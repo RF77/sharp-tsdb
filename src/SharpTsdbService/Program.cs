@@ -17,9 +17,9 @@ namespace SharpTsdbService
             ServiceBase[] ServicesToRun;
             ServicesToRun = new ServiceBase[]
             {
-                new Service1()
+                new TsdbService()
             };
-            ServiceBase.Run(ServicesToRun);
+            HexMaster.Helper.Run(ServicesToRun);
         }
     }
 }

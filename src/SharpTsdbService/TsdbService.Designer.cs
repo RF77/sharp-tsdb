@@ -1,6 +1,6 @@
 ﻿namespace SharpTsdbService
 {
-    partial class Service1
+    partial class TsdbService
     {
         /// <summary> 
         /// Required designer variable.

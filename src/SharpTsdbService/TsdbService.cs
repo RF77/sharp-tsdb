@@ -7,18 +7,20 @@ using System.Linq;
 using System.ServiceProcess;
 using System.Text;
 using System.Threading.Tasks;
+using log4net.Config;
 
 namespace SharpTsdbService
 {
-    public partial class Service1 : ServiceBase
+    public partial class TsdbService : ServiceBase
     {
-        public Service1()
+        public TsdbService()
         {
             InitializeComponent();
         }
 
         protected override void OnStart(string[] args)
         {
+            XmlConfigurator.Configure();
         }
 
         protected override void OnStop()
