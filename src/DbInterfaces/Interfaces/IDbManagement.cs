@@ -1,6 +1,6 @@
 ﻿namespace DbInterfaces.Interfaces
 {
-    interface IDbManagement
+    public interface IDbManagement
     {
         void CreateDb(string directoryPath, string name);
         IDb GetDb(string name);

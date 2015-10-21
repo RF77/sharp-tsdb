@@ -1,6 +1,6 @@
 namespace DbInterfaces.Interfaces
 {
-    interface IMeasurementConfig
+    public interface IMeasurementConfig
     {
         
     }

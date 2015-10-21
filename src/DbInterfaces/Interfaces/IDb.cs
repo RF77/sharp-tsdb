@@ -1,6 +1,6 @@
 namespace DbInterfaces.Interfaces
 {
-    interface IDb
+    public interface IDb
     {
         void CreateMeasurement(IMeasurementConfig config);
         IMeasurement GetMeasurement(string name);
