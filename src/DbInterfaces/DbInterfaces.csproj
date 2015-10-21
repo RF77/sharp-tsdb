@@ -44,7 +44,11 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Class1.cs" />
+    <Compile Include="Interfaces\IDataRow.cs" />
+    <Compile Include="Interfaces\IDb.cs" />
+    <Compile Include="Interfaces\IDbManagement.cs" />
+    <Compile Include="Interfaces\IMeasurement.cs" />
+    <Compile Include="Interfaces\IMeasurementConfig.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
