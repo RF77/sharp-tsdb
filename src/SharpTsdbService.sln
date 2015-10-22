@@ -15,6 +15,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SharpTsdb", "SharpTsdb\Shar
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "DBs", "DBs", "{5AC46751-0CB1-40F9-BD9C-C519634196FD}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Infrastructure", "Infrastructure\Infrastructure.csproj", "{77F38591-93DE-4F4C-9B13-02144B953F5B}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -41,6 +43,10 @@ Global
 		{ECC29A1D-4F22-4349-ACB4-3D714E242AD0}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{ECC29A1D-4F22-4349-ACB4-3D714E242AD0}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{ECC29A1D-4F22-4349-ACB4-3D714E242AD0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{77F38591-93DE-4F4C-9B13-02144B953F5B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{77F38591-93DE-4F4C-9B13-02144B953F5B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{77F38591-93DE-4F4C-9B13-02144B953F5B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{77F38591-93DE-4F4C-9B13-02144B953F5B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
