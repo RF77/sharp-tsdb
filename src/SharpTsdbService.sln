@@ -7,11 +7,13 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SharpTsdbService", "SharpTs
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DbInterfaces", "DbInterfaces\DbInterfaces.csproj", "{E65A3D01-0656-4522-AAF8-1CF2B11270F3}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FileDb", "FileDb\FileDb.csproj", "{8858A25C-EF24-48DB-B049-BF28027482EB}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SharpFileDb", "FileDb\SharpFileDb.csproj", "{8858A25C-EF24-48DB-B049-BF28027482EB}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tests", "Tests\Tests.csproj", "{799C8760-93E4-4B42-BC19-3A3B5B34B4F6}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SharpTsdb", "SharpTsdb\SharpTsdb.csproj", "{ECC29A1D-4F22-4349-ACB4-3D714E242AD0}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "DBs", "DBs", "{5AC46751-0CB1-40F9-BD9C-C519634196FD}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -42,5 +44,9 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{E65A3D01-0656-4522-AAF8-1CF2B11270F3} = {5AC46751-0CB1-40F9-BD9C-C519634196FD}
+		{8858A25C-EF24-48DB-B049-BF28027482EB} = {5AC46751-0CB1-40F9-BD9C-C519634196FD}
 	EndGlobalSection
 EndGlobal

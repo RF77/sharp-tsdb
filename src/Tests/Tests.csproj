@@ -56,7 +56,7 @@
       <DependentUpon>Settings.settings</DependentUpon>
     </Compile>
     <Compile Include="Settings.cs" />
-    <Compile Include="UnitTest1.cs" />
+    <Compile Include="FileDb\DbManagementTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -65,6 +65,16 @@
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
     </None>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\DbInterfaces\DbInterfaces.csproj">
+      <Project>{E65A3D01-0656-4522-AAF8-1CF2B11270F3}</Project>
+      <Name>DbInterfaces</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\FileDb\SharpFileDb.csproj">
+      <Project>{8858A25C-EF24-48DB-B049-BF28027482EB}</Project>
+      <Name>SharpFileDb</Name>
+    </ProjectReference>
   </ItemGroup>
   <Choose>
     <When Condition="'$(VisualStudioVersion)' == '10.0' And '$(IsCodedUITest)' == 'True'">
