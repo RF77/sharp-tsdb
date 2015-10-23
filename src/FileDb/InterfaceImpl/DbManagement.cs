@@ -12,7 +12,9 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using DbInterfaces.Interfaces;
+using Infrastructure;
 
 namespace FileDb.InterfaceImpl
 {
@@ -36,12 +38,24 @@ namespace FileDb.InterfaceImpl
             };
 
             Dbs[name] = metaData;
-            //TODO: Safe list and metadat to db directory
+
+            Serialize();
+            metaData.SaveToFile(metaData.DbMetadataPath);
+        }
+
+        private static void Serialize()
+        {
+            Dbs.Values.SaveToUserProfile("Dbs.json");
         }
 
         public IDb GetDb(string name)
         {
-            throw new System.NotImplementedException();
+            return ListDbs().First(i => i.Metadata.Name == name);
+        }
+
+        public IReadOnlyList<IDb> ListDbs()
+        {
+            return Dbs.Values.Select(i => new Db(i)).ToList();
         }
 
         public void DeleteDb(string name)

@@ -47,6 +47,7 @@
     <Compile Include="Interfaces\IDataRow.cs" />
     <Compile Include="Interfaces\IDb.cs" />
     <Compile Include="Interfaces\IDbManagement.cs" />
+    <Compile Include="Interfaces\IDbMetadata.cs" />
     <Compile Include="Interfaces\IMeasurement.cs" />
     <Compile Include="Interfaces\IMeasurementConfig.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

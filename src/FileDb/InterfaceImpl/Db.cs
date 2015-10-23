@@ -4,6 +4,13 @@ namespace FileDb.InterfaceImpl
 {
     public class Db : IDb
     {
+        public Db(IDbMetadata metadata)
+        {
+            Metadata = metadata;
+        }
+
+        public IDbMetadata Metadata { get; set; }
+        
         public void CreateMeasurement(IMeasurementConfig config)
         {
             throw new System.NotImplementedException();

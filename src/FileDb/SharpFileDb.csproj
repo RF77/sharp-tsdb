@@ -79,6 +79,10 @@
       <Project>{E65A3D01-0656-4522-AAF8-1CF2B11270F3}</Project>
       <Name>DbInterfaces</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Infrastructure\Infrastructure.csproj">
+      <Project>{77F38591-93DE-4F4C-9B13-02144B953F5B}</Project>
+      <Name>Infrastructure</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Config\" />

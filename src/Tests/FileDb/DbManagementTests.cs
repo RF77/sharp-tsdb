@@ -1,26 +1,33 @@
 ﻿using System;
+using System.IO;
 using DbInterfaces.Interfaces;
 using FileDb.InterfaceImpl;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using NUnit.Framework;
 
 namespace Tests
 {
-    [TestClass]
+    [TestFixture]
     public class DbManagementTests
     {
+        private const string DbRootDir = @"c:\temp\DBs";
+        private const string TestDbName = "TestDb";
         private IDbManagement _unitUnderTest;
 
-        [TestInitialize]
+        [SetUp]
         public void Setup()
         {
             _unitUnderTest = new DbManagement();
         }
 
-        [TestMethod]
+        [TestCase]
         public void CreateDb()
         {
-            _unitUnderTest.CreateDb(@"c:\temp\DBs", "TestDb");
+            _unitUnderTest.CreateDb(DbRootDir, TestDbName);
 
+            Directory.Exists(Path.Combine(DbRootDir, TestDbName));
+
+            
         }
     }
 }

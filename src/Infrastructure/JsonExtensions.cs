@@ -20,6 +20,11 @@ namespace Infrastructure
         public static void SaveToUserProfile(this object objToSerialize, string fileName)
         {
             var filePath = SerializationFilePath(fileName);
+            SaveToFile(objToSerialize, filePath);
+        }
+
+        public static void SaveToFile(this object objToSerialize, string filePath)
+        {
             var directoryInfo = new FileInfo(filePath).Directory;
             if (directoryInfo != null && !directoryInfo.Exists) directoryInfo.Create();
             File.WriteAllText(filePath, objToSerialize.ToJson());
@@ -29,6 +34,11 @@ namespace Infrastructure
         {
             var filePath = SerializationFilePath(fileName);
 
+            return LoadFromFile<T>(filePath);
+        }
+
+        public static T LoadFromFile<T>(this string filePath)
+        {
             var fileInfo = new FileInfo(filePath);
             if (fileInfo.Exists == false) return default(T);
             return File.ReadAllText(filePath).FromJson<T>();
