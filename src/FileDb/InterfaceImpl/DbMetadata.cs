@@ -15,7 +15,12 @@ namespace FileDb.InterfaceImpl
 
         public string DbMetadataPath
         {
-            get { return Path.Combine(DbPath, "Metadata.json"); }
+            get { return GetMetadataPath(DbPath); }
+        }
+
+        public static string GetMetadataPath(string dbPath)
+        {
+            return Path.Combine(dbPath, "Metadata.json");
         }
 
     }

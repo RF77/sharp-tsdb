@@ -7,7 +7,12 @@ namespace DbInterfaces.Interfaces
     {
         void CreateDb(string directoryPath, string name);
         IDb GetDb(string name);
-        IReadOnlyList<IDb> ListDbs();
+        IReadOnlyList<string> GetDbNames();
         void DeleteDb(string name);
+        void AttachDb(string dbPath);
+        void DetachDb(string dbName);
+        void DetachAllDbs();
+
+
     }
 }

@@ -13,14 +13,61 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using DbInterfaces.Interfaces;
 using Infrastructure;
+using log4net;
 
 namespace FileDb.InterfaceImpl
 {
     public class DbManagement : IDbManagement
     {
-        public static Dictionary<string, DbMetadata> Dbs = new Dictionary<string, DbMetadata>(); 
+        private static readonly ILog Logger = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
+
+        /// <summary>
+        /// Key: DB Name
+        /// Value: Path to Metadata
+        /// </summary>
+        public static Dictionary<string, string> DbNames = new Dictionary<string, string>();
+
+        public static Dictionary<string, IDb> LoadedDbs = new Dictionary<string, IDb>();
+
+        private readonly string _prefix = "";
+
+        private string DbNamesFileName => $"{_prefix}Dbs.json";
+
+
+        public DbManagement()
+        {
+            Deserialize();
+        }
+
+        public DbManagement(bool test)
+        {
+            if (test)
+            {
+                _prefix = "test_";
+            }
+
+            Deserialize();
+        }
+
+        private void Deserialize()
+        {
+            try
+            {
+                DbNames = DbNamesFileName.LoadFromUserProfile<Dictionary<string, string>>();
+            }
+            catch (Exception ex)
+            {
+                Logger.Warn($"Deserialize(): Failed -> {ex.Message}");
+            }
+        }
+
+        private void Serialize()
+        {
+            DbNames.SaveToUserProfile(DbNamesFileName);
+        }
 
         public void CreateDb(string directoryPath, string name)
         {
@@ -37,30 +84,59 @@ namespace FileDb.InterfaceImpl
                 Id = Guid.NewGuid()
             };
 
-            Dbs[name] = metaData;
+            InitDbFromMetadata(name, metaData);
 
-            Serialize();
             metaData.SaveToFile(metaData.DbMetadataPath);
         }
 
-        private static void Serialize()
+        private void InitDbFromMetadata(string name, DbMetadata metaData)
         {
-            Dbs.Values.SaveToUserProfile("Dbs.json");
+            DbNames[name] = metaData.DbMetadataPath;
+            Serialize();
+            LoadedDbs[name] = new Db(metaData);
         }
+
 
         public IDb GetDb(string name)
         {
-            return ListDbs().First(i => i.Metadata.Name == name);
+            IDb db;
+            if (!LoadedDbs.TryGetValue(name, out db))
+            {
+                var path = DbNames[name];
+                db = new Db(path.LoadFromFile<DbMetadata>());
+            }
+            return db;
         }
 
-        public IReadOnlyList<IDb> ListDbs()
+        public IReadOnlyList<string> GetDbNames()
         {
-            return Dbs.Values.Select(i => new Db(i)).ToList();
+            return DbNames.Values.ToList();
         }
 
         public void DeleteDb(string name)
         {
-            throw new System.NotImplementedException();
+            new FileInfo(DbNames[name]).Directory.Delete(true);
+        }
+
+        public void AttachDb(string dbPath)
+        {
+            var metadataPath = DbMetadata.GetMetadataPath(dbPath);
+            var metaData = metadataPath.LoadFromFile<DbMetadata>();
+            InitDbFromMetadata(metaData.Name, metaData);
+        }
+
+        public void DetachDb(string dbName)
+        {
+            DbNames.Remove(dbName);
+            LoadedDbs.Remove(dbName);
+            Serialize();
+        }
+
+        public void DetachAllDbs()
+        {
+            LoadedDbs.Clear();
+            DbNames.Clear();
+            Serialize();
         }
     }
 }
