@@ -28,9 +28,9 @@ namespace FileDb.InterfaceImpl
         /// Key: DB Name
         /// Value: Path to Metadata
         /// </summary>
-        public static Dictionary<string, string> DbNames = new Dictionary<string, string>();
+        private Dictionary<string, string> _dbNames = new Dictionary<string, string>();
 
-        public static Dictionary<string, IDb> LoadedDbs = new Dictionary<string, IDb>();
+        private readonly Dictionary<string, IDb> _loadedDbs = new Dictionary<string, IDb>();
 
         private readonly string _prefix = "";
 
@@ -56,17 +56,21 @@ namespace FileDb.InterfaceImpl
         {
             try
             {
-                DbNames = DbNamesFileName.LoadFromUserProfile<Dictionary<string, string>>();
+                _dbNames = DbNamesFileName.LoadFromUserProfile<Dictionary<string, string>>();
             }
             catch (Exception ex)
             {
                 Logger.Warn($"Deserialize(): Failed -> {ex.Message}");
             }
+            if (_dbNames == null)
+            {
+                _dbNames = new Dictionary<string, string>();
+            }
         }
 
         private void Serialize()
         {
-            DbNames.SaveToUserProfile(DbNamesFileName);
+            _dbNames.SaveToUserProfile(DbNamesFileName);
         }
 
         public void CreateDb(string directoryPath, string name)
@@ -91,18 +95,18 @@ namespace FileDb.InterfaceImpl
 
         private void InitDbFromMetadata(string name, DbMetadata metaData)
         {
-            DbNames[name] = metaData.DbMetadataPath;
+            _dbNames[name] = metaData.DbMetadataPath;
             Serialize();
-            LoadedDbs[name] = new Db(metaData);
+            _loadedDbs[name] = new Db(metaData);
         }
 
 
         public IDb GetDb(string name)
         {
             IDb db;
-            if (!LoadedDbs.TryGetValue(name, out db))
+            if (!_loadedDbs.TryGetValue(name, out db))
             {
-                var path = DbNames[name];
+                var path = _dbNames[name];
                 db = new Db(path.LoadFromFile<DbMetadata>());
             }
             return db;
@@ -110,12 +114,12 @@ namespace FileDb.InterfaceImpl
 
         public IReadOnlyList<string> GetDbNames()
         {
-            return DbNames.Values.ToList();
+            return _dbNames.Keys.ToList();
         }
 
         public void DeleteDb(string name)
         {
-            new FileInfo(DbNames[name]).Directory.Delete(true);
+            new FileInfo(_dbNames[name]).Directory.Delete(true);
         }
 
         public void AttachDb(string dbPath)
@@ -127,16 +131,18 @@ namespace FileDb.InterfaceImpl
 
         public void DetachDb(string dbName)
         {
-            DbNames.Remove(dbName);
-            LoadedDbs.Remove(dbName);
+            _dbNames.Remove(dbName);
+            _loadedDbs.Remove(dbName);
             Serialize();
         }
 
         public void DetachAllDbs()
         {
-            LoadedDbs.Clear();
-            DbNames.Clear();
+            _loadedDbs.Clear();
+            _dbNames.Clear();
             Serialize();
         }
+
+        public IEnumerable<IDb> LoadedDbs => _loadedDbs.Values;
     }
 }
