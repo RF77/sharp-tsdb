@@ -23,15 +23,39 @@ namespace FileDb.Properties {
             }
         }
         
-        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("test")]
-        public string Test {
+        [global::System.Configuration.DefaultSettingValueAttribute("Key")]
+        public string KeyColumnName {
             get {
-                return ((string)(this["Test"]));
+                return ((string)(this["KeyColumnName"]));
             }
-            set {
-                this["Test"] = value;
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("Value")]
+        public string ValueColumnName {
+            get {
+                return ((string)(this["ValueColumnName"]));
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("meas")]
+        public string MeasurementDirectory {
+            get {
+                return ((string)(this["MeasurementDirectory"]));
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute(".tsb")]
+        public string BinaryFileExtension {
+            get {
+                return ((string)(this["BinaryFileExtension"]));
             }
         }
     }

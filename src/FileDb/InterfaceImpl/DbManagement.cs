@@ -73,7 +73,7 @@ namespace FileDb.InterfaceImpl
             _dbNames.SaveToUserProfile(DbNamesFileName);
         }
 
-        public void CreateDb(string directoryPath, string name)
+        public IDb CreateDb(string directoryPath, string name)
         {
             var dirInfo = new DirectoryInfo(Path.Combine(directoryPath, name));
             if (!dirInfo.Exists)
@@ -89,15 +89,17 @@ namespace FileDb.InterfaceImpl
             };
 
             InitDbFromMetadata(name, metaData);
-
-            metaData.SaveToFile(metaData.DbMetadataPath);
+            
+            return GetDb(name);
         }
 
         private void InitDbFromMetadata(string name, DbMetadata metaData)
         {
             _dbNames[name] = metaData.DbMetadataPath;
             Serialize();
-            _loadedDbs[name] = new Db(metaData);
+            var db = new Db(metaData);
+            _loadedDbs[name] = db;
+            db.SaveMetadata();
         }
 
 

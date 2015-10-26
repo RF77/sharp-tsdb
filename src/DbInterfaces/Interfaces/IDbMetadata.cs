@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 
 namespace DbInterfaces.Interfaces
 {
@@ -8,5 +9,7 @@ namespace DbInterfaces.Interfaces
         Guid Id { get; set; }
         string DbPath { get; set; }
         string DbMetadataPath { get; }
+        IMeasurement GetMeasurement(string name);
+        void SetMeasurement(string name, IMeasurement measurement);
     }
 }

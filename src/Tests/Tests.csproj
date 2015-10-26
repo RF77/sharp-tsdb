@@ -106,6 +106,7 @@
   </Choose>
   <ItemGroup>
     <Compile Include="Deedle\DeedleTests.cs" />
+    <Compile Include="FileDb\DbTests.cs" />
     <Compile Include="Properties\Settings.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
