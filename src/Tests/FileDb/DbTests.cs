@@ -15,20 +15,27 @@ namespace Tests.FileDb
         private const string TestMeasName = "test_Meas";
         private const string TestMeas2Name = "test_Meas2";
         private Db _unitUnderTest;
+        private DbManagement _dbm;
 
         [SetUp]
         public void Setup()
         {
-            var dbm = new DbManagement(true);
-            dbm.DetachAllDbs();
-            _unitUnderTest = (Db) dbm.CreateDb(DbRootDir, TestDbName);
+            _dbm = new DbManagement(true);
+            _dbm.DetachAllDbs();
+            _unitUnderTest = (Db) _dbm.CreateDb(DbRootDir, TestDbName);
             _unitUnderTest.DeleteAllMeasurements();
+        }
+
+        [TearDown]
+        public void TearDown()
+        {
+            _dbm.DeleteDb(_unitUnderTest.Name);
         }
 
         [TestCase]
         public void CreateMeasurement()
         {
-            _unitUnderTest.CreateMeasurement(TestMeasName, typeof(long));
+            _unitUnderTest.CreateMeasurement(TestMeasName, typeof(float));
 
             var measurement = _unitUnderTest.GetMeasurement(TestMeasName);
             measurement.Metadata.Name.Should().Be(TestMeasName);
@@ -40,7 +47,7 @@ namespace Tests.FileDb
         [TestCase]
         public void MeasurementExistingInSecondInstance()
         {
-            _unitUnderTest.CreateMeasurement(TestMeasName, typeof(long));
+            _unitUnderTest.CreateMeasurement(TestMeasName, typeof(float));
 
             var measurement = _unitUnderTest.GetMeasurement(TestMeasName);
             var binName = measurement.BinaryFilePath;

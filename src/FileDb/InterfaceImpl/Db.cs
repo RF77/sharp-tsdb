@@ -10,6 +10,11 @@ namespace FileDb.InterfaceImpl
 {
     public class Db : IDb
     {
+        public string Name
+        {
+            get { return Metadata.Name; }
+        }
+
         public void SaveMetadata()
         {
             MetadataInternal.SaveToFile(MetadataInternal.DbMetadataPath);

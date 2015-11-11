@@ -6,6 +6,7 @@ namespace DbInterfaces.Interfaces
     public interface IDb
     {
         IDbMetadata Metadata { get; }
+        string Name { get; }
         void SaveMetadata();
         string MeasurementDirectory { get; }
         void CreateMeasurement(IMeasurementMetadata metadata);

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using System.Linq;
+using System.Runtime.Serialization.Formatters;
 using Newtonsoft.Json;
 
 namespace Infrastructure
@@ -9,7 +10,11 @@ namespace Infrastructure
     {
         public static string ToJson(this object objToSerialize)
         {
-            return JsonConvert.SerializeObject(objToSerialize, Formatting.Indented);
+            return JsonConvert.SerializeObject(objToSerialize, Formatting.Indented, new JsonSerializerSettings
+            {
+                PreserveReferencesHandling = PreserveReferencesHandling.Objects,
+                TypeNameAssemblyFormat = FormatterAssemblyStyle.Simple
+            });
         }
 
         public static T FromJson<T>(this string jsonString)

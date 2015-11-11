@@ -64,19 +64,6 @@ namespace Tests.FileDb
             new DirectoryInfo(DbRootDir).Exists.Should().BeTrue();
         }
 
-        [TestCase]
-        public void DeleteDb()
-        {
-            _unitUnderTest.CreateDb(DbRootDir, TestDbName);
-
-            var db = _unitUnderTest.GetDb(TestDbName);
-
-            File.Exists(db.Metadata.DbMetadataPath).Should().BeTrue();
-
-            _unitUnderTest.DeleteDb(TestDbName);
-
-            File.Exists(db.Metadata.DbMetadataPath).Should().BeFalse();
-        }
 
         [TestCase]
         public void DetachDb()
@@ -90,6 +77,21 @@ namespace Tests.FileDb
             _unitUnderTest.DetachDb(TestDbName);
 
             File.Exists(db.Metadata.DbMetadataPath).Should().BeTrue();
+        }
+
+
+        [TestCase]
+        public void DeleteDb()
+        {
+            _unitUnderTest.CreateDb(DbRootDir, TestDbName);
+
+            var db = _unitUnderTest.GetDb(TestDbName);
+
+            File.Exists(db.Metadata.DbMetadataPath).Should().BeTrue();
+
+            _unitUnderTest.DeleteDb(TestDbName);
+
+            File.Exists(db.Metadata.DbMetadataPath).Should().BeFalse();
         }
     }
 }

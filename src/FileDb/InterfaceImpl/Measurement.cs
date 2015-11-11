@@ -10,15 +10,19 @@ namespace FileDb.InterfaceImpl
     [DataContract]
     public class Measurement : IMeasurement
     {
-        private readonly IDb _db;
+        private static RowReadWriterFactory _rowReadWriterFactory;
 
         [DataMember]
+        private readonly Db _db;
+
         public string BinaryFilePath { get; private set; }
 
         [DataMember]
         public MeasurementMetadata MetadataInternal { get; set; }
 
         public IMeasurementMetadata Metadata => MetadataInternal;
+
+        private RowReaderWriter _rowReaderWriter;
 
         /// <summary>
         /// Only for deserialization
@@ -28,7 +32,7 @@ namespace FileDb.InterfaceImpl
             
         }
 
-        public Measurement(MeasurementMetadata metadataInternal, IDb db)
+        public Measurement(MeasurementMetadata metadataInternal, Db db)
         {
             _db = db;
             MetadataInternal = metadataInternal;
@@ -41,7 +45,7 @@ namespace FileDb.InterfaceImpl
         /// <param name="name"></param>
         /// <param name="type"></param>
         /// <param name="db"></param>
-        public Measurement(string name, Type type, IDb db)
+        public Measurement(string name, Type type, Db db)
         {
             _db = db;
             MetadataInternal = new MeasurementMetadata(name);
@@ -50,13 +54,27 @@ namespace FileDb.InterfaceImpl
             Init();
         }
 
+        [OnDeserialized]
+        private void OnDeserialized(StreamingContext c)
+        {
+            Init();
+        }
+
         private void Init()
         {
             BinaryFilePath = Path.Combine(_db.MeasurementDirectory, $"{MetadataInternal.Id}{Settings.Default.BinaryFileExtension}");
             if (!File.Exists(BinaryFilePath))
             {
-                File.Create(BinaryFilePath);
+                using (File.Create(BinaryFilePath))
+                {
+                    
+                }
             }
+            if (_rowReadWriterFactory == null)
+            {
+                _rowReadWriterFactory = new RowReadWriterFactory();
+            }
+            _rowReaderWriter = _rowReadWriterFactory.CreateRowReaderWriter(MetadataInternal);
         }
 
         public void AddDataPoints(IEnumerable<IDataRow> row)

@@ -121,7 +121,8 @@ namespace FileDb.InterfaceImpl
 
         public void DeleteDb(string name)
         {
-            new FileInfo(_dbNames[name]).Directory.Delete(true);
+            var directoryInfo = new FileInfo(_dbNames[name]).Directory;
+            directoryInfo?.Delete(true);
         }
 
         public void AttachDb(string dbPath)
