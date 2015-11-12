@@ -40,11 +40,12 @@ namespace FileDb.InterfaceImpl
             MetadataInternal.SetMeasurement(metadata.Name, new Measurement((MeasurementMetadata) metadata, this));
         }
 
-        public void CreateMeasurement(string name, Type valueType)
+        public IMeasurement CreateMeasurement(string name, Type valueType)
         {
             var meas = new Measurement(name, valueType, this);
             MetadataInternal.SetMeasurement(name, meas);
             SaveMetadata();
+            return meas;
         }
 
         public IMeasurement GetMeasurement(string name)

@@ -10,7 +10,7 @@ namespace DbInterfaces.Interfaces
         void SaveMetadata();
         string MeasurementDirectory { get; }
         void CreateMeasurement(IMeasurementMetadata metadata);
-        void CreateMeasurement(string name, Type valueType);
+        IMeasurement CreateMeasurement(string name, Type valueType);
         IMeasurement GetMeasurement(string name);
         IReadOnlyList<string> GetMeasurementNames();
         void DeleteMeasurement(string name);

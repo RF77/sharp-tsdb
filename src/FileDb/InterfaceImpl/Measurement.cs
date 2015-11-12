@@ -77,9 +77,21 @@ namespace FileDb.InterfaceImpl
             _rowReaderWriter = _rowReadWriterFactory.CreateRowReaderWriter(MetadataInternal);
         }
 
-        public void AddDataPoints(IEnumerable<IDataRow> row)
+        public void AppendDataPoints(IEnumerable<IDataRow> row)
         {
-            throw new NotImplementedException();
+            lock (this)
+            {
+                using (var fs = File.Open(BinaryFilePath, FileMode.Append, FileAccess.Write, FileShare.None))
+                {
+                    using (var bw = new BinaryWriter(fs))
+                    {
+                        foreach (var dataRow in row)
+                        {
+                            _rowReaderWriter.WriteRow(bw, dataRow);
+                        }
+                    }
+                }                
+            }
         }
 
         public IEnumerable<IDataRow> GetDataPoints(DateTime? @from, DateTime? to)
