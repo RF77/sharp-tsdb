@@ -24,6 +24,8 @@ namespace FileDb.InterfaceImpl
 
         private RowReaderWriter _rowReaderWriter;
 
+        private const int MinSearchRange = 1000;
+
         /// <summary>
         /// Only for deserialization
         /// </summary>
@@ -94,9 +96,75 @@ namespace FileDb.InterfaceImpl
             }
         }
 
-        public IEnumerable<IDataRow> GetDataPoints(DateTime? @from, DateTime? to)
+        public IEnumerable<IDataRow> GetDataPoints(DateTime? @from = null, DateTime? to = null)
         {
-            throw new NotImplementedException();
+            lock (this)
+            {
+                DateTime start = from ?? DateTime.MinValue;
+                DateTime stop = to ?? DateTime.MaxValue;
+
+                using (var fs = File.Open(BinaryFilePath, FileMode.Open, FileAccess.Read, FileShare.Read))
+                {
+                    var items = fs.Length / _rowReaderWriter.RowLength;
+                    var currentItem = items / 2;
+
+                    using (var binaryReader = new BinaryReader(fs))
+                    {
+                        long itemToStart = GetItemToStart(start, fs, binaryReader, currentItem, currentItem, 0);
+                        fs.Position = itemToStart * _rowReaderWriter.RowLength;
+
+                        IDataRow readRow = null;
+                        IDataRow firstRow = null;
+
+                        while (fs.Position < fs.Length)
+                        {
+                            readRow = _rowReaderWriter.ReadRow(binaryReader);
+
+                            if (readRow.Key >= start)
+                            {
+                                if (firstRow != null)
+                                {
+                                    yield return firstRow;
+                                    firstRow = null;
+                                }
+                                yield return readRow;
+                            }
+                            else
+                            {
+                                firstRow = readRow;
+                            }
+
+                            if (readRow.Key >= stop)
+                            {
+                                //if fill(next) should be interesting, maybe this row should be returned too
+                                break;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        private long GetItemToStart(DateTime start, FileStream fs, BinaryReader binaryReader, long currentIndex, long currentRange, long lastValidIndex)
+        {
+            if (currentRange < MinSearchRange)
+            {
+                return lastValidIndex;
+            }
+            fs.Position = currentIndex * _rowReaderWriter.RowLength;
+            var time = DateTime.FromBinary(binaryReader.ReadInt64());
+            currentRange = currentRange / 2;
+            if (time >= start)
+            {
+                currentIndex = currentIndex - currentRange;
+            }
+            else
+            {
+                lastValidIndex = Math.Max(currentIndex, 0);
+                currentIndex = lastValidIndex + currentRange;
+            }
+
+            return GetItemToStart(start, fs, binaryReader, currentIndex, currentRange, lastValidIndex);
         }
     }
 }

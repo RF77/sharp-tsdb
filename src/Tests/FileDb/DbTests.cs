@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using DbInterfaces.Interfaces;
@@ -91,6 +92,55 @@ namespace Tests.FileDb
                 time += TimeSpan.FromMinutes(1);
                 yield return row;
             }
+        }
+
+        [TestCase]
+        public void ReadItems()
+        {
+            var measurement = _unitUnderTest.CreateMeasurement(TestMeasName, typeof(float));
+            var numberOfRows = 100000;
+            measurement.AppendDataPoints(CreateFloatRows(numberOfRows));
+
+            //All (without dates)
+            var allItems = measurement.GetDataPoints();
+            allItems.Count().Should().Be(numberOfRows);
+
+            var dateTime1999 = new DateTime(1999, 1, 1);
+            allItems = measurement.GetDataPoints(dateTime1999);
+            allItems.Count().Should().Be(numberOfRows);
+
+            var dateTime2200 = new DateTime(2200,1,1);
+            allItems = measurement.GetDataPoints(dateTime1999, dateTime2200);
+            allItems.Count().Should().Be(numberOfRows);
+
+            var time = Stopwatch.StartNew();
+            var dateTimeStart = new DateTime(2000, 1, 7);
+            var dateTime200012 = new DateTime(2000, 1, 21);
+
+            //From begin to middle
+            var items = measurement.GetDataPoints(dateTime1999, dateTime200012).ToList();
+            items[0].Key.Should().BeAfter(dateTime1999);
+            items.Last().Key.Should().BeOnOrBefore(dateTime200012);
+
+            time.Stop();
+
+            //From middle to end
+            items = measurement.GetDataPoints(dateTime200012, dateTime2200).ToList();
+            items[0].Key.Should().BeBefore(dateTime200012);
+            items[1].Key.Should().BeOnOrAfter(dateTime200012);
+            items.Last().Key.Should().BeOnOrBefore(dateTime2200);
+
+            time = Stopwatch.StartNew();
+
+
+            //From middle to middle
+            items = measurement.GetDataPoints(dateTimeStart, dateTime200012).ToList();
+            items[0].Key.Should().BeBefore(dateTimeStart);
+            items[1].Key.Should().BeOnOrAfter(dateTimeStart);
+            items.Last().Key.Should().BeOnOrBefore(dateTime200012);
+
+            time.Stop();
+
         }
 
     }
