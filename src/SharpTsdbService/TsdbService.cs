@@ -1,18 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Diagnostics;
-using System.Linq;
-using System.ServiceProcess;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.ServiceProcess;
 using log4net.Config;
+using SharpTsdb;
 
 namespace SharpTsdbService
 {
     public partial class TsdbService : ServiceBase
     {
+        private DbService _service;
+
         public TsdbService()
         {
             InitializeComponent();
@@ -21,10 +16,14 @@ namespace SharpTsdbService
         protected override void OnStart(string[] args)
         {
             XmlConfigurator.Configure();
+            _service = new DbService();
+            _service.Init();
         }
 
         protected override void OnStop()
         {
+            _service?.Stop();
+            base.Stop();
         }
     }
 }
