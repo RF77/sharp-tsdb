@@ -95,6 +95,24 @@ namespace Tests.FileDb
         }
 
         [TestCase]
+        public void ClearItems()
+        {
+            var measurement = _unitUnderTest.CreateMeasurement(TestMeasName, typeof(float));
+            var numberOfRows = 10;
+            measurement.AppendDataPoints(CreateFloatRows(numberOfRows));
+
+            File.Exists(measurement.BinaryFilePath).Should().BeTrue();
+            new FileInfo(measurement.BinaryFilePath).Length.Should()
+                .Be(measurement.Metadata.Columns.Sum(i => i.Size) * numberOfRows);
+
+            measurement.ClearDataPoints();
+
+            File.Exists(measurement.BinaryFilePath).Should().BeTrue();
+            new FileInfo(measurement.BinaryFilePath).Length.Should().Be(0);
+
+        }
+
+        [TestCase]
         public void ReadItems()
         {
             var measurement = _unitUnderTest.CreateMeasurement(TestMeasName, typeof(float));

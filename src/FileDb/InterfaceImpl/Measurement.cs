@@ -20,6 +20,17 @@ namespace FileDb.InterfaceImpl
         [DataMember]
         public MeasurementMetadata MetadataInternal { get; set; }
 
+        public void ClearDataPoints()
+        {
+            lock (this)
+            {
+                using (var fs = File.Open(BinaryFilePath, FileMode.Create, FileAccess.Write, FileShare.None))
+                {
+                  
+                }
+            }
+        }
+
         public IMeasurementMetadata Metadata => MetadataInternal;
 
         private RowReaderWriter _rowReaderWriter;
