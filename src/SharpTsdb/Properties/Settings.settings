@@ -2,8 +2,8 @@
 <SettingsFile xmlns="http://schemas.microsoft.com/VisualStudio/2004/01/settings" CurrentProfile="(Default)" GeneratedClassNamespace="SharpTsdb.Properties" GeneratedClassName="Settings">
   <Profiles />
   <Settings>
-    <Setting Name="T" Type="System.String" Scope="User">
-      <Value Profile="(Default)">a</Value>
+    <Setting Name="DbDirectory" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">c:\DBs\SharpTsdb</Value>
     </Setting>
   </Settings>
 </SettingsFile>

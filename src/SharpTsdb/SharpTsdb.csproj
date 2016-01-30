@@ -134,6 +134,14 @@
     </None>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\DbInterfaces\DbInterfaces.csproj">
+      <Project>{E65A3D01-0656-4522-AAF8-1CF2B11270F3}</Project>
+      <Name>DbInterfaces</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\FileDb\SharpFileDb.csproj">
+      <Project>{8858A25C-EF24-48DB-B049-BF28027482EB}</Project>
+      <Name>SharpFileDb</Name>
+    </ProjectReference>
     <ProjectReference Include="..\GrafanaAdapter\GrafanaAdapter.csproj">
       <Project>{C8912CF7-2CA3-4DD8-85D9-6BD7136FD178}</Project>
       <Name>GrafanaAdapter</Name>

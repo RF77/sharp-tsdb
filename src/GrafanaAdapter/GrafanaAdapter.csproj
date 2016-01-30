@@ -41,9 +41,20 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Queries\QueryHandler.cs" />
     <Compile Include="Queries\QueryResult.cs" />
     <Compile Include="Queries\QueryRoot.cs" />
     <Compile Include="Queries\QuerySerie.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\DbInterfaces\DbInterfaces.csproj">
+      <Project>{E65A3D01-0656-4522-AAF8-1CF2B11270F3}</Project>
+      <Name>DbInterfaces</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\FileDb\SharpFileDb.csproj">
+      <Project>{8858A25C-EF24-48DB-B049-BF28027482EB}</Project>
+      <Name>SharpFileDb</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

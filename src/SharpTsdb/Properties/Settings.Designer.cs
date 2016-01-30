@@ -23,15 +23,12 @@ namespace SharpTsdb.Properties {
             }
         }
         
-        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("a")]
-        public string T {
+        [global::System.Configuration.DefaultSettingValueAttribute("c:\\DBs\\SharpTsdb")]
+        public string DbDirectory {
             get {
-                return ((string)(this["T"]));
-            }
-            set {
-                this["T"] = value;
+                return ((string)(this["DbDirectory"]));
             }
         }
     }

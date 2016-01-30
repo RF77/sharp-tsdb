@@ -22,17 +22,5 @@ namespace SharpTsdbService.Properties {
                 return defaultInstance;
             }
         }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("t")]
-        public string Test {
-            get {
-                return ((string)(this["Test"]));
-            }
-            set {
-                this["Test"] = value;
-            }
-        }
     }
 }

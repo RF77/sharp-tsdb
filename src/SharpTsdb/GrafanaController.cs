@@ -1,29 +1,43 @@
 ﻿using System.Collections.Generic;
 using System.Web.Http;
+using DbInterfaces.Interfaces;
+using FileDb.InterfaceImpl;
 using GrafanaAdapter.Queries;
+using SharpTsdb.Properties;
 
 namespace SharpTsdb
 {
     [RoutePrefix("")]
     public class GrafanaController : ApiController
     {
+        private QueryHandler _handler = new QueryHandler();
+
         [Route("query")]
-        public QueryRoot Get(InfluxQueryParams p)
+        public QueryRoot Get(string db, string q)
         {
-            var root = new QueryRoot();
-            var result = new QueryResult();
-            var serie = new QuerySerie();
-            serie.name = "measurements";
-            serie.columns.Add("name");
-            serie.values.Add(new List<object>() { "Test1" });
-            serie.values.Add(new List<object>() { "Test2" });
-
-            result.series.Add(serie);
-
-            root.results.Add(result);
+            return _handler.HandleQuery(db, q);
+        }
 
 
-            return root;
+        [Route("createDb")]
+        [HttpGet]
+        public string CreateDb(string dbName)
+        {
+            IDbManagement db = new DbManagement();
+
+            db.CreateDb(Settings.Default.DbDirectory, dbName);
+            return "ok";
+        }
+
+        [Route("createMeas")]
+        [HttpGet]
+        public string CreateMeas(string db, string name)
+        {
+            IDbManagement dbm = new DbManagement();
+
+            var myDb = dbm.GetDb(db);
+            myDb.CreateMeasurement(name, typeof (float));
+            return "ok";
         }
     }
 }
