@@ -14,7 +14,7 @@ namespace FileDb.InterfaceImpl
         public override void WriteRow(BinaryWriter writer, IDataRow row)
         {
             writer.Write(row.Key.Ticks);
-            writer.Write((float)row.Values[0]);
+            writer.Write((float) Convert.ToSingle(row.Values[0]));
         }
 
         public override IDataRow ReadRow(BinaryReader reader)

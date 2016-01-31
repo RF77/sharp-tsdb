@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using System.Web.Http;
 using DbInterfaces.Interfaces;
 using FileDb.InterfaceImpl;
@@ -37,6 +38,29 @@ namespace SharpTsdb
 
             var myDb = dbm.GetDb(db);
             myDb.CreateMeasurement(name, typeof (float));
+            return "ok";
+        }
+
+        [Route("clearMeas")]
+        [HttpGet]
+        public string ClearMeas(string db, string name)
+        {
+            IDbManagement dbm = new DbManagement();
+
+            var myDb = dbm.GetDb(db);
+            myDb.GetMeasurement(name).ClearDataPoints();
+            return "ok";
+        }
+
+        [Route("write")]
+        [HttpPost]
+        public string WritePoints(string db, string meas, [FromBody]List<WritePoint> points)
+        {
+            IDbManagement dbm = new DbManagement();
+
+            var myDb = dbm.GetDb(db);
+            var measurement = myDb.GetMeasurement(meas);
+            measurement.AppendDataPoints(points.Select(i => new DataRow() {Key = i.t, Values = new[] {i.v}}));
             return "ok";
         }
     }
