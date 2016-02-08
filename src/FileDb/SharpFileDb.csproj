@@ -58,7 +58,7 @@
     <Compile Include="InterfaceImpl\Db.cs" />
     <Compile Include="InterfaceImpl\DbManagement.cs" />
     <Compile Include="InterfaceImpl\DbMetadata.cs" />
-    <Compile Include="InterfaceImpl\FloatDataRow.cs" />
+    <Compile Include="InterfaceImpl\SingleDataRow.cs" />
     <Compile Include="InterfaceImpl\FloatRowReaderWriter.cs" />
     <Compile Include="InterfaceImpl\IRowReader.cs" />
     <Compile Include="InterfaceImpl\IRowWriter.cs" />

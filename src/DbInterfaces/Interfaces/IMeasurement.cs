@@ -8,6 +8,7 @@ namespace DbInterfaces.Interfaces
     {
         void AppendDataPoints(IEnumerable<IDataRow> row);
         IEnumerable<IDataRow> GetDataPoints(DateTime? from = null, DateTime? to = null);
+        IEnumerable<ISingleDataRow<T>> GetDataPoints<T>(DateTime? from = null, DateTime? to = null);
         void ClearDataPoints();
         IMeasurementMetadata Metadata { get; }
         string BinaryFilePath { get; }

@@ -4,11 +4,11 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{E65A3D01-0656-4522-AAF8-1CF2B11270F3}</ProjectGuid>
+    <ProjectGuid>{A805E090-842F-4725-88FA-7D5963C0E73C}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>DbInterfaces</RootNamespace>
-    <AssemblyName>DbInterfaces</AssemblyName>
+    <RootNamespace>QueryLanguage</RootNamespace>
+    <AssemblyName>QueryLanguage</AssemblyName>
     <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
@@ -30,10 +30,6 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="log4net, Version=1.2.13.0, Culture=neutral, PublicKeyToken=669e0ddf0bb1aa2a, processorArchitecture=MSIL">
-      <HintPath>..\packages\log4net.2.0.3\lib\net40-full\log4net.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -44,18 +40,22 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Interfaces\IColumn.cs" />
-    <Compile Include="Interfaces\IDataRow.cs" />
-    <Compile Include="Interfaces\IDb.cs" />
-    <Compile Include="Interfaces\IDbManagement.cs" />
-    <Compile Include="Interfaces\IDbMetadata.cs" />
-    <Compile Include="Interfaces\IMeasurement.cs" />
-    <Compile Include="Interfaces\IMeasurementMetadata.cs" />
-    <Compile Include="Interfaces\ISingleDataRow.cs" />
+    <Compile Include="Grouping\AggregationData.cs" />
+    <Compile Include="Grouping\AggregationDataExtensions.cs" />
+    <Compile Include="Grouping\TimeGroupingExtensions.cs" />
+    <Compile Include="Grouping\TimeStampType.cs" />
+    <Compile Include="Grouping\ValueForNull.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="packages.config" />
+    <ProjectReference Include="..\DbInterfaces\DbInterfaces.csproj">
+      <Project>{E65A3D01-0656-4522-AAF8-1CF2B11270F3}</Project>
+      <Name>DbInterfaces</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\FileDb\SharpFileDb.csproj">
+      <Project>{8858A25C-EF24-48DB-B049-BF28027482EB}</Project>
+      <Name>SharpFileDb</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

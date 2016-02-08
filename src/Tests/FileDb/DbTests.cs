@@ -35,7 +35,7 @@ namespace Tests.FileDb
             _dbm.DeleteDb(_unitUnderTest.Name);
         }
 
-        [TestCase]
+        [Test]
         public void CreateMeasurement()
         {
             _unitUnderTest.CreateMeasurement(TestMeasName, typeof(float));
@@ -47,7 +47,7 @@ namespace Tests.FileDb
             _unitUnderTest.GetMeasurementNames().First().Should().Be(TestMeasName);
         }
 
-        [TestCase]
+        [Test]
         public void MeasurementExistingInSecondInstance()
         {
             _unitUnderTest.CreateMeasurement(TestMeasName, typeof(float));
@@ -61,7 +61,7 @@ namespace Tests.FileDb
             m.BinaryFilePath.Should().Be(binName);
         }
 
-        [TestCase]
+        [Test]
         public void Add10Items()
         {
             var measurement = _unitUnderTest.CreateMeasurement(TestMeasName, typeof(float));
@@ -84,17 +84,13 @@ namespace Tests.FileDb
             DateTime time = new DateTime(2000,1,1);
             for (int i = 0; i < numberOfRows; i++)
             {
-                var row = new FloatDataRow()
-                {
-                    Key = time,
-                    Value = (float)(i * 0.5)
-                };
+                var row = new SingleDataRow<float>(time,(float)(i * 0.5));
                 time += TimeSpan.FromMinutes(1);
                 yield return row;
             }
         }
 
-        [TestCase]
+        [Test]
         public void ClearItems()
         {
             var measurement = _unitUnderTest.CreateMeasurement(TestMeasName, typeof(float));
@@ -112,7 +108,7 @@ namespace Tests.FileDb
 
         }
 
-        [TestCase]
+        [Test]
         public void ReadItems()
         {
             var measurement = _unitUnderTest.CreateMeasurement(TestMeasName, typeof(float));
@@ -130,6 +126,10 @@ namespace Tests.FileDb
             var dateTime2200 = new DateTime(2200,1,1);
             allItems = measurement.GetDataPoints(dateTime1999, dateTime2200);
             allItems.Count().Should().Be(numberOfRows);
+
+            var singleItems = measurement.GetDataPoints<float>(dateTime1999, dateTime2200);
+
+            singleItems.Count().Should().Be(allItems.Count());
 
             var time = Stopwatch.StartNew();
             var dateTimeStart = new DateTime(2000, 1, 7);

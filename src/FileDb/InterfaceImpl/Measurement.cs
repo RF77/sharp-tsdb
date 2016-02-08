@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Runtime.Serialization;
 using DbInterfaces.Interfaces;
 using FileDb.Properties;
@@ -19,6 +20,11 @@ namespace FileDb.InterfaceImpl
 
         [DataMember]
         public MeasurementMetadata MetadataInternal { get; set; }
+
+        public IEnumerable<ISingleDataRow<T>> GetDataPoints<T>(DateTime? @from = null, DateTime? to = null)
+        {
+            return GetDataPoints(from, to).OfType<ISingleDataRow<T>>();
+        }
 
         public void ClearDataPoints()
         {

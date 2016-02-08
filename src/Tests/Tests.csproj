@@ -107,6 +107,7 @@
   <ItemGroup>
     <Compile Include="Deedle\DeedleTests.cs" />
     <Compile Include="FileDb\DbTests.cs" />
+    <Compile Include="FileDb\GroupingTests.cs" />
     <Compile Include="Properties\Settings.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
@@ -132,6 +133,14 @@
     <ProjectReference Include="..\FileDb\SharpFileDb.csproj">
       <Project>{8858A25C-EF24-48DB-B049-BF28027482EB}</Project>
       <Name>SharpFileDb</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\QueryLanguage\QueryLanguage.csproj">
+      <Project>{a805e090-842f-4725-88fa-7d5963c0e73c}</Project>
+      <Name>QueryLanguage</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\SharpTsdb\SharpTsdb.csproj">
+      <Project>{ecc29a1d-4f22-4349-acb4-3d714e242ad0}</Project>
+      <Name>SharpTsdb</Name>
     </ProjectReference>
   </ItemGroup>
   <Choose>
