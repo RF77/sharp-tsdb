@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Runtime.Serialization;
 using DbInterfaces.Interfaces;
 using FileDb.Properties;
@@ -20,11 +19,6 @@ namespace FileDb.InterfaceImpl
 
         [DataMember]
         public MeasurementMetadata MetadataInternal { get; set; }
-
-        public IEnumerable<ISingleDataRow<T>> GetDataPoints<T>(DateTime? @from = null, DateTime? to = null)
-        {
-            return GetDataPoints(from, to).OfType<ISingleDataRow<T>>();
-        }
 
         public void ClearDataPoints()
         {
@@ -113,7 +107,7 @@ namespace FileDb.InterfaceImpl
             }
         }
 
-        public IEnumerable<IDataRow> GetDataPoints(DateTime? @from = null, DateTime? to = null)
+        public IEnumerable<ISingleDataRow<T>> GetDataPoints<T>(DateTime? @from = null, DateTime? to = null)
         {
             lock (this)
             {
@@ -130,12 +124,11 @@ namespace FileDb.InterfaceImpl
                         long itemToStart = GetItemToStart(start, fs, binaryReader, currentItem, currentItem, 0);
                         fs.Position = itemToStart * _rowReaderWriter.RowLength;
 
-                        IDataRow readRow = null;
-                        IDataRow firstRow = null;
+                        ISingleDataRow<T> firstRow = null;
 
                         while (fs.Position < fs.Length)
                         {
-                            readRow = _rowReaderWriter.ReadRow(binaryReader);
+                            var readRow = _rowReaderWriter.ReadRow<T>(binaryReader);
 
                             if (readRow.Key >= start)
                             {

@@ -2,8 +2,6 @@
 {
     public enum ValueForNull
     {
-        Null,
-        Zero,
         Previous,
         Next
     }

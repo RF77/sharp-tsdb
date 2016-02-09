@@ -6,7 +6,9 @@ using System.Linq;
 using DbInterfaces.Interfaces;
 using FileDb.InterfaceImpl;
 using FluentAssertions;
+using MathNet.Numerics.Statistics;
 using NUnit.Framework;
+using QueryLanguage.Grouping;
 
 namespace Tests.FileDb
 {
@@ -116,15 +118,15 @@ namespace Tests.FileDb
             measurement.AppendDataPoints(CreateFloatRows(numberOfRows));
 
             //All (without dates)
-            var allItems = measurement.GetDataPoints();
+            var allItems = measurement.GetDataPoints<float>();
             allItems.Count().Should().Be(numberOfRows);
 
             var dateTime1999 = new DateTime(1999, 1, 1);
-            allItems = measurement.GetDataPoints(dateTime1999);
+            allItems = measurement.GetDataPoints<float>(dateTime1999);
             allItems.Count().Should().Be(numberOfRows);
 
             var dateTime2200 = new DateTime(2200,1,1);
-            allItems = measurement.GetDataPoints(dateTime1999, dateTime2200);
+            allItems = measurement.GetDataPoints<float>(dateTime1999, dateTime2200);
             allItems.Count().Should().Be(numberOfRows);
 
             var singleItems = measurement.GetDataPoints<float>(dateTime1999, dateTime2200);
@@ -136,14 +138,14 @@ namespace Tests.FileDb
             var dateTime200012 = new DateTime(2000, 1, 21);
 
             //From begin to middle
-            var items = measurement.GetDataPoints(dateTime1999, dateTime200012).ToList();
+            var items = measurement.GetDataPoints<float>(dateTime1999, dateTime200012).ToList();
             items[0].Key.Should().BeAfter(dateTime1999);
             items.Last().Key.Should().BeOnOrBefore(dateTime200012);
 
             time.Stop();
 
             //From middle to end
-            items = measurement.GetDataPoints(dateTime200012, dateTime2200).ToList();
+            items = measurement.GetDataPoints<float>(dateTime200012, dateTime2200).ToList();
             items[0].Key.Should().BeBefore(dateTime200012);
             items[1].Key.Should().BeOnOrAfter(dateTime200012);
             items.Last().Key.Should().BeOnOrBefore(dateTime2200);
@@ -152,12 +154,26 @@ namespace Tests.FileDb
 
 
             //From middle to middle
-            items = measurement.GetDataPoints(dateTimeStart, dateTime200012).ToList();
+            items = measurement.GetDataPoints<float>(dateTimeStart, dateTime200012).ToList();
             items[0].Key.Should().BeBefore(dateTimeStart);
             items[1].Key.Should().BeOnOrAfter(dateTimeStart);
             items.Last().Key.Should().BeOnOrBefore(dateTime200012);
 
             time.Stop();
+
+        }
+
+        [Test]
+        public void ReadItemsAndConvert()
+        {
+            var measurement = _unitUnderTest.CreateMeasurement(TestMeasName, typeof(float));
+            var numberOfRows = 100000;
+            measurement.AppendDataPoints(CreateFloatRows(numberOfRows));
+
+            //All (without dates)
+            var rows = measurement.GetDataPoints<double>().ToArray();
+            var allItems = rows.GroupByMinutes(5, a => a.Values.HarmonicMean()).ToArray();
+
 
         }
 

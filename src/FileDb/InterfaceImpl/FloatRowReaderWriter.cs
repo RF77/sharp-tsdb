@@ -14,12 +14,12 @@ namespace FileDb.InterfaceImpl
         public override void WriteRow(BinaryWriter writer, IDataRow row)
         {
             writer.Write(row.Key.Ticks);
-            writer.Write(Convert.ToSingle(row.Values[0]));
+            writer.Write(Convert.ToSingle(row.Value));
         }
 
-        public override IDataRow ReadRow(BinaryReader reader)
+        public override ISingleDataRow<T> ReadRow<T>(BinaryReader reader)
         {
-            var row = new SingleDataRow<float>(DateTime.FromBinary(reader.ReadInt64()), reader.ReadSingle());
+            var row = new SingleDataRow<T>(DateTime.FromBinary(reader.ReadInt64()), (T) Convert.ChangeType(reader.ReadSingle(), typeof(T)));
 
             return row;
         }

@@ -60,7 +60,7 @@ namespace SharpTsdb
 
             var myDb = dbm.GetDb(db);
             var measurement = myDb.GetMeasurement(meas);
-            measurement.AppendDataPoints(points.Select(i => new DataRow() {Key = i.t, Values = new[] {i.v}}));
+            measurement.AppendDataPoints(points.Select(i => new DataRow() {Key = i.t, Value = i.v}));
             return "ok";
         }
     }

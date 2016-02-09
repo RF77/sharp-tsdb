@@ -7,14 +7,14 @@ namespace QueryLanguage.Grouping
     {
         public static T? First<T>(this AggregationData<T> data) where T:struct
         {
-            //if (!data.Values.Any()) return null;
-            return data.Values.FirstOrDefault()?.Value;
+            //if (!data.Rows.Any()) return null;
+            return data.Rows.FirstOrDefault()?.Value;
         }
 
         //public static float? First(this AggregationData<float> data)
         //{
-        //    //if (!data.Values.Any()) return null;
-        //    return data.Values.FirstOrDefault()?.Value;
+        //    //if (!data.Rows.Any()) return null;
+        //    return data.Rows.FirstOrDefault()?.Value;
         //}
     }
 }

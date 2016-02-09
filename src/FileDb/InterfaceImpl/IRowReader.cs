@@ -5,6 +5,6 @@ namespace FileDb.InterfaceImpl
 {
     public interface IRowReader
     {
-        IDataRow ReadRow(BinaryReader reader);
+        ISingleDataRow<T> ReadRow<T>(BinaryReader reader);
     }
 }

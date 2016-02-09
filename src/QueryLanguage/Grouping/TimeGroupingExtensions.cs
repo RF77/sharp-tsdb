@@ -9,28 +9,72 @@ namespace QueryLanguage.Grouping
 {
     public static class TimeGroupingExtensions
     {
-        internal static T? FillValue<T>(AggregationData<T> data, ValueForNull fillValue) where T : struct
+        public static IEnumerable<ISingleDataRow<T?>> FillValue<T>(this IEnumerable<ISingleDataRow<T?>> rows, T fillValue) where T : struct
         {
+            foreach (var row in rows)
+            {
+                if (row.Value == null)
+                {
+                    row.Value = fillValue;
+                }
+                yield return row;
+            }
+        }
+
+        public static IEnumerable<ISingleDataRow<T>> RemoveNulls<T>(this IEnumerable<ISingleDataRow<T?>> rows) where T : struct
+        {
+            return rows.Where(i => i.Value != null).Select(i => new SingleDataRow<T>(i.Key, i.Value.Value));
+        }
+
+        public static IList<ISingleDataRow<T?>> Fill<T>(this IEnumerable<ISingleDataRow<T?>> rows, ValueForNull fillValue) where T : struct
+        {
+            var rowList = rows.ToList();
             switch (fillValue)
             {
-                case ValueForNull.Null:
-                    return null;
-                case ValueForNull.Zero:
-                    var changeType = Convert.ChangeType(typeof(T), 0);
-                    if (changeType != null) return (T)changeType;
-                    return null;
                 case ValueForNull.Previous:
-                    return data.Previous.Value;
+                    {
+                        T? previous = null;
+                        foreach (var row in rowList)
+                        {
+                            if (row.Value == null)
+                            {
+                                row.Value = previous;
+                            }
+                            else
+                            {
+                                previous = row.Value;
+                            }
+                        }
+                    }
+                    break;
                 case ValueForNull.Next:
-                    return data.Next.Value;
+                    {
+                        
+                        T? next = null;
+                        for (int i = rowList.Count - 1; i >= 0; i--)
+                        {
+                            var item = rowList[i];
+                            if (item.Value == null)
+                            {
+                                item.Value = next;
+                            }
+                            else
+                            {
+                                next = item.Value;
+                            }
+                        }
+
+                    }
+                    break;
                 default:
                     throw new ArgumentOutOfRangeException(nameof(fillValue), fillValue, null);
             }
+            return rowList;
         }
+
         [SuppressMessage("ReSharper", "PossibleMultipleEnumeration")]
         public static IEnumerable<ISingleDataRow<T?>> GroupByMinutes<T>(this IEnumerable<ISingleDataRow<T>> rows, int minutes,
-            Func<AggregationData<T>, T?> aggregationFunc,
-            ValueForNull fillValue = ValueForNull.Null, TimeStampType timeStampType = TimeStampType.Start) where T : struct
+            Func<AggregationData<T>, T?> aggregationFunc, TimeStampType timeStampType = TimeStampType.Start) where T : struct
         {
             if (rows == null || !rows.Any())
             {
@@ -42,28 +86,27 @@ namespace QueryLanguage.Grouping
             DateTime d = first.Key;
 
             int startMinute = d.Minute;
-            if (60%minutes == 0)
+            if (60 % minutes == 0)
             {
                 //change start minute to even minute
-                startMinute = startMinute - (startMinute%minutes);
+                startMinute = startMinute - (startMinute % minutes);
             }
 
             DateTime currentDate = new DateTime(d.Year, d.Month, d.Day, d.Hour, startMinute, 0);
 
-            return rowList.GroupByTime(0,currentDate, dt => dt + TimeSpan.FromMinutes(minutes), aggregationFunc, fillValue, timeStampType);
+            return rowList.GroupByTime(0, currentDate, dt => dt + TimeSpan.FromMinutes(minutes), aggregationFunc, timeStampType);
         }
 
         public static IEnumerable<ISingleDataRow<T?>> GroupByTime<T>(this IList<ISingleDataRow<T>> items,
             int currentIndex, DateTime startTime, Func<DateTime, DateTime> calcNewDateMethod,
-            Func<AggregationData<T>, T?> aggregationFunc,
-            ValueForNull fillValue = ValueForNull.Null, TimeStampType timeStampType = TimeStampType.Start) where T:struct
+            Func<AggregationData<T>, T?> aggregationFunc, TimeStampType timeStampType = TimeStampType.Start) where T : struct
         {
             DateTime endTime = calcNewDateMethod(startTime);
             ISingleDataRow<T> previous = null;
 
             do
             {
-                List< ISingleDataRow < T >> list = new List<ISingleDataRow<T>>();
+                List<ISingleDataRow<T>> list = new List<ISingleDataRow<T>>();
                 while (currentIndex < items.Count && items[currentIndex].Key < endTime)
                 {
                     list.Add(items[currentIndex++]);
@@ -82,11 +125,11 @@ namespace QueryLanguage.Grouping
                 {
                     Next = next,
                     Previous = previous,
-                    Values = list,
+                    Rows = list,
                     StartTime = startTime,
                     EndTime = endTime,
                 };
-                var value = aggregationFunc(aggregationData);
+                T? value = aggregationFunc(aggregationData);
 
                 DateTime timeStamp = startTime;
                 if (timeStampType == TimeStampType.End)
@@ -95,15 +138,13 @@ namespace QueryLanguage.Grouping
                 }
                 else if (timeStampType == TimeStampType.Middle)
                 {
-                    timeStamp = startTime + TimeSpan.FromMinutes((endTime - startTime).TotalMinutes/2);
+                    timeStamp = startTime + TimeSpan.FromMinutes((endTime - startTime).TotalMinutes / 2);
                 }
 
-                yield return new SingleDataRow<T?> (timeStamp, value ?? FillValue(aggregationData, fillValue));
+                var singleDataRow = new SingleDataRow<T?>(timeStamp, value);
+                yield return singleDataRow;
 
-                if (currentIndex > 0)
-                {
-                    previous = items[currentIndex - 1];
-                }
+                if (currentIndex > 0) previous = items[currentIndex - 1];
 
                 startTime = endTime;
                 endTime = calcNewDateMethod(startTime);

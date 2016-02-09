@@ -37,11 +37,11 @@ namespace Tests
             var db = _unitUnderTest.GetDb("fux");
             
             var measurement = db.GetMeasurement("wetter");
-            var dataPoints = measurement.GetDataPoints(new DateTime(2015,10,1)).ToArray();
+            var dataPoints = measurement.GetDataPoints<float>(new DateTime(2015,10,1)).ToArray();
             var b = new SeriesBuilder<DateTime, double>();
             foreach (var dataPoint in dataPoints)
             {
-                b.Add(dataPoint.Key, (double) Convert.ToDouble(dataPoint.Values[0]));
+                b.Add(dataPoint.Key, (double) Convert.ToDouble(dataPoint.Value));
             }
             Series<DateTime, double> s = b.Series;
             //var mean = s.Mean();

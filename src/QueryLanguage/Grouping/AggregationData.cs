@@ -1,12 +1,19 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using DbInterfaces.Interfaces;
 
 namespace QueryLanguage.Grouping
 {
-    public class AggregationData<T>
+    public class AggregationData<T> where T:struct 
     {
-        public IReadOnlyList<ISingleDataRow<T>> Values { get; set; }
+        public IReadOnlyList<ISingleDataRow<T>> Rows { get; set; }
+
+        public T[] Values
+        {
+            get { return Rows.Select(i => i.Value).ToArray(); }
+        }
+
         public ISingleDataRow<T> Previous { get; set; }
         public ISingleDataRow<T> Next { get; set; }
         public DateTime StartTime { get; set; }
