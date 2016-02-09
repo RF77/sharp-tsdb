@@ -46,8 +46,10 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Convert\ConvertExtensions.cs" />
+    <Compile Include="DataRows\NamedDataRow.cs" />
     <Compile Include="Grouping\AggregationData.cs" />
     <Compile Include="Grouping\AggregationDataExtensions.cs" />
+    <Compile Include="Grouping\DataRowExtensions.cs" />
     <Compile Include="Grouping\TimeGroupingExtensions.cs" />
     <Compile Include="Grouping\TimeStampType.cs" />
     <Compile Include="Grouping\ValueForNull.cs" />
