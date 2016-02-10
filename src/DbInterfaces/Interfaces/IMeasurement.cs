@@ -7,7 +7,7 @@ namespace DbInterfaces.Interfaces
     public interface IMeasurement
     {
         void AppendDataPoints(IEnumerable<IDataRow> row);
-        IEnumerable<ISingleDataRow<T>> GetDataPoints<T>(DateTime? from = null, DateTime? to = null);
+        IQueryData<T> GetDataPoints<T>(DateTime? from = null, DateTime? to = null) where T:struct;
         void ClearDataPoints();
         IMeasurementMetadata Metadata { get; }
         string BinaryFilePath { get; }

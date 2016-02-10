@@ -14,19 +14,19 @@ namespace Tests.FileDb
     [TestFixture]
     public class AggregationTests
     {
-        private IList<ISingleDataRow<float>> _unitUnderTest1000;
-        private IList<ISingleDataRow<float>> _unitUnderTest9m;
-        private List<ISingleDataRow<float>> _unitUnderTest50;
-        private List<ISingleDataRow<float>> _unitUnderTest50Even;
-        private List<ISingleDataRow<int>> _unitUnderTest50Int;
+        private QueryData<float> _unitUnderTest1000;
+        private QueryData<float> _unitUnderTest9m;
+        private QueryData<float> _unitUnderTest50;
+        private QueryData<float> _unitUnderTest50Even;
+        private QueryData<int> _unitUnderTest50Int;
 
         [SetUp]
         public void Setup()
         {
-            _unitUnderTest1000 = new List<ISingleDataRow<float>>();
-            _unitUnderTest50 = new List<ISingleDataRow<float>>();
-            _unitUnderTest50Int = new List<ISingleDataRow<int>>();
-            _unitUnderTest50Even = new List<ISingleDataRow<float>>();
+            var unitUnderTest1000 = new List<ISingleDataRow<float>>();
+            var unitUnderTest50 = new List<ISingleDataRow<float>>();
+            var unitUnderTest50Int = new List<ISingleDataRow<int>>();
+            var unitUnderTest50Even = new List<ISingleDataRow<float>>();
             int items = 1000;
             int items50 = 50;
             var startDate = new DateTime(2010, 1, 1, 13, 27, 14);
@@ -36,16 +36,21 @@ namespace Tests.FileDb
 
             for (int i = 0; i < items; i++)
             {
-                _unitUnderTest1000.Add(new SingleDataRow<float>(current40s, 0.5f * i ));
+                unitUnderTest1000.Add(new SingleDataRow<float>(current40s, 0.5f * i ));
                 if (i < items50)
                 {
-                    _unitUnderTest50.Add(new SingleDataRow<float>(current40s, 0.5f * i));
-                    _unitUnderTest50Int.Add(new SingleDataRow<int>(current40s, i));
-                    _unitUnderTest50Even.Add(new SingleDataRow<float>(current40sEven, 0.5f * i));
+                    unitUnderTest50.Add(new SingleDataRow<float>(current40s, 0.5f * i));
+                    unitUnderTest50Int.Add(new SingleDataRow<int>(current40s, i));
+                    unitUnderTest50Even.Add(new SingleDataRow<float>(current40sEven, 0.5f * i));
                 }
                 current40s += TimeSpan.FromSeconds(40);
                 current40sEven += TimeSpan.FromSeconds(60);
             }
+            _unitUnderTest1000 = new QueryData<float>(unitUnderTest1000, startDate, null);
+            _unitUnderTest50 = new QueryData<float>(unitUnderTest50, startDate, null);
+            _unitUnderTest50Int = new QueryData<int>(unitUnderTest50Int, startDate, null);
+      
+            _unitUnderTest50Even = new QueryData<float>(unitUnderTest50Even, startDateEven, null);
         }
 
         [TearDown]

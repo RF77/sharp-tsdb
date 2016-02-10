@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Runtime.Serialization;
 using DbInterfaces.Interfaces;
 using FileDb.Properties;
@@ -107,7 +108,7 @@ namespace FileDb.InterfaceImpl
             }
         }
 
-        public IEnumerable<ISingleDataRow<T>> GetDataPoints<T>(DateTime? @from = null, DateTime? to = null)
+        public IQueryData<T> GetDataPoints<T>(DateTime? @from = null, DateTime? to = null) where T:struct
         {
             lock (this)
             {
@@ -126,31 +127,38 @@ namespace FileDb.InterfaceImpl
 
                         ISingleDataRow<T> firstRow = null;
 
-                        while (fs.Position < fs.Length)
-                        {
-                            var readRow = _rowReaderWriter.ReadRow<T>(binaryReader);
-
-                            if (readRow.Key >= start)
-                            {
-                                if (firstRow != null)
-                                {
-                                    yield return firstRow;
-                                    firstRow = null;
-                                }
-                                yield return readRow;
-                            }
-                            else
-                            {
-                                firstRow = readRow;
-                            }
-
-                            if (readRow.Key >= stop)
-                            {
-                                //if fill(next) should be interesting, maybe this row should be returned too
-                                break;
-                            }
-                        }
+                        IReadOnlyList<ISingleDataRow<T>> rows = ReadRows(fs, binaryReader, start, firstRow, stop).ToList();
+                        return new QueryData<T>(rows, from, to);
                     }
+                }
+            }
+        }
+
+        private IEnumerable<ISingleDataRow<T>> ReadRows<T>(FileStream fs, BinaryReader binaryReader, DateTime start, ISingleDataRow<T> firstRow,
+            DateTime stop) where T : struct
+        {
+            while (fs.Position < fs.Length)
+            {
+                var readRow = _rowReaderWriter.ReadRow<T>(binaryReader);
+
+                if (readRow.Key >= start)
+                {
+                    if (firstRow != null)
+                    {
+                        yield return firstRow;
+                        firstRow = null;
+                    }
+                    yield return readRow;
+                }
+                else
+                {
+                    firstRow = readRow;
+                }
+
+                if (readRow.Key >= stop)
+                {
+                    //if fill(next) should be interesting, maybe this row should be returned too
+                    break;
                 }
             }
         }

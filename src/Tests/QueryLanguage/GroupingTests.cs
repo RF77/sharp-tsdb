@@ -13,14 +13,14 @@ namespace Tests.FileDb
     [TestFixture]
     public class GroupingTests
     {
-        private IList<ISingleDataRow<float>> _unitUnderTest40s;
-        private IList<ISingleDataRow<float>> _unitUnderTest9m;
+        private QueryData<float> _unitUnderTest40s;
+        private QueryData<float> _unitUnderTest9m;
 
         [SetUp]
         public void Setup()
         {
-            _unitUnderTest40s = new List<ISingleDataRow<float>>();
-            _unitUnderTest9m = new List<ISingleDataRow<float>>();
+            var unitUnderTest40s = new List<ISingleDataRow<float>>();
+            var unitUnderTest9m = new List<ISingleDataRow<float>>();
             int items = 1000;
             var startDate = new DateTime(2010, 1, 1, 13, 27, 14);
             var current40s = startDate;
@@ -28,11 +28,13 @@ namespace Tests.FileDb
 
             for (int i = 0; i < items; i++)
             {
-                _unitUnderTest40s.Add(new SingleDataRow<float>(current40s, 0.5f * i ));
-                _unitUnderTest9m.Add(new SingleDataRow<float>(current9m, 0.5f * i ));
+                unitUnderTest40s.Add(new SingleDataRow<float>(current40s, 0.5f * i ));
+                unitUnderTest9m.Add(new SingleDataRow<float>(current9m, 0.5f * i ));
                 current40s += TimeSpan.FromSeconds(40);
                 current9m += TimeSpan.FromMinutes(9);
             }
+            _unitUnderTest40s = new QueryData<float>(unitUnderTest40s, startDate, null);
+            _unitUnderTest9m = new QueryData<float>(unitUnderTest9m, startDate, null);
         }
 
         [TearDown]

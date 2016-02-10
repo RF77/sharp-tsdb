@@ -73,17 +73,17 @@ namespace QueryLanguage.Grouping
         }
 
         [SuppressMessage("ReSharper", "PossibleMultipleEnumeration")]
-        public static IEnumerable<ISingleDataRow<T?>> GroupByMinutes<T>(this IEnumerable<ISingleDataRow<T>> rows, int minutes,
+        public static IEnumerable<ISingleDataRow<T?>> GroupByMinutes<T>(this IQueryData<T> data, int minutes,
             Func<AggregationData<T>, T?> aggregationFunc, TimeStampType timeStampType = TimeStampType.Start) where T : struct
         {
-            if (rows == null || !rows.Any())
-            {
-                return Enumerable.Empty<ISingleDataRow<T?>>();
-            }
-            List<ISingleDataRow<T>> rowList = rows.ToList();
+            //if (rows == null || !rows.Any())
+            //{
+            //    return Enumerable.Empty<ISingleDataRow<T?>>();
+            //}
+            List<ISingleDataRow<T>> rowList = data.Rows.ToList();
 
             ISingleDataRow<T> first = rowList.First();
-            DateTime d = first.Key;
+            DateTime d = data.StartTime ?? first.Key;
 
             int startMinute = d.Minute;
             if (60 % minutes == 0)
@@ -94,11 +94,11 @@ namespace QueryLanguage.Grouping
 
             DateTime currentDate = new DateTime(d.Year, d.Month, d.Day, d.Hour, startMinute, 0);
 
-            return rowList.GroupByTime(0, currentDate, dt => dt + TimeSpan.FromMinutes(minutes), aggregationFunc, timeStampType);
+            return rowList.GroupByTime(0, currentDate, data.StopTime, dt => dt + TimeSpan.FromMinutes(minutes), aggregationFunc, timeStampType);
         }
 
         public static IEnumerable<ISingleDataRow<T?>> GroupByTime<T>(this IList<ISingleDataRow<T>> items,
-            int currentIndex, DateTime startTime, Func<DateTime, DateTime> calcNewDateMethod,
+            int currentIndex, DateTime startTime, DateTime? stopTime, Func<DateTime, DateTime> calcNewDateMethod,
             Func<AggregationData<T>, T?> aggregationFunc, TimeStampType timeStampType = TimeStampType.Start) where T : struct
         {
             DateTime endTime = calcNewDateMethod(startTime);
@@ -148,7 +148,7 @@ namespace QueryLanguage.Grouping
 
                 startTime = endTime;
                 endTime = calcNewDateMethod(startTime);
-            } while (currentIndex < items.Count);
+            } while (currentIndex < items.Count || (stopTime != null && startTime < stopTime));
         }
     }
 }

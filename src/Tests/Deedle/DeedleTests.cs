@@ -37,7 +37,7 @@ namespace Tests
             var db = _unitUnderTest.GetDb("fux");
             
             var measurement = db.GetMeasurement("wetter");
-            var dataPoints = measurement.GetDataPoints<float>(new DateTime(2015,10,1)).ToArray();
+            var dataPoints = measurement.GetDataPoints<float>(new DateTime(2015,10,1)).Rows.ToArray();
             var b = new SeriesBuilder<DateTime, double>();
             foreach (var dataPoint in dataPoints)
             {
