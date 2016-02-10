@@ -58,7 +58,9 @@
     <Compile Include="InterfaceImpl\Db.cs" />
     <Compile Include="InterfaceImpl\DbManagement.cs" />
     <Compile Include="InterfaceImpl\DbMetadata.cs" />
+    <Compile Include="InterfaceImpl\NullableQueryData.cs" />
     <Compile Include="InterfaceImpl\QueryData.cs" />
+    <Compile Include="InterfaceImpl\QueryDataBase.cs" />
     <Compile Include="InterfaceImpl\SingleDataRow.cs" />
     <Compile Include="InterfaceImpl\FloatRowReaderWriter.cs" />
     <Compile Include="InterfaceImpl\IRowReader.cs" />

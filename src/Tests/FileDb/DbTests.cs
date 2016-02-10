@@ -83,7 +83,7 @@ namespace Tests.FileDb
 
         IEnumerable<IDataRow> CreateFloatRows(int numberOfRows)
         {
-            DateTime time = new DateTime(2000,1,1);
+            DateTime time = new DateTime(2000,1,1, 0, 0, 33);
             for (int i = 0; i < numberOfRows; i++)
             {
                 var row = new SingleDataRow<float>(time,(float)(i * 0.5));
@@ -118,19 +118,27 @@ namespace Tests.FileDb
             measurement.AppendDataPoints(CreateFloatRows(numberOfRows));
 
             //All (without dates)
-            var allItems = measurement.GetDataPoints<float>().Rows;
+            var data = measurement.GetDataPoints<float>();
+            var allItems = data.Rows;
             allItems.Count().Should().Be(numberOfRows);
+            data.StartTime.Should().Be(null);
+            data.StopTime.Should().Be(null);
 
-            var dateTime1999 = new DateTime(1999, 1, 1);
-            allItems = measurement.GetDataPoints<float>(dateTime1999).Rows;
+            var dateTime2000 = new DateTime(2000, 1, 1);
+            data = measurement.GetDataPoints<float>(dateTime2000);
+            allItems = data.Rows;
             allItems.Count().Should().Be(numberOfRows);
+            data.StartTime.Should().Be(dateTime2000);
+            data.StopTime.Should().Be(null);
 
             var dateTime2200 = new DateTime(2200,1,1);
-            allItems = measurement.GetDataPoints<float>(dateTime1999, dateTime2200).Rows;
+            data = measurement.GetDataPoints<float>(dateTime2000, dateTime2200);
+            allItems = data.Rows;
             allItems.Count().Should().Be(numberOfRows);
+            data.StartTime.Should().Be(dateTime2000);
+            data.StopTime.Should().Be(dateTime2200);
 
-            var singleItems = measurement.GetDataPoints<float>(dateTime1999, dateTime2200).Rows;
-
+            var singleItems = measurement.GetDataPoints<float>(dateTime2000, dateTime2200).Rows;
             singleItems.Count().Should().Be(allItems.Count());
 
             var time = Stopwatch.StartNew();
@@ -138,26 +146,32 @@ namespace Tests.FileDb
             var dateTime200012 = new DateTime(2000, 1, 21);
 
             //From begin to middle
-            var items = measurement.GetDataPoints<float>(dateTime1999, dateTime200012).Rows.ToList();
-            items[0].Key.Should().BeAfter(dateTime1999);
+            data = measurement.GetDataPoints<float>(null, dateTime200012);
+            var items = data.Rows;
+            items[0].Key.Should().BeAfter(dateTime2000);
             items.Last().Key.Should().BeOnOrBefore(dateTime200012);
-
+            data.PreviousRow.Should().Be(null);
+            data.NextRow.Key.Should().BeAfter(dateTime200012);
             time.Stop();
 
             //From middle to end
-            items = measurement.GetDataPoints<float>(dateTime200012, dateTime2200).Rows.ToList();
-            items[0].Key.Should().BeBefore(dateTime200012);
-            items[1].Key.Should().BeOnOrAfter(dateTime200012);
+            data = measurement.GetDataPoints<float>(dateTime200012, dateTime2200);
+            items = data.Rows;
+            items[0].Key.Should().BeOnOrAfter(dateTime200012);
             items.Last().Key.Should().BeOnOrBefore(dateTime2200);
+            data.PreviousRow.Key.Should().BeBefore(dateTime200012);
+            data.NextRow.Should().Be(null);
 
             time = Stopwatch.StartNew();
 
 
             //From middle to middle
-            items = measurement.GetDataPoints<float>(dateTimeStart, dateTime200012).Rows.ToList();
-            items[0].Key.Should().BeBefore(dateTimeStart);
-            items[1].Key.Should().BeOnOrAfter(dateTimeStart);
+            data = measurement.GetDataPoints<float>(dateTimeStart, dateTime200012);
+            items = data.Rows;
+            items[0].Key.Should().BeOnOrAfter(dateTimeStart);
             items.Last().Key.Should().BeOnOrBefore(dateTime200012);
+            data.PreviousRow.Key.Should().BeBefore(dateTimeStart);
+            data.NextRow.Key.Should().BeAfter(dateTime200012);
 
             time.Stop();
 

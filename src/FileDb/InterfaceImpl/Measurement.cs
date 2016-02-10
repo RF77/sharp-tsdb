@@ -123,32 +123,35 @@ namespace FileDb.InterfaceImpl
                     using (var binaryReader = new BinaryReader(fs))
                     {
                         long itemToStart = GetItemToStart(start, fs, binaryReader, currentItem, currentItem, 0);
+                        if (itemToStart > 0)
+                        {
+                            itemToStart--;
+                        }
                         fs.Position = itemToStart * _rowReaderWriter.RowLength;
 
-                        ISingleDataRow<T> firstRow = null;
-
-                        IReadOnlyList<ISingleDataRow<T>> rows = ReadRows(fs, binaryReader, start, firstRow, stop).ToList();
-                        return new QueryData<T>(rows, from, to);
+                        return ReadRows<T>(fs, binaryReader, start, stop, from, to);
                     }
                 }
             }
         }
 
-        private IEnumerable<ISingleDataRow<T>> ReadRows<T>(FileStream fs, BinaryReader binaryReader, DateTime start, ISingleDataRow<T> firstRow,
-            DateTime stop) where T : struct
+        private IQueryData<T> ReadRows<T>(FileStream fs, BinaryReader binaryReader, DateTime start, 
+            DateTime stop, DateTime? @from = null, DateTime? to = null) where T : struct
         {
+            ISingleDataRow<T> firstRow = null;
+            List< ISingleDataRow < T >> rows = new List<ISingleDataRow<T>>();
+            var data = new QueryData<T>(rows, from, to);
+
             while (fs.Position < fs.Length)
             {
                 var readRow = _rowReaderWriter.ReadRow<T>(binaryReader);
-
+                
                 if (readRow.Key >= start)
                 {
-                    if (firstRow != null)
+                    if (readRow.Key <= stop)
                     {
-                        yield return firstRow;
-                        firstRow = null;
+                        rows.Add(readRow);
                     }
-                    yield return readRow;
                 }
                 else
                 {
@@ -157,10 +160,15 @@ namespace FileDb.InterfaceImpl
 
                 if (readRow.Key >= stop)
                 {
-                    //if fill(next) should be interesting, maybe this row should be returned too
+                    data.NextRow = readRow;
                     break;
                 }
             }
+
+            data.Name = Metadata.Name;
+            data.PreviousRow = firstRow;
+
+            return data;
         }
 
         private long GetItemToStart(DateTime start, FileStream fs, BinaryReader binaryReader, long currentIndex, long currentRange, long lastValidIndex)

@@ -15,13 +15,18 @@ namespace Tests.FileDb
     {
         private QueryData<float> _unitUnderTest40s;
         private QueryData<float> _unitUnderTest9m;
+        private QueryData<float> _unitUnderTest9mNotTrimmed;
+        private DateTime _trimEndDate;
 
         [SetUp]
         public void Setup()
         {
             var unitUnderTest40s = new List<ISingleDataRow<float>>();
             var unitUnderTest9m = new List<ISingleDataRow<float>>();
-            int items = 1000;
+            var unitUnderTest9mNotTrimmed = new List<ISingleDataRow<float>>();
+            //unitUnderTest9mNotTrimmed.Add(new SingleDataRow<float>(new DateTime(2010, 1, 1, 0, 0, 0), -1f));
+            //unitUnderTest9mNotTrimmed.Add(new SingleDataRow<float>(new DateTime(2010, 1, 1, 0, 0, 1), -0.5f));
+            int items = 100;
             var startDate = new DateTime(2010, 1, 1, 13, 27, 14);
             var current40s = startDate;
             var current9m = startDate;
@@ -30,11 +35,26 @@ namespace Tests.FileDb
             {
                 unitUnderTest40s.Add(new SingleDataRow<float>(current40s, 0.5f * i ));
                 unitUnderTest9m.Add(new SingleDataRow<float>(current9m, 0.5f * i ));
+                if (i < 10)
+                {
+                    unitUnderTest9mNotTrimmed.Add(new SingleDataRow<float>(current9m, 0.5f * i));
+                }
                 current40s += TimeSpan.FromSeconds(40);
                 current9m += TimeSpan.FromMinutes(9);
             }
+            //unitUnderTest9mNotTrimmed.Add(new SingleDataRow<float>(new DateTime(2010, 1, 1, 15, 0, 1), -99f));
+            //unitUnderTest9mNotTrimmed.Add(new SingleDataRow<float>(new DateTime(2010, 1, 1, 15, 0, 2), -99.5f));
+
+            _trimEndDate = new DateTime(2010, 1, 1, 15, 1, 0);
+            //unitUnderTest9mNotTrimmed.Add(new SingleDataRow<float>(_trimEndDate, -99.5f));
+
             _unitUnderTest40s = new QueryData<float>(unitUnderTest40s, startDate, null);
             _unitUnderTest9m = new QueryData<float>(unitUnderTest9m, startDate, null);
+            _unitUnderTest9mNotTrimmed = new QueryData<float>(unitUnderTest9mNotTrimmed, new DateTime(2010, 1, 1, 13, 0, 0), new DateTime(2010, 1, 1, 15, 0, 0))
+            {
+                PreviousRow = new SingleDataRow<float>(new DateTime(2010, 1, 1, 0, 0, 1), -0.5f),
+                NextRow = new SingleDataRow<float>(new DateTime(2010, 1, 1, 15, 0, 1), -99f)
+            };
         }
 
         [TearDown]
@@ -68,6 +88,18 @@ namespace Tests.FileDb
             result.First().Key.Should().Be(new DateTime(2010, 1, 1, 13, 24, 0));
             result[1].Value.Should().Be(null);
             result[10].Value.Should().Be(null);
+            sw.Stop();
+        }
+
+        [Test]
+        public void GroupByMinutesTestStartDateAndNullNotTrimmed()
+        {
+            var sw = Stopwatch.StartNew();
+            var result = _unitUnderTest9mNotTrimmed.GroupByMinutes(6, a => a.First()).ToList();
+            result.First().Key.Should().Be(new DateTime(2010, 1, 1, 13, 0, 0));
+            result.Last().Key.Should().Be(new DateTime(2010, 1, 1, 14, 54, 0));
+            result[1].Value.Should().Be(null);
+            result.Last().Value.Should().Be(null);
             sw.Stop();
         }
 
