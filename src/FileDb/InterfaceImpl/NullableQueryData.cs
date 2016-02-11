@@ -14,5 +14,10 @@ namespace FileDb.InterfaceImpl
         {
             Rows = rows;
         }
+
+        public NullableQueryData(IReadOnlyList<ISingleDataRow<T?>> result, IQueryData<T> olddata) : base(olddata)
+        {
+            Rows = result;
+        }
     }
 }

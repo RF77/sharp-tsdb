@@ -66,7 +66,7 @@ namespace Tests.FileDb
         public void GroupByMinutesTestStartDate()
         {
             var sw = Stopwatch.StartNew();
-            var result = _unitUnderTest40s.GroupByMinutes(5, a => a.First()).ToList();
+            var result = _unitUnderTest40s.GroupByMinutes(5, a => a.First()).Rows;
             result.First().Key.Should().Be(new DateTime(2010, 1, 1, 13, 25, 0));
             sw.Stop();
         }
@@ -75,7 +75,7 @@ namespace Tests.FileDb
         public void GroupByMinutes60TestStartDate()
         {
             var sw = Stopwatch.StartNew();
-            var result = _unitUnderTest40s.GroupByMinutes(60, a => a.First()).ToList();
+            var result = _unitUnderTest40s.GroupByMinutes(60, a => a.First()).Rows;
             result.First().Key.Should().Be(new DateTime(2010, 1, 1, 13, 0, 0));
             sw.Stop();
         }
@@ -84,7 +84,7 @@ namespace Tests.FileDb
         public void GroupByMinutesTestStartDateAndNull()
         {
             var sw = Stopwatch.StartNew();
-            var result = _unitUnderTest9m.GroupByMinutes(6, a => a.First()).ToList();
+            var result = _unitUnderTest9m.GroupByMinutes(6, a => a.First()).Rows;
             result.First().Key.Should().Be(new DateTime(2010, 1, 1, 13, 24, 0));
             result[1].Value.Should().Be(null);
             result[10].Value.Should().Be(null);
@@ -95,7 +95,7 @@ namespace Tests.FileDb
         public void GroupByMinutesTestStartDateAndNullNotTrimmed()
         {
             var sw = Stopwatch.StartNew();
-            var result = _unitUnderTest9mNotTrimmed.GroupByMinutes(6, a => a.First()).ToList();
+            var result = _unitUnderTest9mNotTrimmed.GroupByMinutes(6, a => a.First()).Rows;
             result.First().Key.Should().Be(new DateTime(2010, 1, 1, 13, 0, 0));
             result.Last().Key.Should().Be(new DateTime(2010, 1, 1, 14, 54, 0));
             result[1].Value.Should().Be(null);
@@ -107,7 +107,7 @@ namespace Tests.FileDb
         public void GroupByMinutesTestStartDateAndPrevious()
         {
             var sw = Stopwatch.StartNew();
-            var result = _unitUnderTest9m.GroupByMinutes(6, a => a.First()).Fill(ValueForNull.Previous).ToList();
+            var result = _unitUnderTest9m.GroupByMinutes(6, a => a.First()).Fill(ValueForNull.Previous).Rows;
             result[1].Value.Should().Be(0);
             result[10].Value.Should().Be(3);
             sw.Stop();
@@ -117,7 +117,7 @@ namespace Tests.FileDb
         public void GroupByMinutesTestStartDateAnd5()
         {
             var sw = Stopwatch.StartNew();
-            var result = _unitUnderTest9m.GroupByMinutes(6, a => a.First()).FillValue(5).ToList();
+            var result = _unitUnderTest9m.GroupByMinutes(6, a => a.First()).FillValue(5).Rows;
             result[1].Value.Should().Be(5f);
             result[10].Value.Should().Be(5f);
             sw.Stop();
@@ -127,7 +127,7 @@ namespace Tests.FileDb
         public void GroupByMinutesTestStartDateAndNext()
         {
             var sw = Stopwatch.StartNew();
-            var result = _unitUnderTest9m.GroupByMinutes(6, a => a.First()).Fill(ValueForNull.Next).ToList();
+            var result = _unitUnderTest9m.GroupByMinutes(6, a => a.First()).Fill(ValueForNull.Next).Rows;
             result[1].Value.Should().Be(0.5f);
             result[10].Value.Should().Be(3.5f);
             sw.Stop();
@@ -137,7 +137,7 @@ namespace Tests.FileDb
         public void GroupByMinutesTestStartDateAndRemoveNulls()
         {
             var sw = Stopwatch.StartNew();
-            var result = _unitUnderTest9m.GroupByMinutes(6, a => a.First()).RemoveNulls().ToList();
+            var result = _unitUnderTest9m.GroupByMinutes(6, a => a.First()).RemoveNulls().Rows;
             result[1].Value.Should().Be(0.5f);
             result[10].Value.Should().Be(5f);
             sw.Stop();
@@ -147,7 +147,7 @@ namespace Tests.FileDb
         public void GroupByMinutesTestTimeStampEnd()
         {
             var sw = Stopwatch.StartNew();
-            var result = _unitUnderTest9m.GroupByMinutes(6, a => a.First(), TimeStampType.End).ToList();
+            var result = _unitUnderTest9m.GroupByMinutes(6, a => a.First(), TimeStampType.End).Rows;
             result[0].Key.Should().Be(new DateTime(2010, 1, 1, 13, 30, 0));
             sw.Stop();
         }
@@ -156,7 +156,7 @@ namespace Tests.FileDb
         public void GroupByMinutesTestTimeStampMiddle()
         {
             var sw = Stopwatch.StartNew();
-            var result = _unitUnderTest9m.GroupByMinutes(6, a => a.First(), TimeStampType.Middle).ToList();
+            var result = _unitUnderTest9m.GroupByMinutes(6, a => a.First(), TimeStampType.Middle).Rows;
             result[0].Key.Should().Be(new DateTime(2010, 1, 1, 13, 27, 0));
             sw.Stop();
         }

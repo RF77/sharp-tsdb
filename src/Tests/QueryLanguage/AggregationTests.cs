@@ -62,7 +62,7 @@ namespace Tests.FileDb
         public void TestAggreggationFirst()
         {
             var sw = Stopwatch.StartNew();
-            var result = _unitUnderTest50.GroupByMinutes(5, a => a.First()).ToList();
+            var result = _unitUnderTest50.GroupByMinutes(5, a => a.First()).Rows;
             result[0].Value.Should().Be(0);
             result[2].Value.Should().Be(6);
             result[6].Value.Should().Be(21);
@@ -73,7 +73,7 @@ namespace Tests.FileDb
         public void TestAggreggationFirstEven()
         {
             var sw = Stopwatch.StartNew();
-            var result = _unitUnderTest50Even.GroupByMinutes(5, a => a.First()).ToList();
+            var result = _unitUnderTest50Even.GroupByMinutes(5, a => a.First()).Rows;
             result[0].Value.Should().Be(0);
             result[2].Value.Should().Be(5);
             result[6].Value.Should().Be(15);
@@ -84,7 +84,7 @@ namespace Tests.FileDb
         public void TestAggreggationLastEven()
         {
             var sw = Stopwatch.StartNew();
-            var result = _unitUnderTest50Even.GroupByMinutes(5, a => a.Last()).ToList();
+            var result = _unitUnderTest50Even.GroupByMinutes(5, a => a.Last()).Rows;
             result[0].Value.Should().Be(2);
             result[2].Value.Should().Be(7);
             result[6].Value.Should().Be(17);
@@ -95,7 +95,7 @@ namespace Tests.FileDb
         public void TestAggreggationLast()
         {
             var sw = Stopwatch.StartNew();
-            var result = _unitUnderTest50.GroupByMinutes(5, a => a.Last()).ToList();
+            var result = _unitUnderTest50.GroupByMinutes(5, a => a.Last()).Rows;
             result[0].Value.Should().Be(2);
             result[2].Value.Should().Be(9.5f);
             result[6].Value.Should().Be(24.5f);
@@ -106,8 +106,8 @@ namespace Tests.FileDb
         public void TestAggreggationMax()
         {
             var sw = Stopwatch.StartNew();
-            var result = _unitUnderTest50.GroupByMinutes(5, a => a.Max()).ToList();
-            var result2 = _unitUnderTest50.GroupByMinutes(5, a => a.Last()).ToList();
+            var result = _unitUnderTest50.GroupByMinutes(5, a => a.Max()).Rows;
+            var result2 = _unitUnderTest50.GroupByMinutes(5, a => a.Last()).Rows;
             result.Select(i => i.Value).SequenceEqual(result2.Select(i => i.Value)).Should().BeTrue();
             sw.Stop();
         }
@@ -116,8 +116,8 @@ namespace Tests.FileDb
         public void TestAggreggationMin()
         {
             var sw = Stopwatch.StartNew();
-            var result = _unitUnderTest50Int.GroupByMinutes(5, a => a.Min()).ToList();
-            var result2 = _unitUnderTest50Int.GroupByMinutes(5, a => a.First()).ToList();
+            var result = _unitUnderTest50Int.GroupByMinutes(5, a => a.Min()).Rows;
+            var result2 = _unitUnderTest50Int.GroupByMinutes(5, a => a.First()).Rows;
             result.Select(i => i.Value).SequenceEqual(result2.Select(i => i.Value)).Should().BeTrue();
             sw.Stop();
         }

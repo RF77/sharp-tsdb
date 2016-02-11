@@ -28,5 +28,14 @@ namespace FileDb.InterfaceImpl
             StartTime = startTime;
             StopTime = stopTime;
         }
+
+        protected QueryDataBase(IQueryDataBase<T> data)
+        {
+            StartTime = data.StartTime;
+            StopTime = data.StopTime;
+            Name = data.Name;
+            NextRow = data.NextRow;
+            PreviousRow = data.PreviousRow;
+        }
     }
 }

@@ -186,7 +186,7 @@ namespace Tests.FileDb
 
             //All (without dates)
             var rows = measurement.GetDataPoints<double>();
-            var allItems = rows.GroupByMinutes(5, a => a.Values.HarmonicMean()).ToArray();
+            var allItems = rows.GroupByMinutes(5, a => a.Values.HarmonicMean()).Rows.ToArray();
 
 
         }
