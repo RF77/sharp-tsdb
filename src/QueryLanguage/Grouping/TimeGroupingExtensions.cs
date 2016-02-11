@@ -9,69 +9,24 @@ namespace QueryLanguage.Grouping
 {
     public static class TimeGroupingExtensions
     {
-        public static INullableQueryData<T> FillValue<T>(this NullableQueryData<T> data, T fillValue) where T : struct
+        public static NullableQueryData<T> GroupBySeconds<T>(this IQueryData<T> data, int seconds,
+             Func<AggregationData<T>, T?> aggregationFunc, TimeStampType timeStampType = TimeStampType.Start) where T : struct
         {
-            foreach (var row in data.Rows)
+            ISingleDataRow<T> first = data.Rows.First();
+            DateTime d = data.StartTime ?? first.Key;
+
+            int startSeconds = d.Second;
+            if (60 % seconds == 0)
             {
-                if (row.Value == null)
-                {
-                    row.Value = fillValue;
-                }
+                //change start minute to even minute
+                startSeconds = startSeconds - (startSeconds % seconds);
             }
-            return data;
+
+            DateTime currentDate = new DateTime(d.Year, d.Month, d.Day, d.Hour, d.Minute, startSeconds);
+
+            return data.GroupByTime(0, currentDate, data.StopTime, dt => dt + TimeSpan.FromSeconds(seconds), aggregationFunc, timeStampType);
         }
 
-        public static IQueryData<T> RemoveNulls<T>(this INullableQueryData<T> data) where T : struct
-        {
-            return new QueryData<T>(data.Rows.Where(i => i.Value != null).Select(i => new SingleDataRow<T>(i.Key, i.Value.Value)).ToList(), data);
-        }
-
-        public static INullableQueryData<T> Fill<T>(this INullableQueryData<T> data, ValueForNull fillValue) where T : struct
-        {
-            switch (fillValue)
-            {
-                case ValueForNull.Previous:
-                    {
-                        T? previous = data.PreviousRow?.Value;
-                        foreach (var row in data.Rows)
-                        {
-                            if (row.Value == null)
-                            {
-                                row.Value = previous;
-                            }
-                            else
-                            {
-                                previous = row.Value;
-                            }
-                        }
-                    }
-                    break;
-                case ValueForNull.Next:
-                    {
-                        
-                        T? next = data.NextRow?.Value;
-                        var rows = data.Rows;
-                        for (int i = rows.Count - 1; i >= 0; i--)
-                        {
-                            var item = rows[i];
-                            if (item.Value == null)
-                            {
-                                item.Value = next;
-                            }
-                            else
-                            {
-                                next = item.Value;
-                            }
-                        }
-                    }
-                    break;
-                default:
-                    throw new ArgumentOutOfRangeException(nameof(fillValue), fillValue, null);
-            }
-            return data;
-        }
-
-        [SuppressMessage("ReSharper", "PossibleMultipleEnumeration")]
         public static NullableQueryData<T> GroupByMinutes<T>(this IQueryData<T> data, int minutes,
             Func<AggregationData<T>, T?> aggregationFunc, TimeStampType timeStampType = TimeStampType.Start) where T : struct
         {
@@ -88,6 +43,71 @@ namespace QueryLanguage.Grouping
             DateTime currentDate = new DateTime(d.Year, d.Month, d.Day, d.Hour, startMinute, 0);
 
             return data.GroupByTime(0, currentDate, data.StopTime, dt => dt + TimeSpan.FromMinutes(minutes), aggregationFunc, timeStampType);
+        }
+
+        public static NullableQueryData<T> GroupByHours<T>(this IQueryData<T> data, int hours,
+     Func<AggregationData<T>, T?> aggregationFunc, TimeStampType timeStampType = TimeStampType.Start) where T : struct
+        {
+            ISingleDataRow<T> first = data.Rows.First();
+            DateTime d = data.StartTime ?? first.Key;
+
+            int startHour = d.Hour;
+            if (24 % hours == 0)
+            {
+                //change start minute to even minute
+                startHour = startHour - (startHour % hours);
+            }
+
+            DateTime currentDate = new DateTime(d.Year, d.Month, d.Day, startHour, 0, 0);
+
+            return data.GroupByTime(0, currentDate, data.StopTime, dt => dt + TimeSpan.FromHours(hours), aggregationFunc, timeStampType);
+        }
+
+        public static NullableQueryData<T> GroupByDays<T>(this IQueryData<T> data, int days,
+     Func<AggregationData<T>, T?> aggregationFunc, int startHour = 0, TimeStampType timeStampType = TimeStampType.Start) where T : struct
+        {
+            ISingleDataRow<T> first = data.Rows.First();
+            DateTime d = data.StartTime ?? first.Key;
+
+            DateTime currentDate = new DateTime(d.Year, d.Month, d.Day, startHour, 0, 0);
+
+            return data.GroupByTime(0, currentDate, data.StopTime, dt => dt + TimeSpan.FromDays(days), aggregationFunc, timeStampType);
+        }
+
+        public static NullableQueryData<T> GroupByMonths<T>(this IQueryData<T> data, int months,
+Func<AggregationData<T>, T?> aggregationFunc, TimeStampType timeStampType = TimeStampType.Start) where T : struct
+        {
+            ISingleDataRow<T> first = data.Rows.First();
+            DateTime d = data.StartTime ?? first.Key;
+
+            int startMonth = d.Month;
+            if (12 % months == 0)
+            {
+                startMonth = startMonth - (startMonth % months) + 1;
+            }
+
+            DateTime currentDate = new DateTime(d.Year, startMonth, 1, 0, 0, 0);
+
+            return data.GroupByTime(0, currentDate, data.StopTime, dt =>
+            {
+                int year = dt.Year;
+                int month = dt.Month;
+                int newMonth = month + months;
+                year += (newMonth - 1) / 12;
+                month = ((newMonth - 1)%12) + 1;
+                return new DateTime(year, month, 1);
+            }, aggregationFunc, timeStampType);
+        }
+
+        public static NullableQueryData<T> GroupByYears<T>(this IQueryData<T> data, int years,
+Func<AggregationData<T>, T?> aggregationFunc, TimeStampType timeStampType = TimeStampType.Start) where T : struct
+        {
+            ISingleDataRow<T> first = data.Rows.First();
+            DateTime d = data.StartTime ?? first.Key;
+
+            DateTime currentDate = new DateTime(d.Year, 1, 1);
+
+            return data.GroupByTime(0, currentDate, data.StopTime, dt => new DateTime(dt.Year + years, 1, 1), aggregationFunc, timeStampType);
         }
 
         public static NullableQueryData<T> GroupByTime<T>(this IQueryData<T> data,

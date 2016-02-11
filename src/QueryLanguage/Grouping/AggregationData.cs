@@ -9,9 +9,13 @@ namespace QueryLanguage.Grouping
     {
         public IReadOnlyList<ISingleDataRow<T>> Rows { get; set; }
 
-        public T[] Values
+        public T[] ValueArray
         {
             get { return Rows.Select(i => i.Value).ToArray(); }
+        }
+        public IEnumerable<T> Values
+        {
+            get { return Rows.Select(i => i.Value); }
         }
 
         public ISingleDataRow<T> Previous { get; set; }

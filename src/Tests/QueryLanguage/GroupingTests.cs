@@ -8,7 +8,7 @@ using FluentAssertions;
 using NUnit.Framework;
 using QueryLanguage.Grouping;
 
-namespace Tests.FileDb
+namespace Tests.QueryLanguage
 {
     [TestFixture]
     public class GroupingTests
@@ -17,19 +17,23 @@ namespace Tests.FileDb
         private QueryData<float> _unitUnderTest9m;
         private QueryData<float> _unitUnderTest9mNotTrimmed;
         private DateTime _trimEndDate;
+        private QueryData<float> _unitUnderTest5h;
 
         [SetUp]
         public void Setup()
         {
             var unitUnderTest40s = new List<ISingleDataRow<float>>();
             var unitUnderTest9m = new List<ISingleDataRow<float>>();
+            var unitUnderTest5h = new List<ISingleDataRow<float>>();
             var unitUnderTest9mNotTrimmed = new List<ISingleDataRow<float>>();
             //unitUnderTest9mNotTrimmed.Add(new SingleDataRow<float>(new DateTime(2010, 1, 1, 0, 0, 0), -1f));
             //unitUnderTest9mNotTrimmed.Add(new SingleDataRow<float>(new DateTime(2010, 1, 1, 0, 0, 1), -0.5f));
             int items = 100;
             var startDate = new DateTime(2010, 1, 1, 13, 27, 14);
+            var startDate5h = new DateTime(2010, 5, 19, 13, 27, 14);
             var current40s = startDate;
             var current9m = startDate;
+            var current5h = startDate5h;
 
             for (int i = 0; i < items; i++)
             {
@@ -42,6 +46,13 @@ namespace Tests.FileDb
                 current40s += TimeSpan.FromSeconds(40);
                 current9m += TimeSpan.FromMinutes(9);
             }
+
+            for (int i = 0; i < 10000; i++)
+            {
+                unitUnderTest5h.Add(new SingleDataRow<float>(current5h, 0.5f * i));
+                
+                current5h += TimeSpan.FromHours(5);
+            }
             //unitUnderTest9mNotTrimmed.Add(new SingleDataRow<float>(new DateTime(2010, 1, 1, 15, 0, 1), -99f));
             //unitUnderTest9mNotTrimmed.Add(new SingleDataRow<float>(new DateTime(2010, 1, 1, 15, 0, 2), -99.5f));
 
@@ -50,6 +61,7 @@ namespace Tests.FileDb
 
             _unitUnderTest40s = new QueryData<float>(unitUnderTest40s, startDate, null);
             _unitUnderTest9m = new QueryData<float>(unitUnderTest9m, startDate, null);
+            _unitUnderTest5h = new QueryData<float>(unitUnderTest5h, startDate5h, null);
             _unitUnderTest9mNotTrimmed = new QueryData<float>(unitUnderTest9mNotTrimmed, new DateTime(2010, 1, 1, 13, 0, 0), new DateTime(2010, 1, 1, 15, 0, 0))
             {
                 PreviousRow = new SingleDataRow<float>(new DateTime(2010, 1, 1, 0, 0, 1), -0.5f),
@@ -63,11 +75,77 @@ namespace Tests.FileDb
         }
 
         [Test]
+        public void GroupBySeconds()
+        {
+            var sw = Stopwatch.StartNew();
+            var result = _unitUnderTest40s.GroupBySeconds(30, a => a.First()).Rows;
+            result.First().Key.Should().Be(new DateTime(2010, 1, 1, 13, 27, 0));
+            sw.Stop();
+        }
+
+        [Test]
         public void GroupByMinutesTestStartDate()
         {
             var sw = Stopwatch.StartNew();
             var result = _unitUnderTest40s.GroupByMinutes(5, a => a.First()).Rows;
             result.First().Key.Should().Be(new DateTime(2010, 1, 1, 13, 25, 0));
+            sw.Stop();
+        }
+
+        [Test]
+        public void GroupByHours()
+        {
+            var sw = Stopwatch.StartNew();
+            var result = _unitUnderTest9m.GroupByHours(3, a => a.First()).Rows;
+            result.First().Key.Should().Be(new DateTime(2010, 1, 1, 12, 0, 0));
+            sw.Stop();
+        }
+
+        [Test]
+        public void GroupByDaysAndMidnight()
+        {
+            var sw = Stopwatch.StartNew();
+            var result = _unitUnderTest5h.GroupByDays(3, a => a.First()).Rows;
+            result.First().Key.Should().Be(new DateTime(2010, 5, 19, 0, 0, 0));
+            var last = result.Last();
+            sw.Stop();
+        }
+
+        [Test]
+        public void GroupByDaysAnd9()
+        {
+            var sw = Stopwatch.StartNew();
+            var result = _unitUnderTest5h.GroupByDays(3, a => a.First(), 9).Rows;
+            result[0].Key.Should().Be(new DateTime(2010, 5, 19, 9, 0, 0));
+            result[1].Key.Should().Be(new DateTime(2010, 5, 22, 9, 0, 0));
+            var last = result.Last();
+            sw.Stop();
+        }
+
+
+
+
+        [Test]
+        public void GroupByMonths()
+        {
+            var sw = Stopwatch.StartNew();
+            var result = _unitUnderTest5h.GroupByMonths(2, a => a.First()).Rows;
+            result[0].Key.Should().Be(new DateTime(2010, 5, 1, 0, 0, 0));
+            result[1].Key.Should().Be(new DateTime(2010, 7, 1, 0, 0, 0));
+            result[10].Key.Should().Be(new DateTime(2012, 1, 1, 0, 0, 0));
+            var last = result.Last();
+            sw.Stop();
+        }
+
+        [Test]
+        public void GroupByYears()
+        {
+            var sw = Stopwatch.StartNew();
+            var result = _unitUnderTest5h.GroupByYears(2, a => a.First()).Rows;
+            result[0].Key.Should().Be(new DateTime(2010, 1, 1, 0, 0, 0));
+            result[1].Key.Should().Be(new DateTime(2012, 1, 1, 0, 0, 0));
+            result[2].Key.Should().Be(new DateTime(2014, 1, 1, 0, 0, 0));
+            var last = result.Last();
             sw.Stop();
         }
 
