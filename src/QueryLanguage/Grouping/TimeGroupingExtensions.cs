@@ -74,6 +74,22 @@ namespace QueryLanguage.Grouping
             return data.GroupByTime(0, currentDate, data.StopTime, dt => dt + TimeSpan.FromDays(days), aggregationFunc, timeStampType);
         }
 
+        public static NullableQueryData<T> GroupByWeeks<T>(this IQueryData<T> data, int weeks,
+Func<AggregationData<T>, T?> aggregationFunc, DayOfWeek startDay = DayOfWeek.Monday, TimeStampType timeStampType = TimeStampType.Start) where T : struct
+        {
+            ISingleDataRow<T> first = data.Rows.First();
+            DateTime d = data.StartTime ?? first.Key;
+
+            DateTime startDate = new DateTime(d.Year, d.Month, d.Day);
+
+            while (startDate.DayOfWeek != startDay)
+            {
+                startDate = startDate - TimeSpan.FromDays(1);
+            }
+
+            return data.GroupByTime(0, startDate, data.StopTime, dt => dt + TimeSpan.FromDays(weeks * 7), aggregationFunc, timeStampType);
+        }
+
         public static NullableQueryData<T> GroupByMonths<T>(this IQueryData<T> data, int months,
 Func<AggregationData<T>, T?> aggregationFunc, TimeStampType timeStampType = TimeStampType.Start) where T : struct
         {

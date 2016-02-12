@@ -59,7 +59,7 @@ namespace SharpTsdb
             IDbManagement dbm = new DbManagement();
 
             var myDb = dbm.GetDb(db);
-            var measurement = myDb.GetMeasurement(meas);
+            var measurement = myDb.GetOrCreateMeasurement(meas);
             measurement.AppendDataPoints(points.Select(i => new DataRow() {Key = i.t, Value = i.v}));
             return "ok";
         }

@@ -15,5 +15,6 @@ namespace DbInterfaces.Interfaces
         IReadOnlyList<string> GetMeasurementNames();
         void DeleteMeasurement(string name);
         void DeleteAllMeasurements();
+        IMeasurement GetOrCreateMeasurement(string name);
     }
 }

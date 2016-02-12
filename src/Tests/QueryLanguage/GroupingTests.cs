@@ -137,6 +137,39 @@ namespace Tests.QueryLanguage
             sw.Stop();
         }
 
+
+        [Test]
+        public void GroupByWeeks()
+        {
+            var dayOfWeek = DayOfWeek.Monday;
+            var sw = Stopwatch.StartNew();
+            var result = _unitUnderTest5h.GroupByWeeks(1, a => a.First()).Rows;
+            result[0].Key.Should().Be(new DateTime(2010, 5, 17, 0, 0, 0));
+            result[0].Key.DayOfWeek.Should().Be(dayOfWeek);
+            result[1].Key.Should().Be(new DateTime(2010, 5, 24, 0, 0, 0));
+            result[1].Key.DayOfWeek.Should().Be(dayOfWeek);
+            result[13].Key.DayOfWeek.Should().Be(dayOfWeek);
+            result.Last().Key.DayOfWeek.Should().Be(dayOfWeek);
+
+            sw.Stop();
+        }
+
+        [Test]
+        public void GroupByWeeksStartingSaturday()
+        {
+            var dayOfWeek = DayOfWeek.Saturday;
+            var sw = Stopwatch.StartNew();
+            var result = _unitUnderTest5h.GroupByWeeks(1, a => a.First(), dayOfWeek).Rows;
+            result[0].Key.Should().Be(new DateTime(2010, 5, 15, 0, 0, 0));
+            result[0].Key.DayOfWeek.Should().Be(dayOfWeek);
+            result[1].Key.Should().Be(new DateTime(2010, 5, 22, 0, 0, 0));
+            result[1].Key.DayOfWeek.Should().Be(dayOfWeek);
+            result[13].Key.DayOfWeek.Should().Be(dayOfWeek);
+            result.Last().Key.DayOfWeek.Should().Be(dayOfWeek);
+
+            sw.Stop();
+        }
+
         [Test]
         public void GroupByYears()
         {

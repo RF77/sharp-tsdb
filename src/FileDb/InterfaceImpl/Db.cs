@@ -67,5 +67,14 @@ namespace FileDb.InterfaceImpl
         {
             MetadataInternal.Measurements.Clear();
         }
+
+        public IMeasurement GetOrCreateMeasurement(string name)
+        {
+            if (MetadataInternal.Measurements.ContainsKey(name))
+            {
+                return GetMeasurement(name);
+            }
+            return CreateMeasurement(name, typeof (float));
+        }
     }
 }
