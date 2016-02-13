@@ -21,6 +21,12 @@ namespace FileDb.InterfaceImpl
         [DataMember]
         public MeasurementMetadata MetadataInternal { get; set; }
 
+        public IQueryData<T> GetDataPoints<T>(string timeExpression) where T : struct
+        {
+            var expression = new TimeExpression(timeExpression);
+            return GetDataPoints<T>(expression.From, expression.To);
+        }
+
         public void ClearDataPoints()
         {
             lock (this)

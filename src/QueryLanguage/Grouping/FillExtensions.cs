@@ -7,7 +7,7 @@ namespace QueryLanguage.Grouping
 {
     public static class FillExtensions
     {
-        public static INullableQueryData<T> FillValue<T>(this NullableQueryData<T> data, T fillValue) where T : struct
+        public static INullableQueryData<T> FillValue<T>(this INullableQueryData<T> data, T fillValue) where T : struct
         {
             foreach (var row in data.Rows)
             {

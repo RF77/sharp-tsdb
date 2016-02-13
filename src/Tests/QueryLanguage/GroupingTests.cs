@@ -272,5 +272,36 @@ namespace Tests.QueryLanguage
             sw.Stop();
         }
 
+
+        [Test]
+        public void GroupByExpressionSeconds()
+        {
+            var sw = Stopwatch.StartNew();
+            var result = _unitUnderTest40s.GroupBy("30s", a => a.First(), TimeStampType.Middle).Rows;
+            result[0].Key.Should().Be(new DateTime(2010, 1, 1, 13, 27, 0));
+            result[1].Key.Should().Be(new DateTime(2010, 1, 1, 13, 27, 30));
+            sw.Stop();
+        }
+
+        [Test]
+        public void GroupByExpressionMinutes()
+        {
+            var sw = Stopwatch.StartNew();
+            var result = _unitUnderTest40s.GroupBy("6m", a => a.First(), TimeStampType.Middle).Rows;
+            result[0].Key.Should().Be(new DateTime(2010, 1, 1, 13, 24, 0));
+            result[1].Key.Should().Be(new DateTime(2010, 1, 1, 13, 30, 0));
+            sw.Stop();
+        }
+
+        [Test]
+        public void GroupByExpressionHourss()
+        {
+            var sw = Stopwatch.StartNew();
+            var result = _unitUnderTest9m.GroupBy("3h", a => a.First(), TimeStampType.Middle).Rows;
+            result[0].Key.Should().Be(new DateTime(2010, 1, 1, 13, 24, 0));
+            result[1].Key.Should().Be(new DateTime(2010, 1, 1, 13, 30, 0));
+            sw.Stop();
+        }
+
     }
 }
