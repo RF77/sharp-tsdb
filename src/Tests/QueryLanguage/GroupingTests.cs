@@ -298,8 +298,8 @@ namespace Tests.QueryLanguage
         {
             var sw = Stopwatch.StartNew();
             var result = _unitUnderTest9m.GroupBy("3h", a => a.First(), TimeStampType.Middle).Rows;
-            result[0].Key.Should().Be(new DateTime(2010, 1, 1, 13, 24, 0));
-            result[1].Key.Should().Be(new DateTime(2010, 1, 1, 13, 30, 0));
+            result[0].Key.Should().Be(new DateTime(2010, 1, 1, 12, 0, 0));
+            result[1].Key.Should().Be(new DateTime(2010, 1, 1, 15, 0, 0));
             sw.Stop();
         }
 
