@@ -1,33 +1,30 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Runtime.Serialization;
-using System.Threading;
 using DbInterfaces.Interfaces;
 using FileDb.Properties;
 
 namespace FileDb.InterfaceImpl
 {
     [DataContract]
-    public class Measurement : IMeasurement
+    public class Measurement : ReadWritLockable, IMeasurement
     {
         private const int MinSearchRange = 1000;
-        private static RowReadWriterFactory _rowReadWriterFactory;
-        private static readonly TimeSpan _readWriteTimeOut = TimeSpan.FromMinutes(3);
 
         [DataMember] private readonly Db _db;
+        private static RowReadWriterFactory _rowReadWriterFactory;
 
-        private readonly ReaderWriterLock _rwl = new ReaderWriterLock();
         private RowReaderWriter _rowReaderWriter;
 
         /// <summary>
         ///     Only for deserialization
         /// </summary>
-        private Measurement()
+        private Measurement():base(TimeSpan.FromMinutes(3))
         {
         }
 
-        public Measurement(MeasurementMetadata metadataInternal, Db db)
+        public Measurement(MeasurementMetadata metadataInternal, Db db):this()
         {
             _db = db;
             MetadataInternal = metadataInternal;
@@ -40,7 +37,7 @@ namespace FileDb.InterfaceImpl
         /// <param name="name"></param>
         /// <param name="type"></param>
         /// <param name="db"></param>
-        public Measurement(string name, Type type, Db db)
+        public Measurement(string name, Type type, Db db):this()
         {
             _db = db;
             MetadataInternal = new MeasurementMetadata(name);
@@ -62,26 +59,20 @@ namespace FileDb.InterfaceImpl
 
         public void ClearDataPoints()
         {
-            try
+            WriterLock(() =>
             {
-                _rwl.AcquireWriterLock(_readWriteTimeOut);
                 using (var fs = File.Open(BinaryFilePath, FileMode.Create, FileAccess.Write, FileShare.None))
                 {
                 }
-            }
-            finally
-            {
-                _rwl.ReleaseWriterLock();
-            }
+            });
         }
 
         public IMeasurementMetadata Metadata => MetadataInternal;
 
         public void AppendDataPoints(IEnumerable<IDataRow> row)
         {
-            try
+            WriterLock(() =>
             {
-                _rwl.AcquireWriterLock(_readWriteTimeOut);
                 using (var fs = File.Open(BinaryFilePath, FileMode.Append, FileAccess.Write, FileShare.None))
                 {
                     using (var bw = new BinaryWriter(fs))
@@ -92,18 +83,13 @@ namespace FileDb.InterfaceImpl
                         }
                     }
                 }
-            }
-            finally
-            {
-                _rwl.ReleaseWriterLock();
-            }
+            });
         }
 
         public IQueryData<T> GetDataPoints<T>(DateTime? @from = null, DateTime? to = null) where T : struct
         {
-            try
+            return ReaderLock(() =>
             {
-                _rwl.AcquireReaderLock(_readWriteTimeOut);
                 var start = from ?? DateTime.MinValue;
                 var stop = to ?? DateTime.MaxValue;
 
@@ -124,11 +110,7 @@ namespace FileDb.InterfaceImpl
                         return ReadRows<T>(fs, binaryReader, start, stop, from, to);
                     }
                 }
-            }
-            finally
-            {
-                _rwl.ReleaseReaderLock();
-            }
+            });
         }
 
         [OnDeserialized]

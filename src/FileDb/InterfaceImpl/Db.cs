@@ -2,18 +2,16 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Threading;
 using DbInterfaces.Interfaces;
 using FileDb.Properties;
 using Infrastructure;
 
 namespace FileDb.InterfaceImpl
 {
-    public class Db : IDb
+    public class Db : ReadWritLockable, IDb
     {
-        public string Name
-        {
-            get { return Metadata.Name; }
-        }
+        public string Name => Metadata.Name;
 
         public void SaveMetadata()
         {
@@ -22,7 +20,7 @@ namespace FileDb.InterfaceImpl
 
         public string MeasurementDirectory => Path.Combine(MetadataInternal.DbPath, Settings.Default.MeasurementDirectory);
 
-        public Db(DbMetadata metadata)
+        public Db(DbMetadata metadata):base(TimeSpan.FromSeconds(30))
         {
             MetadataInternal = metadata;
             Directory.CreateDirectory(MeasurementDirectory);
@@ -30,56 +28,62 @@ namespace FileDb.InterfaceImpl
 
         public DbMetadata MetadataInternal { get; set; }
 
-        public IDbMetadata Metadata
-        {
-            get { return MetadataInternal; }
-        }
+        public IDbMetadata Metadata => MetadataInternal;
 
         public void CreateMeasurement(IMeasurementMetadata metadata)
         {
-            MetadataInternal.SetMeasurement(metadata.Name, new Measurement((MeasurementMetadata) metadata, this));
+            WriterLock(() =>
+            {
+                MetadataInternal.SetMeasurement(metadata.Name, new Measurement((MeasurementMetadata) metadata, this));
+            });
         }
 
         public IMeasurement CreateMeasurement(string name, Type valueType)
         {
-            var meas = new Measurement(name, valueType, this);
-            MetadataInternal.SetMeasurement(name, meas);
-            SaveMetadata();
-            return meas;
+            return WriterLock(() =>
+            {
+                var meas = new Measurement(name, valueType, this);
+                MetadataInternal.SetMeasurement(name, meas);
+                SaveMetadata();
+                return meas;
+            });
         }
 
         public IMeasurement GetMeasurement(string name)
         {
-            return MetadataInternal.GetMeasurement(name);
+            return ReaderLock(() => MetadataInternal.GetMeasurement(name));
         }
 
         public IQueryData<T> GetData<T>(string measurementName, string timeExpression) where T : struct
         {
-            return GetMeasurement(measurementName).GetDataPoints<T>(timeExpression);
+            return ReaderLock(() => GetMeasurement(measurementName).GetDataPoints<T>(timeExpression));
         }
 
         public IReadOnlyList<string> GetMeasurementNames()
         {
-            return MetadataInternal.Measurements.Keys.ToList();
+            return ReaderLock(() => MetadataInternal.Measurements.Keys.ToList());
         }
 
         public void DeleteMeasurement(string name)
         {
-            MetadataInternal.Measurements.Remove(name);
+            WriterLock(() => MetadataInternal.Measurements.Remove(name));
         }
 
         public void DeleteAllMeasurements()
         {
-            MetadataInternal.Measurements.Clear();
+            WriterLock(() => MetadataInternal.Measurements.Clear());
         }
 
         public IMeasurement GetOrCreateMeasurement(string name)
         {
-            if (MetadataInternal.Measurements.ContainsKey(name))
+            return WriterLock(() =>
             {
-                return GetMeasurement(name);
-            }
-            return CreateMeasurement(name, typeof (float));
+                if (MetadataInternal.Measurements.ContainsKey(name))
+                {
+                    return GetMeasurement(name);
+                }
+                return CreateMeasurement(name, typeof (float));
+            });
         }
     }
 }

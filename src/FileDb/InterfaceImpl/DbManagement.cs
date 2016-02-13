@@ -14,35 +14,31 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using System.Threading;
 using DbInterfaces.Interfaces;
 using Infrastructure;
 using log4net;
 
 namespace FileDb.InterfaceImpl
 {
-    public class DbManagement : IDbManagement
+    public class DbManagement : ReadWritLockable, IDbManagement
     {
         private static readonly ILog Logger = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
+        private readonly Dictionary<string, IDb> _loadedDbs = new Dictionary<string, IDb>();
+        private readonly string _prefix = "";
 
         /// <summary>
-        /// Key: DB Name
-        /// Value: Path to Metadata
+        ///     Key: DB Name
+        ///     Value: Path to Metadata
         /// </summary>
         private Dictionary<string, string> _dbNames = new Dictionary<string, string>();
 
-        private readonly Dictionary<string, IDb> _loadedDbs = new Dictionary<string, IDb>();
-
-        private readonly string _prefix = "";
-
-        private string DbNamesFileName => $"{_prefix}Dbs.json";
-
-
-        public DbManagement()
+        public DbManagement():base(TimeSpan.FromSeconds(30))
         {
             Deserialize();
         }
 
-        public DbManagement(bool test)
+        public DbManagement(bool test) : base(TimeSpan.FromSeconds(30))
         {
             if (test)
             {
@@ -50,6 +46,90 @@ namespace FileDb.InterfaceImpl
             }
 
             Deserialize();
+        }
+
+        private string DbNamesFileName => $"{_prefix}Dbs.json";
+        public IEnumerable<IDb> LoadedDbs => _loadedDbs.Values;
+
+        public IDb CreateDb(string directoryPath, string name)
+        {
+            return WriterLock(() =>
+            {
+                var dirInfo = new DirectoryInfo(Path.Combine(directoryPath, name));
+                if (!dirInfo.Exists)
+                {
+                    dirInfo.Create();
+                }
+
+                var metaData = new DbMetadata
+                {
+                    Name = name,
+                    DbPath = dirInfo.FullName,
+                    Id = Guid.NewGuid()
+                };
+
+                InitDbFromMetadata(name, metaData);
+
+                return GetDb(name);
+            });
+        }
+
+        public IDb GetDb(string name)
+        {
+            return ReaderLock(() =>
+            {
+                IDb db;
+                if (!_loadedDbs.TryGetValue(name, out db))
+                {
+                    var path = _dbNames[name];
+                    db = new Db(path.LoadFromFile<DbMetadata>());
+                }
+                return db;
+            });
+        }
+
+        public IReadOnlyList<string> GetDbNames()
+        {
+            return ReaderLock(() => _dbNames.Keys.ToList());
+        }
+
+        public void DeleteDb(string name)
+        {
+            WriterLock(() =>
+            {
+                var directoryInfo = new FileInfo(_dbNames[name]).Directory;
+                directoryInfo?.Delete(true);
+            });
+        }
+
+        public void AttachDb(string dbPath)
+        {
+            WriterLock(() =>
+            {
+                var metadataPath = DbMetadata.GetMetadataPath(dbPath);
+                var metaData = metadataPath.LoadFromFile<DbMetadata>();
+                InitDbFromMetadata(metaData.Name, metaData);
+            });
+        }
+
+        public void DetachDb(string dbName)
+        {
+            WriterLock(() =>
+            {
+                _dbNames.Remove(dbName);
+                _loadedDbs.Remove(dbName);
+                Serialize();
+            });
+        }
+
+        public void DetachAllDbs()
+        {
+            WriterLock(() =>
+            {
+                _loadedDbs.Clear();
+                _dbNames.Clear();
+                Serialize();
+            });
         }
 
         private void Deserialize()
@@ -73,26 +153,6 @@ namespace FileDb.InterfaceImpl
             _dbNames.SaveToUserProfile(DbNamesFileName);
         }
 
-        public IDb CreateDb(string directoryPath, string name)
-        {
-            var dirInfo = new DirectoryInfo(Path.Combine(directoryPath, name));
-            if (!dirInfo.Exists)
-            {
-                dirInfo.Create();
-            }
-
-            var metaData = new DbMetadata()
-            {
-                Name = name,
-                DbPath = dirInfo.FullName,
-                Id = Guid.NewGuid()
-            };
-
-            InitDbFromMetadata(name, metaData);
-            
-            return GetDb(name);
-        }
-
         private void InitDbFromMetadata(string name, DbMetadata metaData)
         {
             _dbNames[name] = metaData.DbMetadataPath;
@@ -101,51 +161,5 @@ namespace FileDb.InterfaceImpl
             _loadedDbs[name] = db;
             db.SaveMetadata();
         }
-
-
-        public IDb GetDb(string name)
-        {
-            IDb db;
-            if (!_loadedDbs.TryGetValue(name, out db))
-            {
-                var path = _dbNames[name];
-                db = new Db(path.LoadFromFile<DbMetadata>());
-            }
-            return db;
-        }
-
-        public IReadOnlyList<string> GetDbNames()
-        {
-            return _dbNames.Keys.ToList();
-        }
-
-        public void DeleteDb(string name)
-        {
-            var directoryInfo = new FileInfo(_dbNames[name]).Directory;
-            directoryInfo?.Delete(true);
-        }
-
-        public void AttachDb(string dbPath)
-        {
-            var metadataPath = DbMetadata.GetMetadataPath(dbPath);
-            var metaData = metadataPath.LoadFromFile<DbMetadata>();
-            InitDbFromMetadata(metaData.Name, metaData);
-        }
-
-        public void DetachDb(string dbName)
-        {
-            _dbNames.Remove(dbName);
-            _loadedDbs.Remove(dbName);
-            Serialize();
-        }
-
-        public void DetachAllDbs()
-        {
-            _loadedDbs.Clear();
-            _dbNames.Clear();
-            Serialize();
-        }
-
-        public IEnumerable<IDb> LoadedDbs => _loadedDbs.Values;
     }
 }

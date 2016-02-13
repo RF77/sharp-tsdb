@@ -59,6 +59,7 @@
     <Compile Include="InterfaceImpl\DbManagement.cs" />
     <Compile Include="InterfaceImpl\DbMetadata.cs" />
     <Compile Include="InterfaceImpl\LongExtensions.cs" />
+    <Compile Include="InterfaceImpl\Measurement.cs" />
     <Compile Include="InterfaceImpl\NullableQueryData.cs" />
     <Compile Include="InterfaceImpl\QueryData.cs" />
     <Compile Include="InterfaceImpl\QueryDataBase.cs" />
@@ -66,7 +67,7 @@
     <Compile Include="InterfaceImpl\FloatRowReaderWriter.cs" />
     <Compile Include="InterfaceImpl\IRowReader.cs" />
     <Compile Include="InterfaceImpl\IRowWriter.cs" />
-    <Compile Include="InterfaceImpl\Measurement.cs" />
+    <Compile Include="InterfaceImpl\ReadWritLockable.cs" />
     <Compile Include="InterfaceImpl\MeasurementMetadata.cs" />
     <Compile Include="InterfaceImpl\RowReaderWriter.cs" />
     <Compile Include="InterfaceImpl\RowReadWriterFactory.cs" />
