@@ -46,6 +46,7 @@ namespace QueryLanguage.Grouping
         public static INullableQueryData<T> GroupBySeconds<T>(this IQueryData<T> data, int seconds,
              Func<AggregationData<T>, T?> aggregationFunc, TimeStampType timeStampType = TimeStampType.Start) where T : struct
         {
+            if (!data.Rows.Any()) return new NullableQueryData<T>(new List<ISingleDataRow<T?>>(), data);
             ISingleDataRow<T> first = data.Rows.First();
             DateTime d = data.StartTime ?? first.Key;
 
@@ -64,6 +65,7 @@ namespace QueryLanguage.Grouping
         public static INullableQueryData<T> GroupByMinutes<T>(this IQueryData<T> data, int minutes,
             Func<AggregationData<T>, T?> aggregationFunc, TimeStampType timeStampType = TimeStampType.Start) where T : struct
         {
+            if (!data.Rows.Any()) return new NullableQueryData<T>(new List<ISingleDataRow<T?>>(), data);
             ISingleDataRow<T> first = data.Rows.First();
             DateTime d = data.StartTime ?? first.Key;
 
@@ -82,6 +84,7 @@ namespace QueryLanguage.Grouping
         public static INullableQueryData<T> GroupByHours<T>(this IQueryData<T> data, int hours,
      Func<AggregationData<T>, T?> aggregationFunc, TimeStampType timeStampType = TimeStampType.Start) where T : struct
         {
+            if (!data.Rows.Any()) return new NullableQueryData<T>(new List<ISingleDataRow<T?>>(), data);
             ISingleDataRow<T> first = data.Rows.First();
             DateTime d = data.StartTime ?? first.Key;
 
@@ -100,6 +103,7 @@ namespace QueryLanguage.Grouping
         public static INullableQueryData<T> GroupByDays<T>(this IQueryData<T> data, int days,
      Func<AggregationData<T>, T?> aggregationFunc, int startHour = 0, TimeStampType timeStampType = TimeStampType.Start) where T : struct
         {
+            if (!data.Rows.Any()) return new NullableQueryData<T>(new List<ISingleDataRow<T?>>(), data);
             ISingleDataRow<T> first = data.Rows.First();
             DateTime d = data.StartTime ?? first.Key;
 
@@ -111,6 +115,7 @@ namespace QueryLanguage.Grouping
         public static INullableQueryData<T> GroupByWeeks<T>(this IQueryData<T> data, int weeks,
 Func<AggregationData<T>, T?> aggregationFunc, DayOfWeek startDay = DayOfWeek.Monday, TimeStampType timeStampType = TimeStampType.Start) where T : struct
         {
+            if (!data.Rows.Any()) return new NullableQueryData<T>(new List<ISingleDataRow<T?>>(), data);
             ISingleDataRow<T> first = data.Rows.First();
             DateTime d = data.StartTime ?? first.Key;
 
@@ -127,6 +132,7 @@ Func<AggregationData<T>, T?> aggregationFunc, DayOfWeek startDay = DayOfWeek.Mon
         public static INullableQueryData<T> GroupByMonths<T>(this IQueryData<T> data, int months,
 Func<AggregationData<T>, T?> aggregationFunc, TimeStampType timeStampType = TimeStampType.Start) where T : struct
         {
+            if (!data.Rows.Any()) return new NullableQueryData<T>(new List<ISingleDataRow<T?>>(), data);
             ISingleDataRow<T> first = data.Rows.First();
             DateTime d = data.StartTime ?? first.Key;
 
@@ -152,6 +158,7 @@ Func<AggregationData<T>, T?> aggregationFunc, TimeStampType timeStampType = Time
         public static INullableQueryData<T> GroupByYears<T>(this IQueryData<T> data, int years,
 Func<AggregationData<T>, T?> aggregationFunc, TimeStampType timeStampType = TimeStampType.Start) where T : struct
         {
+            if (!data.Rows.Any()) return new NullableQueryData<T>(new List<ISingleDataRow<T?>>(), data);
             ISingleDataRow<T> first = data.Rows.First();
             DateTime d = data.StartTime ?? first.Key;
 

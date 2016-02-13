@@ -112,6 +112,7 @@
     <Compile Include="Deedle\DeedleTests.cs" />
     <Compile Include="FileDb\DbTests.cs" />
     <Compile Include="FileDb\TimeExpressionsTests.cs" />
+    <Compile Include="Grafana\GrafanaExampleTests.cs" />
     <Compile Include="QueryLanguage\AggregationTests.cs" />
     <Compile Include="QueryLanguage\GroupingTests.cs" />
     <Compile Include="Properties\Settings.Designer.cs">

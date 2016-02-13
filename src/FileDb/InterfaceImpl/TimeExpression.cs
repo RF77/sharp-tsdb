@@ -35,7 +35,7 @@ namespace FileDb.InterfaceImpl
 
         private void ParseSingleTimeExpression(string time)
         {
-            time = time.Replace(" ", "").ToLower();
+            time = time.Replace(" ", "");
             var match = Regex.Match(time, "time([<>])");
             if (match.Success)
             {

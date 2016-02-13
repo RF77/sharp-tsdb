@@ -53,6 +53,11 @@ namespace FileDb.InterfaceImpl
             return MetadataInternal.GetMeasurement(name);
         }
 
+        public IQueryData<T> GetData<T>(string measurementName, string timeExpression) where T : struct
+        {
+            return GetMeasurement(measurementName).GetDataPoints<T>(timeExpression);
+        }
+
         public IReadOnlyList<string> GetMeasurementNames()
         {
             return MetadataInternal.Measurements.Keys.ToList();
