@@ -21,6 +21,7 @@ namespace QueryLanguage.Scripting
         private object _result;
         private Script<IObjectQueryData> _script;
         private static ScriptOptions _options;
+        private static Dictionary<string, Script<IObjectQueryData>> _scripts = new Dictionary<string, Script<IObjectQueryData>>(); 
 
         public IObjectQueryData SingleResult => _result as IObjectQueryData;
 
@@ -80,8 +81,24 @@ namespace QueryLanguage.Scripting
 
         private void CreateScript()
         {
-            _script = CSharpScript.Create<IObjectQueryData>($"db.{_expression}", globalsType: typeof (Globals), options: _options);
+            var scriptText = ScriptText;
+
+            Script<IObjectQueryData> existingScript;
+
+            if (_scripts.TryGetValue(scriptText, out existingScript))
+            {
+                _script = existingScript;
+                return;
+            }
+
+            _script = CSharpScript.Create<IObjectQueryData>(scriptText, globalsType: typeof (Globals), options: _options);
             _script.Compile();
+            _scripts[scriptText] = _script;
+        }
+
+        private string ScriptText
+        {
+            get { return $"db.{_expression}"; }
         }
     }
 }
