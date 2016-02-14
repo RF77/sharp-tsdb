@@ -13,6 +13,10 @@ namespace FileDb.InterfaceImpl
         /// </summary>
         public ISingleDataRow<T> PreviousRow { get; set; }
 
+        IObjectSingleDataRow IObjectQueryDataBase.NextRow => NextRow;
+
+        IObjectSingleDataRow IObjectQueryDataBase.PreviousRow => PreviousRow;
+
         /// <summary>
         /// first value after end time or null
         /// </summary>

@@ -2,9 +2,15 @@ using System;
 
 namespace DbInterfaces.Interfaces
 {
-    public interface ISingleDataRow<T>
+    public interface ISingleDataRow<T> : IObjectSingleDataRow
+    {
+        new T Value { get; set; }
+    }
+
+    public interface IObjectSingleDataRow
     {
         DateTime Key { get; set; }
-        T Value { get; set; }
+        object Value { get;  }
+
     }
 }

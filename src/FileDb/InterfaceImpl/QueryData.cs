@@ -19,5 +19,7 @@ namespace FileDb.InterfaceImpl
         {
             Rows = rows;
         }
+
+        IReadOnlyList<IObjectSingleDataRow> IObjectQueryData.Rows => Rows;
     }
 }

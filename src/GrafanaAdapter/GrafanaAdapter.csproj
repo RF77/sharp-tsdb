@@ -9,8 +9,9 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>GrafanaAdapter</RootNamespace>
     <AssemblyName>GrafanaAdapter</AssemblyName>
-    <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.6</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -54,6 +55,10 @@
     <ProjectReference Include="..\FileDb\SharpFileDb.csproj">
       <Project>{8858A25C-EF24-48DB-B049-BF28027482EB}</Project>
       <Name>SharpFileDb</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\QueryLanguage\QueryLanguage.csproj">
+      <Project>{A805E090-842F-4725-88FA-7D5963C0E73C}</Project>
+      <Name>QueryLanguage</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

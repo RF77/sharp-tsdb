@@ -26,6 +26,7 @@ namespace FileDb.InterfaceImpl
 
         private void ParseTimeExpression()
         {
+            if (string.IsNullOrEmpty(_expression)) return;
             string[] times = _expression.Split(new [] {" and "}, StringSplitOptions.RemoveEmptyEntries);
             foreach (var time in times)
             {

@@ -9,6 +9,7 @@ using FluentAssertions;
 using MathNet.Numerics.Statistics;
 using NUnit.Framework;
 using QueryLanguage.Grouping;
+using QueryLanguage.Scripting;
 
 namespace Tests.FileDb
 {
@@ -172,6 +173,76 @@ namespace Tests.FileDb
             items.Last().Key.Should().BeOnOrBefore(dateTime200012);
             data.PreviousRow.Key.Should().BeBefore(dateTimeStart);
             data.NextRow.Key.Should().BeAfter(dateTime200012);
+
+            time.Stop();
+
+        }
+
+        [Test]
+        public void ReadItemsPerScripting()
+        {
+            var measurement = _unitUnderTest.CreateMeasurement(TestMeasName, typeof(float));
+            var numberOfRows = 100000;
+            measurement.AppendDataPoints(CreateFloatRows(numberOfRows));
+
+            var time = Stopwatch.StartNew();
+
+            //All (without dates)
+            var scriptingEngine = new ScriptingEngine(_unitUnderTest, $@"GetData<float>(""{TestMeasName}"", null)");
+            var data = scriptingEngine.Execute().SingleResult;
+            var allItems = data.Rows;
+            allItems.Count().Should().Be(numberOfRows);
+            data.StartTime.Should().Be(null);
+            data.StopTime.Should().Be(null);
+
+            //var dateTime2000 = new DateTime(2000, 1, 1);
+            //data = measurement.GetDataPoints<float>(dateTime2000);
+            //allItems = data.Rows;
+            //allItems.Count().Should().Be(numberOfRows);
+            //data.StartTime.Should().Be(dateTime2000);
+            //data.StopTime.Should().Be(null);
+
+            //var dateTime2200 = new DateTime(2200, 1, 1);
+            //data = measurement.GetDataPoints<float>(dateTime2000, dateTime2200);
+            //allItems = data.Rows;
+            //allItems.Count().Should().Be(numberOfRows);
+            //data.StartTime.Should().Be(dateTime2000);
+            //data.StopTime.Should().Be(dateTime2200);
+
+            //var singleItems = measurement.GetDataPoints<float>(dateTime2000, dateTime2200).Rows;
+            //singleItems.Count().Should().Be(allItems.Count());
+
+            //var time = Stopwatch.StartNew();
+            //var dateTimeStart = new DateTime(2000, 1, 7);
+            //var dateTime200012 = new DateTime(2000, 1, 21);
+
+            ////From begin to middle
+            //data = measurement.GetDataPoints<float>(null, dateTime200012);
+            //var items = data.Rows;
+            //items[0].Key.Should().BeAfter(dateTime2000);
+            //items.Last().Key.Should().BeOnOrBefore(dateTime200012);
+            //data.PreviousRow.Should().Be(null);
+            //data.NextRow.Key.Should().BeAfter(dateTime200012);
+            //time.Stop();
+
+            ////From middle to end
+            //data = measurement.GetDataPoints<float>(dateTime200012, dateTime2200);
+            //items = data.Rows;
+            //items[0].Key.Should().BeOnOrAfter(dateTime200012);
+            //items.Last().Key.Should().BeOnOrBefore(dateTime2200);
+            //data.PreviousRow.Key.Should().BeBefore(dateTime200012);
+            //data.NextRow.Should().Be(null);
+
+            //time = Stopwatch.StartNew();
+
+
+            ////From middle to middle
+            //data = measurement.GetDataPoints<float>(dateTimeStart, dateTime200012);
+            //items = data.Rows;
+            //items[0].Key.Should().BeOnOrAfter(dateTimeStart);
+            //items.Last().Key.Should().BeOnOrBefore(dateTime200012);
+            //data.PreviousRow.Key.Should().BeBefore(dateTimeStart);
+            //data.NextRow.Key.Should().BeAfter(dateTime200012);
 
             time.Stop();
 

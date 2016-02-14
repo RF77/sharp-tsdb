@@ -3,32 +3,51 @@ using System.Collections.Generic;
 
 namespace DbInterfaces.Interfaces
 {
-    public interface IQueryData<T> : IQueryDataBase<T> where T:struct 
+    public interface IObjectQueryData : IObjectQueryDataBase
     {
-        IReadOnlyList<ISingleDataRow<T>> Rows { get; } 
+        IReadOnlyList<IObjectSingleDataRow> Rows { get; } 
     }
 
-    public interface INullableQueryData<T>:IQueryDataBase<T> where T : struct
+    public interface IQueryData<T> : IObjectQueryData, IQueryDataBase<T> where T:struct 
     {
-        IReadOnlyList<ISingleDataRow<T?>> Rows { get; }
+        new IReadOnlyList<ISingleDataRow<T>> Rows { get; } 
     }
 
-    public interface IQueryDataBase<T> where T : struct
+    public interface INullableQueryData<T>: IObjectQueryData, IQueryDataBase<T> where T : struct
     {
-        DateTime? StartTime { get; }
-        DateTime? StopTime { get; }
+        new IReadOnlyList<ISingleDataRow<T?>> Rows { get; }
+    }
+
+    public interface IQueryDataBase<T> : IObjectQueryDataBase where T : struct
+    {
 
         /// <summary>
         /// Last value before the start time or null
         /// </summary>
-        ISingleDataRow<T> PreviousRow { get; set; }
+        new ISingleDataRow<T> PreviousRow { get; set; }
 
         /// <summary>
         /// first value after end time or null
         /// </summary>
-        ISingleDataRow<T> NextRow { get; set; }
+        new ISingleDataRow<T> NextRow { get; set; }
 
-        string Name { get; set; }
     }
-   
+
+    public interface IObjectQueryDataBase
+    {
+        DateTime? StartTime { get; }
+        DateTime? StopTime { get; }
+        string Name { get; set; }
+
+        /// <summary>
+        /// Last value before the start time or null
+        /// </summary>
+        IObjectSingleDataRow PreviousRow { get;  }
+
+        /// <summary>
+        /// first value after end time or null
+        /// </summary>
+        IObjectSingleDataRow NextRow { get;  }
+
+    }
 }

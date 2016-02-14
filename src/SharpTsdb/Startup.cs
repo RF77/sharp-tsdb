@@ -1,9 +1,17 @@
 ﻿using System.Net.Http.Headers;
 using System.Web.Http;
+using System.Web.Http.Filters;
 using Owin;
 
 namespace SharpTsdb
 {
+    public class AddCustomHeaderFilter : ActionFilterAttribute
+    {
+        public override void OnActionExecuted(HttpActionExecutedContext actionExecutedContext)
+        {
+            actionExecutedContext.Response.Headers.Add("X-Influxdb-Version", "0.9.2");
+        }
+    }
     class Startup
     {
         //  Hack from http://stackoverflow.com/a/17227764/19020 to load controllers in 
@@ -28,6 +36,7 @@ namespace SharpTsdb
                 );
 
             config.Formatters.JsonFormatter.SupportedMediaTypes.Add(new MediaTypeHeaderValue("text/html"));
+            config.Filters.Add(new AddCustomHeaderFilter());
 
             appBuilder.UseWebApi(config);
         }

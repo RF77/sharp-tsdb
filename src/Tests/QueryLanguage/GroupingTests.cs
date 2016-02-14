@@ -297,7 +297,10 @@ namespace Tests.QueryLanguage
         public void GroupByExpressionHourss()
         {
             var sw = Stopwatch.StartNew();
-            var result = _unitUnderTest9m.GroupBy("3h", a => a.First(), TimeStampType.Middle).Rows;
+            INullableQueryData<float> nullableQueryData = _unitUnderTest9m.GroupBy("3h", a => a.First(), TimeStampType.Middle);
+            IReadOnlyList<ISingleDataRow<float?>> result = nullableQueryData.Rows;
+            IObjectQueryData result2 = nullableQueryData;
+            object val = result2.Rows.First().Value;
             result[0].Key.Should().Be(new DateTime(2010, 1, 1, 12, 0, 0));
             result[1].Key.Should().Be(new DateTime(2010, 1, 1, 15, 0, 0));
             sw.Stop();
