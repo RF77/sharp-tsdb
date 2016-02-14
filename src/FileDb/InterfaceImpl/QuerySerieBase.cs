@@ -3,7 +3,7 @@ using DbInterfaces.Interfaces;
 
 namespace FileDb.InterfaceImpl
 {
-    public class QueryDataBase<T>:IQueryDataBase<T> where T : struct
+    public class QuerySerieBase<T>:IQuerySerieBase<T> where T : struct
     {
         public DateTime? StartTime { get; }
         public DateTime? StopTime { get; }
@@ -13,9 +13,9 @@ namespace FileDb.InterfaceImpl
         /// </summary>
         public ISingleDataRow<T> PreviousRow { get; set; }
 
-        IObjectSingleDataRow IObjectQueryDataBase.NextRow => NextRow;
+        IObjectSingleDataRow IObjectQuerySerieBase.NextRow => NextRow;
 
-        IObjectSingleDataRow IObjectQueryDataBase.PreviousRow => PreviousRow;
+        IObjectSingleDataRow IObjectQuerySerieBase.PreviousRow => PreviousRow;
 
         /// <summary>
         /// first value after end time or null
@@ -27,19 +27,19 @@ namespace FileDb.InterfaceImpl
         /// </summary>
         public string Name { get; set; }
 
-        public QueryDataBase(DateTime? startTime, DateTime? stopTime)
+        public QuerySerieBase(DateTime? startTime, DateTime? stopTime)
         {
             StartTime = startTime;
             StopTime = stopTime;
         }
 
-        protected QueryDataBase(IQueryDataBase<T> data)
+        protected QuerySerieBase(IQuerySerieBase<T> serie)
         {
-            StartTime = data.StartTime;
-            StopTime = data.StopTime;
-            Name = data.Name;
-            NextRow = data.NextRow;
-            PreviousRow = data.PreviousRow;
+            StartTime = serie.StartTime;
+            StopTime = serie.StopTime;
+            Name = serie.Name;
+            NextRow = serie.NextRow;
+            PreviousRow = serie.PreviousRow;
         }
     }
 }

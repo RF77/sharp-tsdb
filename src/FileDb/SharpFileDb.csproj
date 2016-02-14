@@ -62,9 +62,9 @@
     <Compile Include="InterfaceImpl\DbMetadata.cs" />
     <Compile Include="InterfaceImpl\LongExtensions.cs" />
     <Compile Include="InterfaceImpl\Measurement.cs" />
-    <Compile Include="InterfaceImpl\NullableQueryData.cs" />
-    <Compile Include="InterfaceImpl\QueryData.cs" />
-    <Compile Include="InterfaceImpl\QueryDataBase.cs" />
+    <Compile Include="InterfaceImpl\NullableQuerySerie.cs" />
+    <Compile Include="InterfaceImpl\QuerySerie.cs" />
+    <Compile Include="InterfaceImpl\QuerySerieBase.cs" />
     <Compile Include="InterfaceImpl\SingleDataRow.cs" />
     <Compile Include="InterfaceImpl\FloatRowReaderWriter.cs" />
     <Compile Include="InterfaceImpl\IRowReader.cs" />

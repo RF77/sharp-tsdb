@@ -12,7 +12,7 @@ namespace DbInterfaces.Interfaces
         void CreateMeasurement(IMeasurementMetadata metadata);
         IMeasurement CreateMeasurement(string name, Type valueType);
         IMeasurement GetMeasurement(string name);
-        IQueryData<T> GetData<T>(string measurementName, string timeExpression) where T:struct;
+        IQuerySerie<T> GetData<T>(string measurementName, string timeExpression) where T:struct;
         IReadOnlyList<string> GetMeasurementNames();
         void DeleteMeasurement(string name);
         void DeleteAllMeasurements();

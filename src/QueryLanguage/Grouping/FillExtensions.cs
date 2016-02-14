@@ -7,31 +7,31 @@ namespace QueryLanguage.Grouping
 {
     public static class FillExtensions
     {
-        public static INullableQueryData<T> FillValue<T>(this INullableQueryData<T> data, T fillValue) where T : struct
+        public static INullableQuerySerie<T> FillValue<T>(this INullableQuerySerie<T> serie, T fillValue) where T : struct
         {
-            foreach (var row in data.Rows)
+            foreach (var row in serie.Rows)
             {
                 if (row.Value == null)
                 {
                     row.Value = fillValue;
                 }
             }
-            return data;
+            return serie;
         }
 
-        public static IQueryData<T> RemoveNulls<T>(this INullableQueryData<T> data) where T : struct
+        public static IQuerySerie<T> RemoveNulls<T>(this INullableQuerySerie<T> serie) where T : struct
         {
-            return new QueryData<T>(data.Rows.Where(i => i.Value != null).Select(i => new SingleDataRow<T>(i.Key, i.Value.Value)).ToList(), data);
+            return new QuerySerie<T>(serie.Rows.Where(i => i.Value != null).Select(i => new SingleDataRow<T>(i.Key, i.Value.Value)).ToList(), serie);
         }
 
-        public static INullableQueryData<T> Fill<T>(this INullableQueryData<T> data, ValueForNull fillValue) where T : struct
+        public static INullableQuerySerie<T> Fill<T>(this INullableQuerySerie<T> serie, ValueForNull fillValue) where T : struct
         {
             switch (fillValue)
             {
                 case ValueForNull.Previous:
                 {
-                    T? previous = data.PreviousRow?.Value;
-                    foreach (var row in data.Rows)
+                    T? previous = serie.PreviousRow?.Value;
+                    foreach (var row in serie.Rows)
                     {
                         if (row.Value == null)
                         {
@@ -47,8 +47,8 @@ namespace QueryLanguage.Grouping
                 case ValueForNull.Next:
                 {
 
-                    T? next = data.NextRow?.Value;
-                    var rows = data.Rows;
+                    T? next = serie.NextRow?.Value;
+                    var rows = serie.Rows;
                     for (int i = rows.Count - 1; i >= 0; i--)
                     {
                         var item = rows[i];
@@ -66,7 +66,7 @@ namespace QueryLanguage.Grouping
                 default:
                     throw new ArgumentOutOfRangeException(nameof(fillValue), fillValue, null);
             }
-            return data;
+            return serie;
         }
     }
 }

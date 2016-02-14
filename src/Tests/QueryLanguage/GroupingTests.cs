@@ -13,11 +13,11 @@ namespace Tests.QueryLanguage
     [TestFixture]
     public class GroupingTests
     {
-        private QueryData<float> _unitUnderTest40s;
-        private QueryData<float> _unitUnderTest9m;
-        private QueryData<float> _unitUnderTest9mNotTrimmed;
+        private QuerySerie<float> _unitUnderTest40s;
+        private QuerySerie<float> _unitUnderTest9m;
+        private QuerySerie<float> _unitUnderTest9mNotTrimmed;
         private DateTime _trimEndDate;
-        private QueryData<float> _unitUnderTest5h;
+        private QuerySerie<float> _unitUnderTest5h;
 
         [SetUp]
         public void Setup()
@@ -59,10 +59,10 @@ namespace Tests.QueryLanguage
             _trimEndDate = new DateTime(2010, 1, 1, 15, 1, 0);
             //unitUnderTest9mNotTrimmed.Add(new SingleDataRow<float>(_trimEndDate, -99.5f));
 
-            _unitUnderTest40s = new QueryData<float>(unitUnderTest40s, startDate, null);
-            _unitUnderTest9m = new QueryData<float>(unitUnderTest9m, startDate, null);
-            _unitUnderTest5h = new QueryData<float>(unitUnderTest5h, startDate5h, null);
-            _unitUnderTest9mNotTrimmed = new QueryData<float>(unitUnderTest9mNotTrimmed, new DateTime(2010, 1, 1, 13, 0, 0), new DateTime(2010, 1, 1, 15, 0, 0))
+            _unitUnderTest40s = new QuerySerie<float>(unitUnderTest40s, startDate, null);
+            _unitUnderTest9m = new QuerySerie<float>(unitUnderTest9m, startDate, null);
+            _unitUnderTest5h = new QuerySerie<float>(unitUnderTest5h, startDate5h, null);
+            _unitUnderTest9mNotTrimmed = new QuerySerie<float>(unitUnderTest9mNotTrimmed, new DateTime(2010, 1, 1, 13, 0, 0), new DateTime(2010, 1, 1, 15, 0, 0))
             {
                 PreviousRow = new SingleDataRow<float>(new DateTime(2010, 1, 1, 0, 0, 1), -0.5f),
                 NextRow = new SingleDataRow<float>(new DateTime(2010, 1, 1, 15, 0, 1), -99f)
@@ -297,9 +297,9 @@ namespace Tests.QueryLanguage
         public void GroupByExpressionHourss()
         {
             var sw = Stopwatch.StartNew();
-            INullableQueryData<float> nullableQueryData = _unitUnderTest9m.GroupBy("3h", a => a.First(), TimeStampType.Middle);
-            IReadOnlyList<ISingleDataRow<float?>> result = nullableQueryData.Rows;
-            IObjectQueryData result2 = nullableQueryData;
+            INullableQuerySerie<float> nullableQuerySerie = _unitUnderTest9m.GroupBy("3h", a => a.First(), TimeStampType.Middle);
+            IReadOnlyList<ISingleDataRow<float?>> result = nullableQuerySerie.Rows;
+            IObjectQuerySerie result2 = nullableQuerySerie;
             object val = result2.Rows.First().Value;
             result[0].Key.Should().Be(new DateTime(2010, 1, 1, 12, 0, 0));
             result[1].Key.Should().Be(new DateTime(2010, 1, 1, 15, 0, 0));

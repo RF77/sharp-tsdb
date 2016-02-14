@@ -51,7 +51,7 @@ namespace FileDb.InterfaceImpl
 
         public string BinaryFilePath { get; private set; }
 
-        public IQueryData<T> GetDataPoints<T>(string timeExpression) where T : struct
+        public IQuerySerie<T> GetDataPoints<T>(string timeExpression) where T : struct
         {
             var expression = new TimeExpression(timeExpression);
             return GetDataPoints<T>(expression.From, expression.To);
@@ -86,7 +86,7 @@ namespace FileDb.InterfaceImpl
             });
         }
 
-        public IQueryData<T> GetDataPoints<T>(DateTime? @from = null, DateTime? to = null) where T : struct
+        public IQuerySerie<T> GetDataPoints<T>(DateTime? @from = null, DateTime? to = null) where T : struct
         {
             return ReaderLock(() =>
             {
@@ -136,12 +136,12 @@ namespace FileDb.InterfaceImpl
             _rowReaderWriter = _rowReadWriterFactory.CreateRowReaderWriter(MetadataInternal);
         }
 
-        private IQueryData<T> ReadRows<T>(FileStream fs, BinaryReader binaryReader, DateTime start,
+        private IQuerySerie<T> ReadRows<T>(FileStream fs, BinaryReader binaryReader, DateTime start,
             DateTime stop, DateTime? @from = null, DateTime? to = null) where T : struct
         {
             ISingleDataRow<T> firstRow = null;
             var rows = new List<ISingleDataRow<T>>();
-            var data = new QueryData<T>(rows, from, to);
+            var data = new QuerySerie<T>(rows, from, to);
 
             while (fs.Position < fs.Length)
             {

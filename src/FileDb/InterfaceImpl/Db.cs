@@ -54,7 +54,7 @@ namespace FileDb.InterfaceImpl
             return ReaderLock(() => MetadataInternal.GetMeasurement(name));
         }
 
-        public IQueryData<T> GetData<T>(string measurementName, string timeExpression) where T : struct
+        public IQuerySerie<T> GetData<T>(string measurementName, string timeExpression) where T : struct
         {
             return ReaderLock(() => GetMeasurement(measurementName).GetDataPoints<T>(timeExpression));
         }

@@ -52,7 +52,11 @@
     <Compile Include="Interfaces\IDbMetadata.cs" />
     <Compile Include="Interfaces\IMeasurement.cs" />
     <Compile Include="Interfaces\IMeasurementMetadata.cs" />
-    <Compile Include="Interfaces\IQueryData.cs" />
+    <Compile Include="Interfaces\INullableQuerySerie.cs" />
+    <Compile Include="Interfaces\IObjectQuerySerie.cs" />
+    <Compile Include="Interfaces\IObjectQuerySerieBase.cs" />
+    <Compile Include="Interfaces\IQuerySerie.cs" />
+    <Compile Include="Interfaces\IQuerySerieBase.cs" />
     <Compile Include="Interfaces\ISingleDataRow.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

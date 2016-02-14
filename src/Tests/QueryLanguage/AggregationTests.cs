@@ -14,11 +14,11 @@ namespace Tests.FileDb
     [TestFixture]
     public class AggregationTests
     {
-        private QueryData<float> _unitUnderTest1000;
-        private QueryData<float> _unitUnderTest9m;
-        private QueryData<float> _unitUnderTest50;
-        private QueryData<float> _unitUnderTest50Even;
-        private QueryData<int> _unitUnderTest50Int;
+        private QuerySerie<float> _unitUnderTest1000;
+        private QuerySerie<float> _unitUnderTest9m;
+        private QuerySerie<float> _unitUnderTest50;
+        private QuerySerie<float> _unitUnderTest50Even;
+        private QuerySerie<int> _unitUnderTest50Int;
 
         [SetUp]
         public void Setup()
@@ -46,11 +46,11 @@ namespace Tests.FileDb
                 current40s += TimeSpan.FromSeconds(40);
                 current40sEven += TimeSpan.FromSeconds(60);
             }
-            _unitUnderTest1000 = new QueryData<float>(unitUnderTest1000, startDate, null);
-            _unitUnderTest50 = new QueryData<float>(unitUnderTest50, startDate, null);
-            _unitUnderTest50Int = new QueryData<int>(unitUnderTest50Int, startDate, null);
+            _unitUnderTest1000 = new QuerySerie<float>(unitUnderTest1000, startDate, null);
+            _unitUnderTest50 = new QuerySerie<float>(unitUnderTest50, startDate, null);
+            _unitUnderTest50Int = new QuerySerie<int>(unitUnderTest50Int, startDate, null);
       
-            _unitUnderTest50Even = new QueryData<float>(unitUnderTest50Even, startDateEven, null);
+            _unitUnderTest50Even = new QuerySerie<float>(unitUnderTest50Even, startDateEven, null);
         }
 
         [TearDown]
