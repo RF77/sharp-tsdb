@@ -9,6 +9,7 @@ namespace QueryLanguage.Grouping
 {
     public static class TimeGroupingExtensions
     {
+
         public static INullableQuerySerie<T> GroupBy<T>(this IQuerySerie<T> serie, string expression,
              Func<AggregationData<T>, T?> aggregationFunc, TimeStampType timeStampType = TimeStampType.Start) where T : struct
         {

@@ -30,7 +30,7 @@ namespace Tests.Grafana
             var db = dbm.GetDb("fux");
 
             var sw = Stopwatch.StartNew();
-            var result = db.GetData<float>("Temperatur.Aussen.Wetterstation", "time > now() - 2d").GroupBy("6h", a => a.Mean());
+            var result = db.GetSerie<float>("Temperatur.Aussen.Wetterstation", "time > now() - 2d").GroupBy("6h", a => a.Mean());
             sw.Stop();
 
         }

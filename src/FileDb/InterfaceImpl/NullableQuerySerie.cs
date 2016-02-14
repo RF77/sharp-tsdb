@@ -20,6 +20,11 @@ namespace FileDb.InterfaceImpl
             Rows = result;
         }
 
+        public NullableQuerySerie(IReadOnlyList<ISingleDataRow<T?>> result, INullableQuerySerie<T> olddata) : base(olddata)
+        {
+            Rows = result;
+        }
+
         IReadOnlyList<IObjectSingleDataRow> IObjectQuerySerie.Rows => Rows;
     }
 }

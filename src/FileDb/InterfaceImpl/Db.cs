@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Text.RegularExpressions;
 using System.Threading;
 using DbInterfaces.Interfaces;
 using FileDb.Properties;
@@ -54,9 +55,33 @@ namespace FileDb.InterfaceImpl
             return ReaderLock(() => MetadataInternal.GetMeasurement(name));
         }
 
-        public IQuerySerie<T> GetData<T>(string measurementName, string timeExpression) where T : struct
+        public IQuerySerie<T> GetSerie<T>(string measurementName, string timeExpression) where T : struct
         {
             return ReaderLock(() => GetMeasurement(measurementName).GetDataPoints<T>(timeExpression));
+        }
+
+        public IQueryTable<T> GetTable<T>(string measurementRegex, string timeExpression) where T : struct
+        {
+            var result = new QueryTable<T>();
+            foreach (var meas in MetadataInternal.Measurements)
+            {
+                var match = Regex.Match(meas.Key, measurementRegex);
+                if (match.Success)
+                {
+                    var serie = meas.Value.GetDataPoints<T>(timeExpression);
+                    if (match.Groups.Count > 1)
+                    {
+                        serie.Name = match.Groups[1].Value;
+                    }
+                    result.AddSerie(serie);
+                }
+            }
+            return result;
+        }
+
+        public IObjectQueryTable GetTable(string measurementRegex, string timeExpression)
+        {
+            throw new NotImplementedException();
         }
 
         public IReadOnlyList<string> GetMeasurementNames()

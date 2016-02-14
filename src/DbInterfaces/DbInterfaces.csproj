@@ -55,6 +55,7 @@
     <Compile Include="Interfaces\INullableQuerySerie.cs" />
     <Compile Include="Interfaces\IObjectQuerySerie.cs" />
     <Compile Include="Interfaces\IObjectQuerySerieBase.cs" />
+    <Compile Include="Interfaces\IObjectQueryTable.cs" />
     <Compile Include="Interfaces\IQuerySerie.cs" />
     <Compile Include="Interfaces\IQuerySerieBase.cs" />
     <Compile Include="Interfaces\ISingleDataRow.cs" />

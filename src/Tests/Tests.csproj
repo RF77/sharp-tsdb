@@ -121,6 +121,7 @@
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
       <DependentUpon>Settings.settings</DependentUpon>
     </Compile>
+    <Compile Include="QueryLanguage\ScientificTests.cs" />
     <Compile Include="Settings.cs" />
     <Compile Include="FileDb\DbManagementTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
