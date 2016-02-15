@@ -75,6 +75,10 @@ namespace GrafanaAdapter.Queries
             serie.columns.Add("value");
 
             serie.values.AddRange(res.Rows.Select(i => new List<object> {i.Key.ToMiliSecondsAfter1970(), i.Value}));
+            if (res.LastRow != null)
+            {
+                serie.values.AddRange(res.Rows.Select(i => new List<object> { res.LastRow.Key.ToMiliSecondsAfter1970(), res.LastRow.Value }));
+            }
 
             result.series.Add(serie);
         }

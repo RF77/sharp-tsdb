@@ -11,9 +11,19 @@ namespace QueryLanguage.Grouping
     {
 
         public static INullableQuerySerie<T> GroupBy<T>(this IQuerySerie<T> serie, string expression,
-             Func<AggregationData<T>, T?> aggregationFunc, TimeStampType timeStampType = TimeStampType.Start) where T : struct
+             Func<AggregationData<T>, T?> aggregationFunc, string minIntervalExpression = null, TimeStampType timeStampType = TimeStampType.Start) where T : struct
         {
             if (expression == null) throw new ArgumentNullException(nameof(expression));
+
+            if (minIntervalExpression != null)
+            {
+                var minTimeSpan = minIntervalExpression.ToTimeSpan();
+                var currentTimeSpan = expression.ToTimeSpan();
+                if (currentTimeSpan < minTimeSpan)
+                {
+                    expression = minIntervalExpression;
+                }
+            }
             expression = expression.Trim();
             var match = Regex.Match(expression, "^(\\d+)([smhdwMy])$");
             if (match.Success == false)

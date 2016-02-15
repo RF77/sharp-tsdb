@@ -64,6 +64,7 @@ namespace FileDb.InterfaceImpl
             Name = serie.Name;
             NextRow = serie.NextRow;
             PreviousRow = serie.PreviousRow;
+            LastRow = serie.LastRow;
         }
     }
 }

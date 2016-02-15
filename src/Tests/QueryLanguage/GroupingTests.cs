@@ -277,7 +277,7 @@ namespace Tests.QueryLanguage
         public void GroupByExpressionSeconds()
         {
             var sw = Stopwatch.StartNew();
-            var result = _unitUnderTest40s.GroupBy("30s", a => a.First(), TimeStampType.Middle).Rows;
+            var result = _unitUnderTest40s.GroupBy("30s", a => a.First(), null, TimeStampType.Middle).Rows;
             result[0].Key.Should().Be(new DateTime(2010, 1, 1, 13, 27, 0));
             result[1].Key.Should().Be(new DateTime(2010, 1, 1, 13, 27, 30));
             sw.Stop();
@@ -287,7 +287,7 @@ namespace Tests.QueryLanguage
         public void GroupByExpressionMinutes()
         {
             var sw = Stopwatch.StartNew();
-            var result = _unitUnderTest40s.GroupBy("6m", a => a.First(), TimeStampType.Middle).Rows;
+            var result = _unitUnderTest40s.GroupBy("6m", a => a.First(), null, TimeStampType.Middle).Rows;
             result[0].Key.Should().Be(new DateTime(2010, 1, 1, 13, 24, 0));
             result[1].Key.Should().Be(new DateTime(2010, 1, 1, 13, 30, 0));
             sw.Stop();
@@ -297,7 +297,7 @@ namespace Tests.QueryLanguage
         public void GroupByExpressionHourss()
         {
             var sw = Stopwatch.StartNew();
-            INullableQuerySerie<float> nullableQuerySerie = _unitUnderTest9m.GroupBy("3h", a => a.First(), TimeStampType.Middle);
+            INullableQuerySerie<float> nullableQuerySerie = _unitUnderTest9m.GroupBy("3h", a => a.First(), null, TimeStampType.Middle);
             IReadOnlyList<ISingleDataRow<float?>> result = nullableQuerySerie.Rows;
             IObjectQuerySerie result2 = nullableQuerySerie;
             object val = result2.Rows.First().Value;
