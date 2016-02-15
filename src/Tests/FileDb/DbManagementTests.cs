@@ -21,7 +21,7 @@ namespace Tests.FileDb
             _unitUnderTest.DetachAllDbs();
         }
 
-        [TestCase]
+        [Test]
         public void CreateDb()
         {
             _unitUnderTest.CreateDb(DbRootDir, TestDbName);
@@ -31,7 +31,7 @@ namespace Tests.FileDb
             _unitUnderTest.GetDbNames().First().Should().Be(TestDbName);
         }
 
-        [TestCase]
+        [Test]
         public void ListDbs()
         {
             _unitUnderTest.CreateDb(DbRootDir, TestDbName);
@@ -43,7 +43,7 @@ namespace Tests.FileDb
 
         }
 
-        [TestCase]
+        [Test]
         public void Deserialize()
         {
             _unitUnderTest.CreateDb(DbRootDir, TestDbName);
@@ -52,7 +52,7 @@ namespace Tests.FileDb
             secondManagement.GetDbNames().Count.Should().Be(1);
         }
 
-        [TestCase]
+        [Test]
         public void DetachAll()
         {
             _unitUnderTest.CreateDb(DbRootDir, TestDbName);
@@ -65,7 +65,7 @@ namespace Tests.FileDb
         }
 
 
-        [TestCase]
+        [Test]
         public void DetachDb()
         {
             _unitUnderTest.CreateDb(DbRootDir, TestDbName);
@@ -80,7 +80,7 @@ namespace Tests.FileDb
         }
 
 
-        [TestCase]
+        [Test]
         public void DeleteDb()
         {
             _unitUnderTest.CreateDb(DbRootDir, TestDbName);

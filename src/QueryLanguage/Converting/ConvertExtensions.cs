@@ -32,5 +32,29 @@ namespace QueryLanguage.Converting
         {
             return (T)Convert.ChangeType(val, typeof(T));
         }
+        public static T ToType<T>(this double val) where T : struct
+        {
+            return (T)Convert.ChangeType(val, typeof(T));
+        }
+        public static T ToType<T>(this int val) where T : struct
+        {
+            return (T)Convert.ChangeType(val, typeof(T));
+        }
+        public static T ToType<T>(this long val) where T : struct
+        {
+            return (T)Convert.ChangeType(val, typeof(T));
+        }
+        public static T ToType<T>(this short val) where T : struct
+        {
+            return (T)Convert.ChangeType(val, typeof(T));
+        }
+        public static T ToType<T>(this byte val) where T : struct
+        {
+            return (T)Convert.ChangeType(val, typeof(T));
+        }
+        public static T ToType<T>(this decimal val) where T : struct
+        {
+            return (T)Convert.ChangeType(val, typeof(T));
+        }
     }
 }

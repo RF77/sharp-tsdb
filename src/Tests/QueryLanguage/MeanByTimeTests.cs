@@ -1,9 +1,11 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using DbInterfaces.Interfaces;
 using FileDb.InterfaceImpl;
 using FluentAssertions;
 using NUnit.Framework;
+using QueryLanguage.Converting;
 using QueryLanguage.Grouping;
 
 namespace Tests.QueryLanguage
@@ -70,6 +72,35 @@ namespace Tests.QueryLanguage
             result.Should().Be(6f);
         }
 
+        [Test, Ignore]
+        public void ConvertPerformance()
+        {
+            int number = 1000000;
+            List<float> list = new List<float>(number);
+            var sw = Stopwatch.StartNew();
+            for (float i = 0; i < number; i++)
+            {
+                list.Add(i);
+            }
+            sw.Stop();
+
+            List<float> list2 = new List<float>(number);
+            var sw2 = Stopwatch.StartNew();
+            for (double i = 0; i < number; i++)
+            {
+                list2.Add(i.ToFloat());
+            }
+            sw2.Stop();
+
+
+            List<double> list3 = new List<double>(number);
+            var sw3 = Stopwatch.StartNew();
+            for (long i = 0; i < number; i++)
+            {
+                list3.Add(i.ToDouble());
+            }
+            sw3.Stop();
+        }
 
     }
 }
