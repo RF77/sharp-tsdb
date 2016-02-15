@@ -2,7 +2,7 @@ using System;
 using DbInterfaces.Interfaces;
 using FileDb.InterfaceImpl;
 
-namespace QueryLanguage.Grouping
+namespace QueryLanguage.Converting
 {
     public static class QueryTableExtensions
     {

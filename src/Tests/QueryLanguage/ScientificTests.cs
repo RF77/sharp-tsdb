@@ -1,6 +1,7 @@
 using DbInterfaces.Interfaces;
 using FileDb.InterfaceImpl;
 using NUnit.Framework;
+using QueryLanguage.Converting;
 using QueryLanguage.Grouping;
 using QueryLanguage.Scientific;
 
@@ -29,6 +30,22 @@ namespace Tests.QueryLanguage
             var result = queryTable
                 .Do(i => i.GroupByHours(1, o => o.Mean()))
                 .DewPoint("Temperatur", "Feuchtigkeit", "Taupunkt");
+        }
+
+        [Test]
+        public void AllCalcTempValuesTest()
+        {
+            var db = new DbManagement().GetDb("fux");
+            var queryTable = db.GetTable<float>("Aussen.Wetterstation.(.*?)$", "time > now() - 1M");
+            var result = queryTable
+                .Do(i => i.GroupByHours(1, o => o.Mean()))
+                .AddDewPoint("Temperatur", "Feuchtigkeit")
+                .AddAbsoluteHumidity("Temperatur", "Feuchtigkeit")
+                .AddHumidex("Temperatur", "Feuchtigkeit")
+                .AddSleetLine("Temperatur", "Feuchtigkeit", 440)
+                .AddSnowLine("Temperatur", "Feuchtigkeit", 440)
+                .RemoveSerie("Feuchtigkeit")
+                ;
         }
     }
 }

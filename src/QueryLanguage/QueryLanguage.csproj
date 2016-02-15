@@ -86,14 +86,15 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Convert\ConvertExtensions.cs" />
+    <Compile Include="Converting\ConvertExtensions.cs" />
+    <Compile Include="Converting\ValueExtensions.cs" />
     <Compile Include="DataRows\NamedDataRow.cs" />
     <Compile Include="Grouping\AggregationData.cs" />
     <Compile Include="Grouping\AggregationDataExtensions.cs" />
     <Compile Include="Grouping\DataRowExtensions.cs" />
     <Compile Include="Grouping\FillExtensions.cs" />
-    <Compile Include="Grouping\QuerySerieExtensions.cs" />
-    <Compile Include="Grouping\QueryTableExtensions.cs" />
+    <Compile Include="Converting\QuerySerieExtensions.cs" />
+    <Compile Include="Converting\QueryTableExtensions.cs" />
     <Compile Include="Grouping\TimeGroupingExtensions.cs" />
     <Compile Include="Grouping\TimeStampType.cs" />
     <Compile Include="Grouping\ValueForNull.cs" />

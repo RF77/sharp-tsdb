@@ -26,10 +26,10 @@ namespace QueryLanguage.Scientific
             double TK = Temperature + 273.15;
 
 
-            SättigungsDampfDruck = 6.1078 * System.Math.Pow(10, (a * Temperature) / (b + Temperature));
+            SättigungsDampfDruck = 6.1078 * Math.Pow(10, (a * Temperature) / (b + Temperature));
             DampfDruck = RelativeHumidity / 100 * SättigungsDampfDruck;
 
-            double v = System.Math.Log10(DampfDruck / 6.1078);
+            double v = Math.Log10(DampfDruck / 6.1078);
 
             Taupunkt = b * v / (a - v);
             AbsoluteHumitity = 100000 * mw / R * DampfDruck / TK;
@@ -41,13 +41,13 @@ namespace QueryLanguage.Scientific
 
         public double Humidex { get; private set; }
 
-        public double Temperature { get; private set; }
-        public double RelativeHumidity { get; private set; }
+        public double Temperature { get; }
+        public double RelativeHumidity { get; }
 
         /// <summary>
         /// in C°
         /// </summary>
-        public double Taupunkt { get; private set; }
+        public double Taupunkt { get; }
 
         /// <summary>
         /// Absolute Feuchtigkeit in g/m3
@@ -63,12 +63,12 @@ namespace QueryLanguage.Scientific
         /// <summary>
         /// in hPa
         /// </summary>
-        public double SättigungsDampfDruck { get; private set; }
+        public double SättigungsDampfDruck { get; }
 
         /// <summary>
         /// in hPa
         /// </summary>
-        public double DampfDruck { get; private set; }
+        public double DampfDruck { get; }
 
 
         // Für T > 0

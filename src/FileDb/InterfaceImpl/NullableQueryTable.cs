@@ -19,9 +19,16 @@ namespace FileDb.InterfaceImpl
 
         IEnumerable<IObjectQuerySerie> IObjectQueryTable.Series => Series.Values;
 
-        public void AddSerie(INullableQuerySerie<T> serie)
+        public INullableQueryTable<T> AddSerie(INullableQuerySerie<T> serie)
         {
             Series[serie.Name] = serie;
+            return this;
+        }
+
+        public INullableQueryTable<T> RemoveSerie(string name)
+        {
+            Series.Remove(name);
+            return this;
         }
 
         public INullableQueryTable<T> MergeTable(INullableQueryTable<T> otherTable)

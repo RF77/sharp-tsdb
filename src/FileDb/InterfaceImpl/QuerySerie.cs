@@ -15,7 +15,7 @@ namespace FileDb.InterfaceImpl
             Rows = rows;
         }
 
-        public QuerySerie(IReadOnlyList<SingleDataRow<T>> rows, INullableQuerySerie<T> oldSerie) : base(oldSerie)
+        public QuerySerie(IReadOnlyList<ISingleDataRow<T>> rows, IQuerySerieBase<T> oldSerie) : base(oldSerie)
         {
             Rows = rows;
         }

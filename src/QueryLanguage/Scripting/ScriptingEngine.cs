@@ -79,6 +79,7 @@ namespace QueryLanguage.Scripting
                 "FileDb.InterfaceImpl",
                 "QueryLanguage.Grouping",
                 "QueryLanguage.Scientific",
+                "QueryLanguage.Converting",
             });
         }
 

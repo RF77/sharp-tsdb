@@ -7,6 +7,11 @@ namespace FileDb.InterfaceImpl
     public class NullableQuerySerie<T> : QuerySerieBase<T>, INullableQuerySerie<T> where T : struct
     {
         public IReadOnlyList<ISingleDataRow<T?>> Rows { get; }
+        public INullableQuerySerie<T> Clone(string serieName)
+        {
+            var serie = new NullableQuerySerie<T>(Rows, this) {Name = serieName};
+            return serie;
+        }
 
         public NullableQuerySerie(IReadOnlyList<ISingleDataRow<T?>> rows, DateTime? startTime, DateTime? stopTime)
             : base(startTime, stopTime)

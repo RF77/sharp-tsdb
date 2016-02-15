@@ -6,7 +6,8 @@ namespace DbInterfaces.Interfaces
     {
         new IEnumerable<INullableQuerySerie<T>> Series { get; } 
         new INullableQuerySerie<T> TryGetSerie(string name);
-        void AddSerie(INullableQuerySerie<T> serie);
+        INullableQueryTable<T> AddSerie(INullableQuerySerie<T> serie);
+        INullableQueryTable<T> RemoveSerie(string name);
         INullableQueryTable<T> MergeTable(INullableQueryTable<T> otherTable);
     }
 }
