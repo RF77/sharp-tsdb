@@ -7,7 +7,7 @@ namespace FileDb.InterfaceImpl
     public class QueryTable<T> : QueryTableBase<T>, IQueryTable<T> where T : struct
     {
         public new IDictionary<string, IQuerySerie<T>> Series { get; } = new Dictionary<string, IQuerySerie<T>>();
-        protected override IEnumerable<IObjectQuerySerie> GetSeries() => Series.OfType<IObjectQuerySerie>();
+        protected override IEnumerable<IObjectQuerySerie> GetSeries() => Series.Values;
 
 
         public void AddSerie(IQuerySerie<T> serie)
@@ -25,7 +25,7 @@ namespace FileDb.InterfaceImpl
             return null;
         }
 
-        IEnumerable<IObjectQuerySerie> IObjectQueryTable.Series => Series.OfType<IObjectQuerySerie>();
+        IEnumerable<IObjectQuerySerie> IObjectQueryTable.Series => Series.Values;
 
         IEnumerable<IQuerySerie<T>> IQueryTable<T>.Series => Series.Values;
 

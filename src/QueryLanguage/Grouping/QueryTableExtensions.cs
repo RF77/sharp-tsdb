@@ -23,7 +23,5 @@ namespace QueryLanguage.Grouping
             transformAction(sourceTable, table);
             return table;
         }
-
-       
     }
 }

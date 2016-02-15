@@ -1,6 +1,4 @@
-using System;
 using DbInterfaces.Interfaces;
-using FileDb.InterfaceImpl;
 using QueryLanguage.Grouping;
 
 namespace QueryLanguage.Scientific
@@ -19,6 +17,11 @@ namespace QueryLanguage.Scientific
                         return (T) System.Convert.ChangeType(tempMath.Taupunkt, typeof(T));
                     }));
             });
+        }
+
+        public static INullableQueryTable<T> AddDewPoint<T>(this INullableQueryTable<T> sourceTable, string temperatureName, string humidityName, string dewPointName = "dew point") where T : struct
+        {
+            return sourceTable.MergeTable(sourceTable.DewPoint(temperatureName, humidityName, dewPointName));
         }
 
     }
