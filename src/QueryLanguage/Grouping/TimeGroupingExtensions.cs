@@ -11,7 +11,7 @@ namespace QueryLanguage.Grouping
     {
 
         public static INullableQuerySerie<T> GroupBy<T>(this IQuerySerie<T> serie, string expression,
-             Func<AggregationData<T>, T?> aggregationFunc, string minIntervalExpression = null, TimeStampType timeStampType = TimeStampType.Start) where T : struct
+             Func<IQuerySerie<T>, T?> aggregationFunc, string minIntervalExpression = null, TimeStampType timeStampType = TimeStampType.Start) where T : struct
         {
             if (expression == null) throw new ArgumentNullException(nameof(expression));
 
@@ -55,7 +55,7 @@ namespace QueryLanguage.Grouping
         }
 
         public static INullableQuerySerie<T> GroupBySeconds<T>(this IQuerySerie<T> serie, int seconds,
-             Func<AggregationData<T>, T?> aggregationFunc, TimeStampType timeStampType = TimeStampType.Start) where T : struct
+             Func<IQuerySerie<T>, T?> aggregationFunc, TimeStampType timeStampType = TimeStampType.Start) where T : struct
         {
             if (!serie.Rows.Any()) return new NullableQuerySerie<T>(new List<ISingleDataRow<T?>>(), serie);
             ISingleDataRow<T> first = serie.Rows.First();
@@ -74,7 +74,7 @@ namespace QueryLanguage.Grouping
         }
 
         public static INullableQuerySerie<T> GroupByMinutes<T>(this IQuerySerie<T> serie, int minutes,
-            Func<AggregationData<T>, T?> aggregationFunc, TimeStampType timeStampType = TimeStampType.Start) where T : struct
+            Func<IQuerySerie<T>, T?> aggregationFunc, TimeStampType timeStampType = TimeStampType.Start) where T : struct
         {
             if (!serie.Rows.Any()) return new NullableQuerySerie<T>(new List<ISingleDataRow<T?>>(), serie);
             ISingleDataRow<T> first = serie.Rows.First();
@@ -93,7 +93,7 @@ namespace QueryLanguage.Grouping
         }
 
         public static INullableQuerySerie<T> GroupByHours<T>(this IQuerySerie<T> serie, int hours,
-     Func<AggregationData<T>, T?> aggregationFunc, TimeStampType timeStampType = TimeStampType.Start) where T : struct
+     Func<IQuerySerie<T>, T?> aggregationFunc, TimeStampType timeStampType = TimeStampType.Start) where T : struct
         {
             if (!serie.Rows.Any()) return new NullableQuerySerie<T>(new List<ISingleDataRow<T?>>(), serie);
             ISingleDataRow<T> first = serie.Rows.First();
@@ -112,7 +112,7 @@ namespace QueryLanguage.Grouping
         }
 
         public static INullableQuerySerie<T> GroupByDays<T>(this IQuerySerie<T> serie, int days,
-     Func<AggregationData<T>, T?> aggregationFunc, int startHour = 0, TimeStampType timeStampType = TimeStampType.Start) where T : struct
+     Func<IQuerySerie<T>, T?> aggregationFunc, int startHour = 0, TimeStampType timeStampType = TimeStampType.Start) where T : struct
         {
             if (!serie.Rows.Any()) return new NullableQuerySerie<T>(new List<ISingleDataRow<T?>>(), serie);
             ISingleDataRow<T> first = serie.Rows.First();
@@ -124,7 +124,7 @@ namespace QueryLanguage.Grouping
         }
 
         public static INullableQuerySerie<T> GroupByWeeks<T>(this IQuerySerie<T> serie, int weeks,
-Func<AggregationData<T>, T?> aggregationFunc, DayOfWeek startDay = DayOfWeek.Monday, TimeStampType timeStampType = TimeStampType.Start) where T : struct
+Func<IQuerySerie<T>, T?> aggregationFunc, DayOfWeek startDay = DayOfWeek.Monday, TimeStampType timeStampType = TimeStampType.Start) where T : struct
         {
             if (!serie.Rows.Any()) return new NullableQuerySerie<T>(new List<ISingleDataRow<T?>>(), serie);
             ISingleDataRow<T> first = serie.Rows.First();
@@ -141,7 +141,7 @@ Func<AggregationData<T>, T?> aggregationFunc, DayOfWeek startDay = DayOfWeek.Mon
         }
 
         public static INullableQuerySerie<T> GroupByMonths<T>(this IQuerySerie<T> serie, int months,
-Func<AggregationData<T>, T?> aggregationFunc, TimeStampType timeStampType = TimeStampType.Start) where T : struct
+Func<IQuerySerie<T>, T?> aggregationFunc, TimeStampType timeStampType = TimeStampType.Start) where T : struct
         {
             if (!serie.Rows.Any()) return new NullableQuerySerie<T>(new List<ISingleDataRow<T?>>(), serie);
             ISingleDataRow<T> first = serie.Rows.First();
@@ -167,7 +167,7 @@ Func<AggregationData<T>, T?> aggregationFunc, TimeStampType timeStampType = Time
         }
 
         public static INullableQuerySerie<T> GroupByYears<T>(this IQuerySerie<T> serie, int years,
-Func<AggregationData<T>, T?> aggregationFunc, TimeStampType timeStampType = TimeStampType.Start) where T : struct
+Func<IQuerySerie<T>, T?> aggregationFunc, TimeStampType timeStampType = TimeStampType.Start) where T : struct
         {
             if (!serie.Rows.Any()) return new NullableQuerySerie<T>(new List<ISingleDataRow<T?>>(), serie);
             ISingleDataRow<T> first = serie.Rows.First();
@@ -180,7 +180,7 @@ Func<AggregationData<T>, T?> aggregationFunc, TimeStampType timeStampType = Time
 
         public static INullableQuerySerie<T> GroupByTime<T>(this IQuerySerie<T> serie,
             int currentIndex, DateTime startTime, DateTime? stopTime, Func<DateTime, DateTime> calcNewDateMethod,
-            Func<AggregationData<T>, T?> aggregationFunc, TimeStampType timeStampType = TimeStampType.Start) where T : struct
+            Func<IQuerySerie<T>, T?> aggregationFunc, TimeStampType timeStampType = TimeStampType.Start) where T : struct
         {
             DateTime endTime = calcNewDateMethod(startTime);
             ISingleDataRow<T> previous = null;
@@ -204,13 +204,13 @@ Func<AggregationData<T>, T?> aggregationFunc, TimeStampType timeStampType = Time
                     next = null;
                 }
 
-                var aggregationData = new AggregationData<T>
+                var aggregationData = new QuerySerie<T>(list, serie)
                 {
-                    Next = next,
-                    Previous = previous,
-                    Rows = list,
+                    NextRow = next,
+                    PreviousRow = previous,
                     StartTime = startTime,
-                    EndTime = endTime,
+                    StopTime = endTime,
+                    LastRow = list.Any() ? list.Last() : null
                 };
                 T? value = aggregationFunc(aggregationData);
 

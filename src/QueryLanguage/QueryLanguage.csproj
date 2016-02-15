@@ -89,8 +89,7 @@
     <Compile Include="Converting\ConvertExtensions.cs" />
     <Compile Include="Converting\ValueExtensions.cs" />
     <Compile Include="DataRows\NamedDataRow.cs" />
-    <Compile Include="Grouping\AggregationData.cs" />
-    <Compile Include="Grouping\AggregationDataExtensions.cs" />
+    <Compile Include="Grouping\AggregationExtensions.cs" />
     <Compile Include="Grouping\DataRowExtensions.cs" />
     <Compile Include="Grouping\FillExtensions.cs" />
     <Compile Include="Converting\QuerySerieExtensions.cs" />

@@ -1,14 +1,15 @@
 ﻿using System;
+using System.Collections.Generic;
 using DbInterfaces.Interfaces;
 
 namespace FileDb.InterfaceImpl
 {
-    public class QuerySerieBase<T>:IQuerySerieBase<T> where T : struct
+    public abstract class QuerySerieBase<T>:IQuerySerieBase<T> where T : struct
     {
         private string _name;
         private string _originalName;
-        public DateTime? StartTime { get; }
-        public DateTime? StopTime { get; }
+        public DateTime? StartTime { get; set; }
+        public DateTime? StopTime { get; set; }
 
 
         public string FullName => _originalName == null ? _name : $"{_originalName}.{_name}";

@@ -1,3 +1,5 @@
+using System.Collections.Generic;
+
 namespace DbInterfaces.Interfaces
 {
     public interface IQuerySerieBase<T> : IObjectQuerySerieBase where T : struct
@@ -17,6 +19,5 @@ namespace DbInterfaces.Interfaces
         /// defaults to null, but can be explicitly set to show in a chart the current value
         /// </summary>
         new ISingleDataRow<T> LastRow { get; set; }
-
     }
 }
