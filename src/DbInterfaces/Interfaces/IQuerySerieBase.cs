@@ -13,5 +13,10 @@ namespace DbInterfaces.Interfaces
         /// </summary>
         new ISingleDataRow<T> NextRow { get; set; }
 
+        /// <summary>
+        /// defaults to null, but can be explicitly set to show in a chart the current value
+        /// </summary>
+        new ISingleDataRow<T> LastRow { get; set; }
+
     }
 }

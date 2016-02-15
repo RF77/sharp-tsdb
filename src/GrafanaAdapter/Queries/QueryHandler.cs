@@ -36,21 +36,47 @@ namespace GrafanaAdapter.Queries
             {
                 var dbInstance = _dbm.GetDb(db);
                 var scriptingEngine = new ScriptingEngine(dbInstance, query);
-                var res = scriptingEngine.Execute().SingleResult;
+                var res = scriptingEngine.Execute();
 
-                serie.name = res.Name;
-                serie.columns.Add("time");
-                serie.columns.Add("value");
-
-                serie.values.AddRange(res.Rows.Select(i => new List<object> { i.Key.ToMiliSecondsAfter1970(), i.Value }));
-
-                result.series.Add(serie);
-
-                root.results.Add(result);
+                if (res.ResultAsSerie != null)
+                {
+                    CreateSerieResult(serie, res.ResultAsSerie, result, root);
+                }
+                if (res.ResultAsTable != null)
+                {
+                    CreateTableResult(res.ResultAsTable, result, root);
+                }
                 return root;
             }
+        }
 
-            return null;
+        private void CreateTableResult(IObjectQueryTable resultAsTable, QueryResult result, QueryRoot root)
+        {
+            foreach (var serie in resultAsTable.Series)
+            {
+                QuerySerie querySerie = new QuerySerie();
+                CreateSingleResult(querySerie, serie, result);
+            }
+
+            root.results.Add(result);
+        }
+
+        private static void CreateSerieResult(QuerySerie serie, IObjectQuerySerie res, QueryResult result, QueryRoot root)
+        {
+            CreateSingleResult(serie, res, result);
+
+            root.results.Add(result);
+        }
+
+        private static void CreateSingleResult(QuerySerie serie, IObjectQuerySerie res, QueryResult result)
+        {
+            serie.name = res.Name;
+            serie.columns.Add("time");
+            serie.columns.Add("value");
+
+            serie.values.AddRange(res.Rows.Select(i => new List<object> {i.Key.ToMiliSecondsAfter1970(), i.Value}));
+
+            result.series.Add(serie);
         }
     }
 }

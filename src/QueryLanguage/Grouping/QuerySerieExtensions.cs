@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using DbInterfaces.Interfaces;
 using FileDb.InterfaceImpl;
 
@@ -21,6 +22,15 @@ namespace QueryLanguage.Grouping
                 resultRows.Add(new SingleDataRow<T?>(firstQuery.Rows[i].Key, transformAction(firstQuery.Rows[i].Value, secondQuery.Rows[i].Value)));
             }
             return result;
+        }
+
+        public static IQuerySerie<T> TakeLastRow<T>(this IQuerySerie<T> serie) where T : struct
+        {
+            if (serie.Rows.Any())
+            {
+                serie.LastRow = serie.Rows.Last();
+            }
+            return serie;
         }
     }
 }

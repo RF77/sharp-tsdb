@@ -19,11 +19,13 @@ namespace QueryLanguage.Scripting
         private IDb _db;
         private string _expression;
         private object _result;
-        private Script<IObjectQuerySerie> _script;
+        private Script<IQueryResult> _script;
         private static ScriptOptions _options;
-        private static Dictionary<string, Script<IObjectQuerySerie>> _scripts = new Dictionary<string, Script<IObjectQuerySerie>>(); 
+        private static Dictionary<string, Script<IQueryResult>> _scripts = new Dictionary<string, Script<IQueryResult>>();
 
-        public IObjectQuerySerie SingleResult => _result as IObjectQuerySerie;
+        public IQueryResult Result => _result as IQueryResult;
+        public IObjectQuerySerie ResultAsSerie => _result as IObjectQuerySerie;
+        public IObjectQueryTable ResultAsTable => _result as IObjectQueryTable;
 
         public ScriptingEngine(IDb db, string expression)
         {
@@ -83,7 +85,7 @@ namespace QueryLanguage.Scripting
         {
             var scriptText = ScriptText;
 
-            Script<IObjectQuerySerie> existingScript;
+            Script<IQueryResult> existingScript;
 
             if (_scripts.TryGetValue(scriptText, out existingScript))
             {
@@ -91,14 +93,11 @@ namespace QueryLanguage.Scripting
                 return;
             }
 
-            _script = CSharpScript.Create<IObjectQuerySerie>(scriptText, globalsType: typeof (Globals), options: _options);
+            _script = CSharpScript.Create<IQueryResult>(scriptText, globalsType: typeof (Globals), options: _options);
             _script.Compile();
             _scripts[scriptText] = _script;
         }
 
-        private string ScriptText
-        {
-            get { return $"db.{_expression}"; }
-        }
+        private string ScriptText => $"db.{_expression}";
     }
 }

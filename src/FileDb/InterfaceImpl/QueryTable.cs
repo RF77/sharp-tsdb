@@ -1,11 +1,15 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using DbInterfaces.Interfaces;
 
 namespace FileDb.InterfaceImpl
 {
     public class QueryTable<T> : QueryTableBase<T>, IQueryTable<T> where T : struct
     {
-        public IDictionary<string, IQuerySerie<T>> Series { get; } = new Dictionary<string, IQuerySerie<T>>();
+        public new IDictionary<string, IQuerySerie<T>> Series { get; } = new Dictionary<string, IQuerySerie<T>>();
+        protected override IEnumerable<IObjectQuerySerie> GetSeries() => Series.OfType<IObjectQuerySerie>();
+
+
         public void AddSerie(IQuerySerie<T> serie)
         {
             Series[serie.Name] = serie;
@@ -20,6 +24,8 @@ namespace FileDb.InterfaceImpl
             }
             return null;
         }
+
+        IEnumerable<IObjectQuerySerie> IObjectQueryTable.Series => Series.OfType<IObjectQuerySerie>();
 
         IEnumerable<IQuerySerie<T>> IQueryTable<T>.Series => Series.Values;
 

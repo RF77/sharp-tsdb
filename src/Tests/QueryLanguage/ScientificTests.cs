@@ -1,3 +1,4 @@
+using DbInterfaces.Interfaces;
 using FileDb.InterfaceImpl;
 using NUnit.Framework;
 using QueryLanguage.Grouping;
@@ -24,7 +25,8 @@ namespace Tests.QueryLanguage
         public void DewPointTest()
         {
             var db = new DbManagement().GetDb("fux");
-            var result = db.GetTable<float>("(.*?).Aussen.Wetterstation", "time > now() - 1y")
+            var queryTable = db.GetTable<float>("Aussen.Wetterstation.(.*?)$", "time > now() - 1y");
+            var result = queryTable
                 .Do(i => i.GroupByHours(1, o => o.Mean()))
                 .DewPoint("Temperatur", "Feuchtigkeit", "Taupunkt");
         }
