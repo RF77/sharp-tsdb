@@ -49,6 +49,9 @@ namespace FileDb.InterfaceImpl
             }
         }
 
+        public string GroupName { get; set; }
+        public string Key { get; set; }
+
         public string OriginalName => _originalName ?? Name;
 
 
@@ -66,6 +69,8 @@ namespace FileDb.InterfaceImpl
             NextRow = serie.NextRow;
             PreviousRow = serie.PreviousRow;
             LastRow = serie.LastRow;
+            GroupName = serie.GroupName;
+            Key = serie.Key;
         }
     }
 }

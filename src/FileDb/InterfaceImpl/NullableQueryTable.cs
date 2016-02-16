@@ -42,11 +42,12 @@ namespace FileDb.InterfaceImpl
 
         INullableQuerySerie<T> INullableQueryTable<T>.TryGetSerie(string name)
         {
-            INullableQuerySerie<T> serie;
-            if (Series.TryGetValue(name, out serie))
+            foreach (var serie in Series.Values)
             {
-                return serie;
+                if (serie.Key == name) return serie;
+                if (serie.Name == name) return serie;
             }
+            
             return null;
         }
     }

@@ -7,6 +7,8 @@ namespace DbInterfaces.Interfaces
         DateTime? StartTime { get; }
         DateTime? StopTime { get; }
         string Name { get; set; }
+        string GroupName { get; set; }
+        string Key { get; set; }
         string OriginalName { get; }
         string FullName { get; }
 

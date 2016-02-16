@@ -96,52 +96,47 @@ namespace QueryLanguage.Grouping
             return result.ToType<T>();
         }
 
-        //public static float? TimeForCondition(this IQuerySerie<float> serie, Func<float, bool> )
-        //{
-        //    if (!serie.Rows.Any()) return null;
-        //    double valueSum = 0;
-        //    var rows = serie.Rows;
-        //    DateTime start = DateTime.MinValue;
-        //    DateTime stop = rows.Last().Key;
-        //    DateTime? currentTimeStamp = null;
+        public static TimeSpan? TimeForCondition<T>(this IQuerySerie<float> serie, Func<float, bool> condition) where T:struct 
+        {
+            if (!serie.Rows.Any()) return null;
+            TimeSpan timeSpan = TimeSpan.Zero;
+            var rows = serie.Rows;
 
+            DateTime? currentTimeStamp = null;
+            ISingleDataRow<float> prevRow = null;
 
-        //    float currentValue = 0;
-        //    if (serie.PreviousRow != null && serie.StartTime != null)
-        //    {
-        //        start = serie.StartTime.Value;
-        //        currentValue = serie.PreviousRow.Value;
-        //        currentTimeStamp = start;
-        //    }
+            for (int i = 0; i < rows.Count; i++)
+            {
+                ISingleDataRow<float> newRow = rows[i];
+                if (i == 0 && serie.PreviousRow != null && serie.StartTime != null)
+                {
+                    if (condition(serie.PreviousRow.Value))
+                    {
+                        timeSpan += (newRow.Key - serie.StartTime.Value);
+                    }
+                }
+                else
+                {
+                    if (condition(prevRow.Value))
+                    {
+                        timeSpan += (newRow.Key - prevRow.Key);
+                    }
+                }
 
-        //    for (int i = 0; i < rows.Count; i++)
-        //    {
-        //        var newRow = rows[i];
-        //        if (currentTimeStamp != null)
-        //        {
-        //            valueSum += (newRow.Key - currentTimeStamp.Value).Ticks * currentValue;
-        //        }
-        //        else
-        //        {
-        //            start = newRow.Key;
-        //        }
-        //        currentValue = newRow.Value;
-        //        currentTimeStamp = newRow.Key;
-        //    }
+                currentTimeStamp = newRow.Key;
+                prevRow = newRow;
+            }
 
-        //    if (serie.NextRow != null && serie.StopTime != null)
-        //    {
-        //        stop = serie.StopTime.Value;
-        //        if (currentTimeStamp != null)
-        //        {
-        //            valueSum += (stop - currentTimeStamp.Value).Ticks * currentValue;
-        //        }
-        //    }
+            if (serie.NextRow != null && serie.StopTime != null)
+            {
+                if (condition(prevRow.Value))
+                {
+                    timeSpan += (serie.StopTime.Value - prevRow.Key);
+                }
+            }
 
-        //    var result = valueSum / (stop - start).Ticks;
-
-        //    return (float)result;
-        //}
+            return timeSpan;
+        }
 
 
     }

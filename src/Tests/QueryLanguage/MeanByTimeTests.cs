@@ -32,7 +32,7 @@ namespace Tests.QueryLanguage
         [Test]
         public void WithoutPrevAndNext()
         {
-            var serie = new QuerySerie<float>(_rows, new DateTime(1000,1,1), new DateTime(1000,1,1,0,10,0));
+            var serie = new QuerySerie<float>(_rows, new DateTime(1000, 1, 1), new DateTime(1000, 1, 1, 0, 10, 0));
             var result = serie.MeanByTime();
             result.Should().Be(3.75f);
         }
@@ -63,7 +63,8 @@ namespace Tests.QueryLanguage
         [Test]
         public void WithPrevAndNext()
         {
-            var serie = new QuerySerie<float>(_rows, new DateTime(1000, 1, 1)-TimeSpan.FromMinutes(5), new DateTime(1000, 1, 1, 0, 10, 0))
+            var serie = new QuerySerie<float>(_rows, new DateTime(1000, 1, 1) - TimeSpan.FromMinutes(5),
+                new DateTime(1000, 1, 1, 0, 10, 0))
             {
                 PreviousRow = new SingleDataRow<float>(new DateTime(999, 1, 1, 0, 11, 0), 9.6f),
                 NextRow = new SingleDataRow<float>(new DateTime(1000, 1, 1, 0, 11, 0), 11)
@@ -102,5 +103,9 @@ namespace Tests.QueryLanguage
             sw3.Stop();
         }
 
+        [Test, Ignore]
+        public void ExpandoPerformance()
+        {
+        }
     }
 }

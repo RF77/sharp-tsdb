@@ -69,10 +69,22 @@ namespace FileDb.InterfaceImpl
                 if (match.Success)
                 {
                     var serie = meas.Value.GetDataPoints<T>(timeExpression);
-                    if (match.Groups.Count > 1)
+
+                    Group g = match.Groups["g"];
+
+                    if (g.Success)
                     {
-                        serie.Name = match.Groups[1].Value;
+                        serie.GroupName = g.Value;
                     }
+
+
+                    Group k = match.Groups["k"];
+
+                    if (k.Success)
+                    {
+                        serie.Key = k.Value;
+                    }
+
                     result.AddSerie(serie);
                 }
             }
