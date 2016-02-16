@@ -18,7 +18,7 @@ namespace QueryLanguage.Converting
             return Convert.ToDouble(val);
         }
 
-        public static T ToType<T>(this object val)
+        public static T ToType<T>(this object val) where T:struct 
         {
             return (T)Convert.ChangeType(val, typeof(T));
         }

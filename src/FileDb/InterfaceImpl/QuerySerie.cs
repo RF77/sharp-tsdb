@@ -8,6 +8,16 @@ namespace FileDb.InterfaceImpl
     public class QuerySerie<T> : QuerySerieBase<T>, IQuerySerie<T> where T : struct
     {
         public IReadOnlyList<ISingleDataRow<T>> Rows { get; }
+
+        public object this[int index]
+        {
+            get { return Rows[index].Value; }
+            set
+            {
+                Rows[index].Value = (T)Convert.ChangeType(value, typeof(T));
+            }
+        }
+
         public IEnumerable<T> Values => Rows.Select(i => i.Value); 
 
         public QuerySerie(IReadOnlyList<ISingleDataRow<T>> rows, DateTime? startTime, DateTime? stopTime)

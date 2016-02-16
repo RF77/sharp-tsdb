@@ -7,6 +7,23 @@ namespace FileDb.InterfaceImpl
     public class NullableQuerySerie<T> : QuerySerieBase<T>, INullableQuerySerie<T> where T : struct
     {
         public IReadOnlyList<ISingleDataRow<T?>> Rows { get; }
+
+        public object this[int index]
+        {
+            get { return Rows[index].Value; }
+            set
+            {
+                if (value == null)
+                {
+                    Rows[index].Value = null;
+                }
+                else
+                {
+                    Rows[index].Value =  (T)Convert.ChangeType(value, typeof(T));
+                }
+            }
+        }
+
         public INullableQuerySerie<T> Clone(string serieName)
         {
             var serie = new NullableQuerySerie<T>(Rows, this) {Name = serieName};

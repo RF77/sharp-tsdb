@@ -54,6 +54,15 @@ namespace Tests.Dummy
         }
 
         [Test]
+        public void ConverterTests()
+        {
+            int? test = 5;
+            object t = test;
+            float? result = t.ToType<float>();
+            
+        }
+
+        [Test]
         public void ExpandoPerformance()
         {
             int number = 10000;
@@ -96,6 +105,9 @@ namespace Tests.Dummy
         {
             DummyLambda(a => a);
             Dummy(3);
+            dynamic otherEx = new ExpandoObject();
+            otherEx.G = 3;
+            int sdfa = otherEx.G;
             int number = 10000;
             var sw = Stopwatch.StartNew();
             for (double i = 0; i < number; i++)
@@ -118,11 +130,14 @@ namespace Tests.Dummy
             dynamic t = 4;
             var test = TestWithLambda(a => a + 2 + t, 4);
             var test2 = TestWithLambda2(a => (int)a + 2, 4);
+            test = TestWithLambda(a => a + 2 + t, 4);
+            test2 = TestWithLambda2(a => (int)a + 2, 4);
             sw3.Stop();
             dynamic tt = 3.4;
             var sw4 = Stopwatch.StartNew();
-            var test3 = TestWithLambda(a => tt + a + 2, 4);
-            var test4 = TestWithLambda2(a => (int)a + 2, 4);
+            dynamic ex = new ExpandoObject();
+            ex.B = 2.2;
+            var h = ex.B;
             sw4.Stop();
         }
 
