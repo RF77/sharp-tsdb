@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using DbInterfaces.Interfaces;
 using FileDb.InterfaceImpl;
 using Microsoft.CodeAnalysis.CSharp.Scripting;
@@ -36,6 +37,13 @@ namespace QueryLanguage.Scripting
         static ScriptingEngine()
         {
             CreateOptions();
+        }
+
+        public static async Task<object> ExecuteTestAsync(string expressionToExecute)
+        {
+            var script = CSharpScript.Create<object>(expressionToExecute, globalsType: typeof(Globals), options: _options);
+            script.Compile();
+            return (await script.RunAsync(new Globals())).ReturnValue;
         }
 
 
@@ -81,6 +89,7 @@ namespace QueryLanguage.Scripting
                 "QueryLanguage.Scientific",
                 "QueryLanguage.Converting",
             });
+            
         }
 
         private void CreateScript()
