@@ -39,7 +39,7 @@ namespace QueryLanguage.Converting
         public static INullableQueryTable<T> ZipToNew<T>(this INullableQueryTable<T> sourceTable, string newSerieName, Func<dynamic, T?> zipFunc) where T : struct
         {
             var table = new NullableQueryTable<T>();
-            var dynamicTable = new DynamicTable(sourceTable);
+            var dynamicTable = new DynamicTableValues(sourceTable);
             var firstSerie = sourceTable.Series.First();
             var count = firstSerie.Rows.Count;
             var newRows = new List<ISingleDataRow<T?>>(count);

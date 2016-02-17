@@ -96,18 +96,17 @@ namespace QueryLanguage.Grouping
             return result.ToType<T>();
         }
 
-        public static TimeSpan? TimeForCondition<T>(this IQuerySerie<float> serie, Func<float, bool> condition) where T:struct 
+        public static TimeSpan? TimeWhere<T>(this IQuerySerie<T> serie, Func<T, bool> condition) where T:struct 
         {
             if (!serie.Rows.Any()) return null;
             TimeSpan timeSpan = TimeSpan.Zero;
             var rows = serie.Rows;
 
-            DateTime? currentTimeStamp = null;
-            ISingleDataRow<float> prevRow = null;
+            ISingleDataRow<T> prevRow = null;
 
             for (int i = 0; i < rows.Count; i++)
             {
-                ISingleDataRow<float> newRow = rows[i];
+                ISingleDataRow<T> newRow = rows[i];
                 if (i == 0 && serie.PreviousRow != null && serie.StartTime != null)
                 {
                     if (condition(serie.PreviousRow.Value))
@@ -117,13 +116,12 @@ namespace QueryLanguage.Grouping
                 }
                 else
                 {
-                    if (condition(prevRow.Value))
+                    if (prevRow != null && condition(prevRow.Value))
                     {
                         timeSpan += (newRow.Key - prevRow.Key);
                     }
                 }
 
-                currentTimeStamp = newRow.Key;
                 prevRow = newRow;
             }
 
