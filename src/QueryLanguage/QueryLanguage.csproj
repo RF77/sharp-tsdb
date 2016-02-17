@@ -90,12 +90,17 @@
     <Compile Include="Converting\ValueExtensions.cs" />
     <Compile Include="DataRows\NamedDataRow.cs" />
     <Compile Include="Grouping\AggregationExtensions.cs" />
+    <Compile Include="Grouping\ByTrigger\GroupByTriggerConfigurator.cs" />
+    <Compile Include="Grouping\ByTrigger\GroupByTriggerExtensions.cs" />
+    <Compile Include="Grouping\ByTrigger\IGroupByTriggerConfigurator.cs" />
     <Compile Include="Grouping\DataRowExtensions.cs" />
     <Compile Include="Grouping\DynamicTable.cs" />
     <Compile Include="Grouping\DynamicTableValues.cs" />
     <Compile Include="Grouping\FillExtensions.cs" />
     <Compile Include="Converting\QuerySerieExtensions.cs" />
     <Compile Include="Converting\QueryTableExtensions.cs" />
+    <Compile Include="Grouping\StartEndTime.cs" />
+    <Compile Include="Grouping\WhereGroupingExtensions.cs" />
     <Compile Include="Grouping\TimeGroupingExtensions.cs" />
     <Compile Include="Grouping\TimeStampType.cs" />
     <Compile Include="Grouping\ValueForNull.cs" />

@@ -9,7 +9,7 @@ namespace FileDb.InterfaceImpl
         private string _name;
         private string _originalName;
         public DateTime? StartTime { get; set; }
-        public DateTime? StopTime { get; set; }
+        public DateTime? EndTime { get; set; }
 
 
         public string FullName => _originalName == null ? _name : $"{_originalName}.{_name}";
@@ -58,16 +58,16 @@ namespace FileDb.InterfaceImpl
         public string OriginalName => _originalName ?? Name;
 
 
-        public QuerySerieBase(DateTime? startTime, DateTime? stopTime)
+        public QuerySerieBase(DateTime? startTime, DateTime? endTime)
         {
             StartTime = startTime;
-            StopTime = stopTime;
+            EndTime = endTime;
         }
 
         protected QuerySerieBase(IQuerySerieBase<T> serie)
         {
             StartTime = serie.StartTime;
-            StopTime = serie.StopTime;
+            EndTime = serie.EndTime;
             Name = serie.Name;
             NextRow = serie.NextRow;
             PreviousRow = serie.PreviousRow;

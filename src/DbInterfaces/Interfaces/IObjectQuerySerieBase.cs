@@ -5,7 +5,7 @@ namespace DbInterfaces.Interfaces
     public interface IObjectQuerySerieBase : IQueryResult
     {
         DateTime? StartTime { get; }
-        DateTime? StopTime { get; }
+        DateTime? EndTime { get; }
         string Name { get; set; }
         string GroupName { get; set; }
         string Key { get; set; }

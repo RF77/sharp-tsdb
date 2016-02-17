@@ -82,9 +82,9 @@ namespace QueryLanguage.Grouping
                 currentTimeStamp = newRow.Time;
             }
 
-            if (serie.NextRow != null && serie.StopTime != null)
+            if (serie.NextRow != null && serie.EndTime != null)
             {
-                stop = serie.StopTime.Value;
+                stop = serie.EndTime.Value;
                 if (currentTimeStamp != null)
                 {
                     valueSum += (stop - currentTimeStamp.Value).Ticks * currentValue;
@@ -96,7 +96,15 @@ namespace QueryLanguage.Grouping
             return result.ToType<T>();
         }
 
-        public static TimeSpan? TimeWhere<T>(this IQuerySerie<T> serie, Func<T, bool> condition) where T:struct 
+        /// <summary>
+        /// Calculates the time span where a specified condition (predicate) is true
+        /// e.g. serie.TimeWhere(v => v == 9.6f)?.TotalMinutes
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="serie"></param>
+        /// <param name="predicate">true, if added to time span</param>
+        /// <returns>Time Span / use for example TotalMinutes to get a value of type T again</returns>
+        public static TimeSpan? TimeWhere<T>(this IQuerySerie<T> serie, Func<T, bool> predicate) where T:struct 
         {
             if (!serie.Rows.Any()) return null;
             TimeSpan timeSpan = TimeSpan.Zero;
@@ -109,14 +117,14 @@ namespace QueryLanguage.Grouping
                 ISingleDataRow<T> newRow = rows[i];
                 if (i == 0 && serie.PreviousRow != null && serie.StartTime != null)
                 {
-                    if (condition(serie.PreviousRow.Value))
+                    if (predicate(serie.PreviousRow.Value))
                     {
                         timeSpan += (newRow.Time - serie.StartTime.Value);
                     }
                 }
                 else
                 {
-                    if (prevRow != null && condition(prevRow.Value))
+                    if (prevRow != null && predicate(prevRow.Value))
                     {
                         timeSpan += (newRow.Time - prevRow.Time);
                     }
@@ -125,17 +133,15 @@ namespace QueryLanguage.Grouping
                 prevRow = newRow;
             }
 
-            if (serie.NextRow != null && serie.StopTime != null)
+            if (serie.NextRow != null && serie.EndTime != null)
             {
-                if (condition(prevRow.Value))
+                if (predicate(prevRow.Value))
                 {
-                    timeSpan += (serie.StopTime.Value - prevRow.Time);
+                    timeSpan += (serie.EndTime.Value - prevRow.Time);
                 }
             }
 
             return timeSpan;
         }
-
-
     }
 }

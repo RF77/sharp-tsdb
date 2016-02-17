@@ -30,8 +30,8 @@ namespace FileDb.InterfaceImpl
             return serie;
         }
 
-        public NullableQuerySerie(IReadOnlyList<ISingleDataRow<T?>> rows, DateTime? startTime, DateTime? stopTime)
-            : base(startTime, stopTime)
+        public NullableQuerySerie(IReadOnlyList<ISingleDataRow<T?>> rows, DateTime? startTime, DateTime? endTime)
+            : base(startTime, endTime)
 
         {
             Rows = rows;

@@ -123,21 +123,21 @@ namespace Tests.FileDb
             var allItems = data.Rows;
             allItems.Count().Should().Be(numberOfRows);
             data.StartTime.Should().Be(null);
-            data.StopTime.Should().Be(null);
+            data.EndTime.Should().Be(null);
 
             var dateTime2000 = new DateTime(2000, 1, 1);
             data = measurement.GetDataPoints<float>(dateTime2000);
             allItems = data.Rows;
             allItems.Count().Should().Be(numberOfRows);
             data.StartTime.Should().Be(dateTime2000);
-            data.StopTime.Should().Be(null);
+            data.EndTime.Should().Be(null);
 
             var dateTime2200 = new DateTime(2200,1,1);
             data = measurement.GetDataPoints<float>(dateTime2000, dateTime2200);
             allItems = data.Rows;
             allItems.Count().Should().Be(numberOfRows);
             data.StartTime.Should().Be(dateTime2000);
-            data.StopTime.Should().Be(dateTime2200);
+            data.EndTime.Should().Be(dateTime2200);
 
             var singleItems = measurement.GetDataPoints<float>(dateTime2000, dateTime2200).Rows;
             singleItems.Count().Should().Be(allItems.Count());
@@ -193,21 +193,21 @@ namespace Tests.FileDb
             var allItems = data.Rows;
             allItems.Count().Should().Be(numberOfRows);
             data.StartTime.Should().Be(null);
-            data.StopTime.Should().Be(null);
+            data.EndTime.Should().Be(null);
 
             //var dateTime2000 = new DateTime(2000, 1, 1);
             //data = measurement.GetDataPoints<float>(dateTime2000);
             //allItems = data.Rows;
             //allItems.Count().Should().Be(numberOfRows);
             //data.StartTime.Should().Be(dateTime2000);
-            //data.StopTime.Should().Be(null);
+            //data.EndTime.Should().Be(null);
 
             //var dateTime2200 = new DateTime(2200, 1, 1);
             //data = measurement.GetDataPoints<float>(dateTime2000, dateTime2200);
             //allItems = data.Rows;
             //allItems.Count().Should().Be(numberOfRows);
             //data.StartTime.Should().Be(dateTime2000);
-            //data.StopTime.Should().Be(dateTime2200);
+            //data.EndTime.Should().Be(dateTime2200);
 
             //var singleItems = measurement.GetDataPoints<float>(dateTime2000, dateTime2200).Rows;
             //singleItems.Count().Should().Be(allItems.Count());

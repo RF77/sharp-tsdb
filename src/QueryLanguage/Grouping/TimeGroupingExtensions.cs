@@ -9,7 +9,6 @@ namespace QueryLanguage.Grouping
 {
     public static class TimeGroupingExtensions
     {
-
         public static INullableQuerySerie<T> GroupBy<T>(this IQuerySerie<T> serie, string expression,
              Func<IQuerySerie<T>, T?> aggregationFunc, string minIntervalExpression = null, TimeStampType timeStampType = TimeStampType.Start) where T : struct
         {
@@ -70,7 +69,7 @@ namespace QueryLanguage.Grouping
 
             DateTime currentDate = new DateTime(d.Year, d.Month, d.Day, d.Hour, d.Minute, startSeconds);
 
-            return serie.GroupByTime(0, currentDate, serie.StopTime, dt => dt + TimeSpan.FromSeconds(seconds), aggregationFunc, timeStampType);
+            return serie.GroupByTime(0, currentDate, serie.EndTime, dt => dt + TimeSpan.FromSeconds(seconds), aggregationFunc, timeStampType);
         }
 
         public static INullableQuerySerie<T> GroupByMinutes<T>(this IQuerySerie<T> serie, int minutes,
@@ -89,7 +88,7 @@ namespace QueryLanguage.Grouping
 
             DateTime currentDate = new DateTime(d.Year, d.Month, d.Day, d.Hour, startMinute, 0);
 
-            return serie.GroupByTime(0, currentDate, serie.StopTime, dt => dt + TimeSpan.FromMinutes(minutes), aggregationFunc, timeStampType);
+            return serie.GroupByTime(0, currentDate, serie.EndTime, dt => dt + TimeSpan.FromMinutes(minutes), aggregationFunc, timeStampType);
         }
 
         public static INullableQuerySerie<T> GroupByHours<T>(this IQuerySerie<T> serie, int hours,
@@ -108,7 +107,7 @@ namespace QueryLanguage.Grouping
 
             DateTime currentDate = new DateTime(d.Year, d.Month, d.Day, startHour, 0, 0);
 
-            return serie.GroupByTime(0, currentDate, serie.StopTime, dt => dt + TimeSpan.FromHours(hours), aggregationFunc, timeStampType);
+            return serie.GroupByTime(0, currentDate, serie.EndTime, dt => dt + TimeSpan.FromHours(hours), aggregationFunc, timeStampType);
         }
 
         public static INullableQuerySerie<T> GroupByDays<T>(this IQuerySerie<T> serie, int days,
@@ -120,7 +119,7 @@ namespace QueryLanguage.Grouping
 
             DateTime currentDate = new DateTime(d.Year, d.Month, d.Day, startHour, 0, 0);
 
-            return serie.GroupByTime(0, currentDate, serie.StopTime, dt => dt + TimeSpan.FromDays(days), aggregationFunc, timeStampType);
+            return serie.GroupByTime(0, currentDate, serie.EndTime, dt => dt + TimeSpan.FromDays(days), aggregationFunc, timeStampType);
         }
 
         public static INullableQuerySerie<T> GroupByWeeks<T>(this IQuerySerie<T> serie, int weeks,
@@ -137,7 +136,7 @@ Func<IQuerySerie<T>, T?> aggregationFunc, DayOfWeek startDay = DayOfWeek.Monday,
                 startDate = startDate - TimeSpan.FromDays(1);
             }
 
-            return serie.GroupByTime(0, startDate, serie.StopTime, dt => dt + TimeSpan.FromDays(weeks * 7), aggregationFunc, timeStampType);
+            return serie.GroupByTime(0, startDate, serie.EndTime, dt => dt + TimeSpan.FromDays(weeks * 7), aggregationFunc, timeStampType);
         }
 
         public static INullableQuerySerie<T> GroupByMonths<T>(this IQuerySerie<T> serie, int months,
@@ -155,7 +154,7 @@ Func<IQuerySerie<T>, T?> aggregationFunc, TimeStampType timeStampType = TimeStam
 
             DateTime currentDate = new DateTime(d.Year, startMonth, 1, 0, 0, 0);
 
-            return serie.GroupByTime(0, currentDate, serie.StopTime, dt =>
+            return serie.GroupByTime(0, currentDate, serie.EndTime, dt =>
             {
                 int year = dt.Year;
                 int month = dt.Month;
@@ -175,7 +174,7 @@ Func<IQuerySerie<T>, T?> aggregationFunc, TimeStampType timeStampType = TimeStam
 
             DateTime currentDate = new DateTime(d.Year, 1, 1);
 
-            return serie.GroupByTime(0, currentDate, serie.StopTime, dt => new DateTime(dt.Year + years, 1, 1), aggregationFunc, timeStampType);
+            return serie.GroupByTime(0, currentDate, serie.EndTime, dt => new DateTime(dt.Year + years, 1, 1), aggregationFunc, timeStampType);
         }
 
         public static INullableQuerySerie<T> GroupByTime<T>(this IQuerySerie<T> serie,
@@ -209,7 +208,7 @@ Func<IQuerySerie<T>, T?> aggregationFunc, TimeStampType timeStampType = TimeStam
                     NextRow = next,
                     PreviousRow = previous,
                     StartTime = startTime,
-                    StopTime = endTime,
+                    EndTime = endTime,
                     LastRow = list.Any() ? list.Last() : null
                 };
                 T? value = aggregationFunc(aggregationData);
