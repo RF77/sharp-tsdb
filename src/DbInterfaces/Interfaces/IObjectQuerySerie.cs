@@ -6,9 +6,5 @@ namespace DbInterfaces.Interfaces
     {
         IReadOnlyList<IObjectSingleDataRow> Rows { get; }
 
-        object this[int index]
-        {
-            get; set;
-        }
     }
 }

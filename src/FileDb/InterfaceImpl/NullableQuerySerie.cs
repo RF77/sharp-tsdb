@@ -8,7 +8,7 @@ namespace FileDb.InterfaceImpl
     {
         public IReadOnlyList<ISingleDataRow<T?>> Rows { get; }
 
-        public object this[int index]
+        public override object this[int index]
         {
             get { return Rows[index].Value; }
             set

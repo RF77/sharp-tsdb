@@ -91,6 +91,7 @@
     <Compile Include="DataRows\NamedDataRow.cs" />
     <Compile Include="Grouping\AggregationExtensions.cs" />
     <Compile Include="Grouping\DataRowExtensions.cs" />
+    <Compile Include="Grouping\DynamicTable.cs" />
     <Compile Include="Grouping\FillExtensions.cs" />
     <Compile Include="Converting\QuerySerieExtensions.cs" />
     <Compile Include="Converting\QueryTableExtensions.cs" />
@@ -98,7 +99,7 @@
     <Compile Include="Grouping\TimeStampType.cs" />
     <Compile Include="Grouping\ValueForNull.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Scientific\QueryTableExtensions.cs" />
+    <Compile Include="Scientific\ScientificQueryTableExtensions.cs" />
     <Compile Include="Scientific\TemperatureMath.cs" />
     <Compile Include="Scripting\ScriptingEngine.cs" />
   </ItemGroup>

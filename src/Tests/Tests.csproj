@@ -117,6 +117,7 @@
     <Compile Include="FileDb\TimeExpressionsTests.cs" />
     <Compile Include="Grafana\GrafanaExampleTests.cs" />
     <Compile Include="QueryLanguage\AggregationTests.cs" />
+    <Compile Include="QueryLanguage\DynamicTableTests.cs" />
     <Compile Include="QueryLanguage\MeanByTimeTests.cs" />
     <Compile Include="QueryLanguage\GroupingTests.cs" />
     <Compile Include="Properties\Settings.Designer.cs">

@@ -75,6 +75,9 @@ namespace QueryLanguage.Scripting
                 typeof (IDb).Assembly,
                 typeof (Column).Assembly,
                 typeof (FillExtensions).Assembly,
+                typeof (Microsoft.CSharp.RuntimeBinder.CSharpArgumentInfo).Assembly,
+                typeof (System.Dynamic.DynamicObject).Assembly,
+                typeof (System.Dynamic.ExpandoObject).Assembly,
             }.Distinct());
 
             _options = _options.WithImports(new[]
@@ -88,6 +91,8 @@ namespace QueryLanguage.Scripting
                 "QueryLanguage.Grouping",
                 "QueryLanguage.Scientific",
                 "QueryLanguage.Converting",
+                "Microsoft.CSharp",
+                "System.Dynamic"
             });
             
         }

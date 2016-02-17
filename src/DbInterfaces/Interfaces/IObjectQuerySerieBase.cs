@@ -27,5 +27,10 @@ namespace DbInterfaces.Interfaces
         /// </summary>
         IObjectSingleDataRow LastRow { get; }
 
+        object this[int index]
+        {
+            get; set;
+        }
+
     }
 }

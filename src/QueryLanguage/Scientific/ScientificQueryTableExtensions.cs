@@ -5,7 +5,7 @@ using QueryLanguage.Grouping;
 
 namespace QueryLanguage.Scientific
 {
-    public static class QueryTableExtensions
+    public static class ScientificQueryTableExtensions
     {
         public static INullableQueryTable<T> DewPoint<T>(this INullableQueryTable<T> sourceTable, string temperatureName, string humidityName, string dewPointName="Dew point") where T : struct
         {

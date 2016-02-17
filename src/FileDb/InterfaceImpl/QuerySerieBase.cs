@@ -21,6 +21,9 @@ namespace FileDb.InterfaceImpl
 
         IObjectSingleDataRow IObjectQuerySerieBase.NextRow => NextRow;
         public ISingleDataRow<T> LastRow { get; set; }
+
+        public abstract object this[int index] { get; set; }
+
         IObjectSingleDataRow IObjectQuerySerieBase.LastRow => LastRow;
 
         IObjectSingleDataRow IObjectQuerySerieBase.PreviousRow => PreviousRow;

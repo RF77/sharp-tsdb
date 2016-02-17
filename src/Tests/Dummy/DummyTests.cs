@@ -173,6 +173,11 @@ namespace Tests.Dummy
             return a + b;
         }
 
+        [Test]
+        public void DynamicSerieTests()
+        {
+            
+        }
 
     }
 }
