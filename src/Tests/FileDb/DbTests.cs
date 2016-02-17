@@ -149,18 +149,18 @@ namespace Tests.FileDb
             //From begin to middle
             data = measurement.GetDataPoints<float>(null, dateTime200012);
             var items = data.Rows;
-            items[0].Key.Should().BeAfter(dateTime2000);
-            items.Last().Key.Should().BeOnOrBefore(dateTime200012);
+            items[0].Time.Should().BeAfter(dateTime2000);
+            items.Last().Time.Should().BeOnOrBefore(dateTime200012);
             data.PreviousRow.Should().Be(null);
-            data.NextRow.Key.Should().BeAfter(dateTime200012);
+            data.NextRow.Time.Should().BeAfter(dateTime200012);
             time.Stop();
 
             //From middle to end
             data = measurement.GetDataPoints<float>(dateTime200012, dateTime2200);
             items = data.Rows;
-            items[0].Key.Should().BeOnOrAfter(dateTime200012);
-            items.Last().Key.Should().BeOnOrBefore(dateTime2200);
-            data.PreviousRow.Key.Should().BeBefore(dateTime200012);
+            items[0].Time.Should().BeOnOrAfter(dateTime200012);
+            items.Last().Time.Should().BeOnOrBefore(dateTime2200);
+            data.PreviousRow.Time.Should().BeBefore(dateTime200012);
             data.NextRow.Should().Be(null);
 
             time = Stopwatch.StartNew();
@@ -169,10 +169,10 @@ namespace Tests.FileDb
             //From middle to middle
             data = measurement.GetDataPoints<float>(dateTimeStart, dateTime200012);
             items = data.Rows;
-            items[0].Key.Should().BeOnOrAfter(dateTimeStart);
-            items.Last().Key.Should().BeOnOrBefore(dateTime200012);
-            data.PreviousRow.Key.Should().BeBefore(dateTimeStart);
-            data.NextRow.Key.Should().BeAfter(dateTime200012);
+            items[0].Time.Should().BeOnOrAfter(dateTimeStart);
+            items.Last().Time.Should().BeOnOrBefore(dateTime200012);
+            data.PreviousRow.Time.Should().BeBefore(dateTimeStart);
+            data.NextRow.Time.Should().BeAfter(dateTime200012);
 
             time.Stop();
 

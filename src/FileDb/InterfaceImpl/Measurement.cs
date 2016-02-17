@@ -147,9 +147,9 @@ namespace FileDb.InterfaceImpl
             {
                 var readRow = _rowReaderWriter.ReadRow<T>(binaryReader);
 
-                if (readRow.Key >= start)
+                if (readRow.Time >= start)
                 {
-                    if (readRow.Key <= stop)
+                    if (readRow.Time <= stop)
                     {
                         rows.Add(readRow);
                     }
@@ -159,7 +159,7 @@ namespace FileDb.InterfaceImpl
                     firstRow = readRow;
                 }
 
-                if (readRow.Key >= stop)
+                if (readRow.Time >= stop)
                 {
                     data.NextRow = readRow;
                     break;

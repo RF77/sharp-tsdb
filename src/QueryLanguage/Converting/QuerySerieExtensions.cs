@@ -17,9 +17,9 @@ namespace QueryLanguage.Converting
             result.Name = resultQueryName;
             for (int i = 0; i < firstQuery.Rows.Count; i++)
             {
-                if (firstQuery.Rows[i].Key != secondQuery.Rows[i].Key) throw new ArgumentOutOfRangeException(nameof(firstQuery), "Zip with not aligned times");
+                if (firstQuery.Rows[i].Time != secondQuery.Rows[i].Time) throw new ArgumentOutOfRangeException(nameof(firstQuery), "Zip with not aligned times");
 
-                resultRows.Add(new SingleDataRow<T?>(firstQuery.Rows[i].Key, transformAction(firstQuery.Rows[i].Value, secondQuery.Rows[i].Value)));
+                resultRows.Add(new SingleDataRow<T?>(firstQuery.Rows[i].Time, transformAction(firstQuery.Rows[i].Value, secondQuery.Rows[i].Value)));
             }
             return result;
         }

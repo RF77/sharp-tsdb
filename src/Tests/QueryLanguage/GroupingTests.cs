@@ -79,7 +79,7 @@ namespace Tests.QueryLanguage
         {
             var sw = Stopwatch.StartNew();
             var result = _unitUnderTest40s.GroupBySeconds(30, a => a.First()).Rows;
-            result.First().Key.Should().Be(new DateTime(2010, 1, 1, 13, 27, 0));
+            result.First().Time.Should().Be(new DateTime(2010, 1, 1, 13, 27, 0));
             sw.Stop();
         }
 
@@ -88,7 +88,7 @@ namespace Tests.QueryLanguage
         {
             var sw = Stopwatch.StartNew();
             var result = _unitUnderTest40s.GroupByMinutes(5, a => a.First()).Rows;
-            result.First().Key.Should().Be(new DateTime(2010, 1, 1, 13, 25, 0));
+            result.First().Time.Should().Be(new DateTime(2010, 1, 1, 13, 25, 0));
             sw.Stop();
         }
 
@@ -97,7 +97,7 @@ namespace Tests.QueryLanguage
         {
             var sw = Stopwatch.StartNew();
             var result = _unitUnderTest9m.GroupByHours(3, a => a.First()).Rows;
-            result.First().Key.Should().Be(new DateTime(2010, 1, 1, 12, 0, 0));
+            result.First().Time.Should().Be(new DateTime(2010, 1, 1, 12, 0, 0));
             sw.Stop();
         }
 
@@ -106,7 +106,7 @@ namespace Tests.QueryLanguage
         {
             var sw = Stopwatch.StartNew();
             var result = _unitUnderTest5h.GroupByDays(3, a => a.First()).Rows;
-            result.First().Key.Should().Be(new DateTime(2010, 5, 19, 0, 0, 0));
+            result.First().Time.Should().Be(new DateTime(2010, 5, 19, 0, 0, 0));
             var last = result.Last();
             sw.Stop();
         }
@@ -116,8 +116,8 @@ namespace Tests.QueryLanguage
         {
             var sw = Stopwatch.StartNew();
             var result = _unitUnderTest5h.GroupByDays(3, a => a.First(), 9).Rows;
-            result[0].Key.Should().Be(new DateTime(2010, 5, 19, 9, 0, 0));
-            result[1].Key.Should().Be(new DateTime(2010, 5, 22, 9, 0, 0));
+            result[0].Time.Should().Be(new DateTime(2010, 5, 19, 9, 0, 0));
+            result[1].Time.Should().Be(new DateTime(2010, 5, 22, 9, 0, 0));
             var last = result.Last();
             sw.Stop();
         }
@@ -130,9 +130,9 @@ namespace Tests.QueryLanguage
         {
             var sw = Stopwatch.StartNew();
             var result = _unitUnderTest5h.GroupByMonths(2, a => a.First()).Rows;
-            result[0].Key.Should().Be(new DateTime(2010, 5, 1, 0, 0, 0));
-            result[1].Key.Should().Be(new DateTime(2010, 7, 1, 0, 0, 0));
-            result[10].Key.Should().Be(new DateTime(2012, 1, 1, 0, 0, 0));
+            result[0].Time.Should().Be(new DateTime(2010, 5, 1, 0, 0, 0));
+            result[1].Time.Should().Be(new DateTime(2010, 7, 1, 0, 0, 0));
+            result[10].Time.Should().Be(new DateTime(2012, 1, 1, 0, 0, 0));
             var last = result.Last();
             sw.Stop();
         }
@@ -144,12 +144,12 @@ namespace Tests.QueryLanguage
             var dayOfWeek = DayOfWeek.Monday;
             var sw = Stopwatch.StartNew();
             var result = _unitUnderTest5h.GroupByWeeks(1, a => a.First()).Rows;
-            result[0].Key.Should().Be(new DateTime(2010, 5, 17, 0, 0, 0));
-            result[0].Key.DayOfWeek.Should().Be(dayOfWeek);
-            result[1].Key.Should().Be(new DateTime(2010, 5, 24, 0, 0, 0));
-            result[1].Key.DayOfWeek.Should().Be(dayOfWeek);
-            result[13].Key.DayOfWeek.Should().Be(dayOfWeek);
-            result.Last().Key.DayOfWeek.Should().Be(dayOfWeek);
+            result[0].Time.Should().Be(new DateTime(2010, 5, 17, 0, 0, 0));
+            result[0].Time.DayOfWeek.Should().Be(dayOfWeek);
+            result[1].Time.Should().Be(new DateTime(2010, 5, 24, 0, 0, 0));
+            result[1].Time.DayOfWeek.Should().Be(dayOfWeek);
+            result[13].Time.DayOfWeek.Should().Be(dayOfWeek);
+            result.Last().Time.DayOfWeek.Should().Be(dayOfWeek);
 
             sw.Stop();
         }
@@ -160,12 +160,12 @@ namespace Tests.QueryLanguage
             var dayOfWeek = DayOfWeek.Saturday;
             var sw = Stopwatch.StartNew();
             var result = _unitUnderTest5h.GroupByWeeks(1, a => a.First(), dayOfWeek).Rows;
-            result[0].Key.Should().Be(new DateTime(2010, 5, 15, 0, 0, 0));
-            result[0].Key.DayOfWeek.Should().Be(dayOfWeek);
-            result[1].Key.Should().Be(new DateTime(2010, 5, 22, 0, 0, 0));
-            result[1].Key.DayOfWeek.Should().Be(dayOfWeek);
-            result[13].Key.DayOfWeek.Should().Be(dayOfWeek);
-            result.Last().Key.DayOfWeek.Should().Be(dayOfWeek);
+            result[0].Time.Should().Be(new DateTime(2010, 5, 15, 0, 0, 0));
+            result[0].Time.DayOfWeek.Should().Be(dayOfWeek);
+            result[1].Time.Should().Be(new DateTime(2010, 5, 22, 0, 0, 0));
+            result[1].Time.DayOfWeek.Should().Be(dayOfWeek);
+            result[13].Time.DayOfWeek.Should().Be(dayOfWeek);
+            result.Last().Time.DayOfWeek.Should().Be(dayOfWeek);
 
             sw.Stop();
         }
@@ -175,9 +175,9 @@ namespace Tests.QueryLanguage
         {
             var sw = Stopwatch.StartNew();
             var result = _unitUnderTest5h.GroupByYears(2, a => a.First()).Rows;
-            result[0].Key.Should().Be(new DateTime(2010, 1, 1, 0, 0, 0));
-            result[1].Key.Should().Be(new DateTime(2012, 1, 1, 0, 0, 0));
-            result[2].Key.Should().Be(new DateTime(2014, 1, 1, 0, 0, 0));
+            result[0].Time.Should().Be(new DateTime(2010, 1, 1, 0, 0, 0));
+            result[1].Time.Should().Be(new DateTime(2012, 1, 1, 0, 0, 0));
+            result[2].Time.Should().Be(new DateTime(2014, 1, 1, 0, 0, 0));
             var last = result.Last();
             sw.Stop();
         }
@@ -187,7 +187,7 @@ namespace Tests.QueryLanguage
         {
             var sw = Stopwatch.StartNew();
             var result = _unitUnderTest40s.GroupByMinutes(60, a => a.First()).Rows;
-            result.First().Key.Should().Be(new DateTime(2010, 1, 1, 13, 0, 0));
+            result.First().Time.Should().Be(new DateTime(2010, 1, 1, 13, 0, 0));
             sw.Stop();
         }
 
@@ -196,7 +196,7 @@ namespace Tests.QueryLanguage
         {
             var sw = Stopwatch.StartNew();
             var result = _unitUnderTest9m.GroupByMinutes(6, a => a.First()).Rows;
-            result.First().Key.Should().Be(new DateTime(2010, 1, 1, 13, 24, 0));
+            result.First().Time.Should().Be(new DateTime(2010, 1, 1, 13, 24, 0));
             result[1].Value.Should().Be(null);
             result[10].Value.Should().Be(null);
             sw.Stop();
@@ -207,8 +207,8 @@ namespace Tests.QueryLanguage
         {
             var sw = Stopwatch.StartNew();
             var result = _unitUnderTest9mNotTrimmed.GroupByMinutes(6, a => a.First()).Rows;
-            result.First().Key.Should().Be(new DateTime(2010, 1, 1, 13, 0, 0));
-            result.Last().Key.Should().Be(new DateTime(2010, 1, 1, 14, 54, 0));
+            result.First().Time.Should().Be(new DateTime(2010, 1, 1, 13, 0, 0));
+            result.Last().Time.Should().Be(new DateTime(2010, 1, 1, 14, 54, 0));
             result[1].Value.Should().Be(null);
             result.Last().Value.Should().Be(null);
             sw.Stop();
@@ -259,7 +259,7 @@ namespace Tests.QueryLanguage
         {
             var sw = Stopwatch.StartNew();
             var result = _unitUnderTest9m.GroupByMinutes(6, a => a.First(), TimeStampType.End).Rows;
-            result[0].Key.Should().Be(new DateTime(2010, 1, 1, 13, 30, 0));
+            result[0].Time.Should().Be(new DateTime(2010, 1, 1, 13, 30, 0));
             sw.Stop();
         }
 
@@ -268,7 +268,7 @@ namespace Tests.QueryLanguage
         {
             var sw = Stopwatch.StartNew();
             var result = _unitUnderTest9m.GroupByMinutes(6, a => a.First(), TimeStampType.Middle).Rows;
-            result[0].Key.Should().Be(new DateTime(2010, 1, 1, 13, 27, 0));
+            result[0].Time.Should().Be(new DateTime(2010, 1, 1, 13, 27, 0));
             sw.Stop();
         }
 
@@ -278,8 +278,8 @@ namespace Tests.QueryLanguage
         {
             var sw = Stopwatch.StartNew();
             var result = _unitUnderTest40s.GroupBy("30s", a => a.First(), null, TimeStampType.Middle).Rows;
-            result[0].Key.Should().Be(new DateTime(2010, 1, 1, 13, 27, 0));
-            result[1].Key.Should().Be(new DateTime(2010, 1, 1, 13, 27, 30));
+            result[0].Time.Should().Be(new DateTime(2010, 1, 1, 13, 27, 0));
+            result[1].Time.Should().Be(new DateTime(2010, 1, 1, 13, 27, 30));
             sw.Stop();
         }
 
@@ -288,8 +288,8 @@ namespace Tests.QueryLanguage
         {
             var sw = Stopwatch.StartNew();
             var result = _unitUnderTest40s.GroupBy("6m", a => a.First(), null, TimeStampType.Middle).Rows;
-            result[0].Key.Should().Be(new DateTime(2010, 1, 1, 13, 24, 0));
-            result[1].Key.Should().Be(new DateTime(2010, 1, 1, 13, 30, 0));
+            result[0].Time.Should().Be(new DateTime(2010, 1, 1, 13, 24, 0));
+            result[1].Time.Should().Be(new DateTime(2010, 1, 1, 13, 30, 0));
             sw.Stop();
         }
 
@@ -301,8 +301,8 @@ namespace Tests.QueryLanguage
             IReadOnlyList<ISingleDataRow<float?>> result = nullableQuerySerie.Rows;
             IObjectQuerySerie result2 = nullableQuerySerie;
             object val = result2.Rows.First().Value;
-            result[0].Key.Should().Be(new DateTime(2010, 1, 1, 12, 0, 0));
-            result[1].Key.Should().Be(new DateTime(2010, 1, 1, 15, 0, 0));
+            result[0].Time.Should().Be(new DateTime(2010, 1, 1, 12, 0, 0));
+            result[1].Time.Should().Be(new DateTime(2010, 1, 1, 15, 0, 0));
             sw.Stop();
         }
 

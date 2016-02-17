@@ -41,7 +41,7 @@ namespace Tests
             var b = new SeriesBuilder<DateTime, double>();
             foreach (var dataPoint in dataPoints)
             {
-                b.Add(dataPoint.Key, (double) Convert.ToDouble(dataPoint.Value));
+                b.Add(dataPoint.Time, (double) Convert.ToDouble(dataPoint.Value));
             }
             Series<DateTime, double> s = b.Series;
             //var mean = s.Mean();

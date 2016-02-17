@@ -49,7 +49,7 @@ namespace QueryLanguage.Converting
             {
                 dynamicTable.Index = i;
                 T? newValue = zipFunc(dynamicTable);
-                newRows.Add(new SingleDataRow<T?>(firstSerie.Rows[i].Key, newValue));
+                newRows.Add(new SingleDataRow<T?>(firstSerie.Rows[i].Time, newValue));
             }
             
             return table;

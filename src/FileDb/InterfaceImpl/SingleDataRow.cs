@@ -7,6 +7,15 @@ namespace FileDb.InterfaceImpl
     [DebuggerDisplay("{Key}: {Value}")]
     public class SingleDataRow<T> : DataRow, ISingleDataRow<T>
     {
+        public DateTime Time
+        {
+            get
+            {
+                return Key;
+            }
+            set { Key = value; }
+        }
+
         public new T Value
         {
             get { return (T) base.Value; }

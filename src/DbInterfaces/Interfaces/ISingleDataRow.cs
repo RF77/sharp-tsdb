@@ -9,7 +9,7 @@ namespace DbInterfaces.Interfaces
 
     public interface IObjectSingleDataRow
     {
-        DateTime Key { get; set; }
+        DateTime Time { get; set; }
         object Value { get;  }
 
     }

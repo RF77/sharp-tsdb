@@ -55,7 +55,7 @@ namespace QueryLanguage.Grouping
             double valueSum = 0;
             var rows = serie.Rows;
             DateTime start = DateTime.MinValue;
-            DateTime stop = rows.Last().Key;
+            DateTime stop = rows.Last().Time;
             DateTime? currentTimeStamp = null;
 
 
@@ -72,14 +72,14 @@ namespace QueryLanguage.Grouping
                 var newRow = rows[i];
                 if (currentTimeStamp != null)
                 {
-                    valueSum += (newRow.Key - currentTimeStamp.Value).Ticks*currentValue;
+                    valueSum += (newRow.Time - currentTimeStamp.Value).Ticks*currentValue;
                 }
                 else
                 {
-                    start = newRow.Key;
+                    start = newRow.Time;
                 }
                 currentValue = newRow.Value.ToDouble();
-                currentTimeStamp = newRow.Key;
+                currentTimeStamp = newRow.Time;
             }
 
             if (serie.NextRow != null && serie.StopTime != null)
@@ -111,14 +111,14 @@ namespace QueryLanguage.Grouping
                 {
                     if (condition(serie.PreviousRow.Value))
                     {
-                        timeSpan += (newRow.Key - serie.StartTime.Value);
+                        timeSpan += (newRow.Time - serie.StartTime.Value);
                     }
                 }
                 else
                 {
                     if (prevRow != null && condition(prevRow.Value))
                     {
-                        timeSpan += (newRow.Key - prevRow.Key);
+                        timeSpan += (newRow.Time - prevRow.Time);
                     }
                 }
 
@@ -129,7 +129,7 @@ namespace QueryLanguage.Grouping
             {
                 if (condition(prevRow.Value))
                 {
-                    timeSpan += (serie.StopTime.Value - prevRow.Key);
+                    timeSpan += (serie.StopTime.Value - prevRow.Time);
                 }
             }
 
