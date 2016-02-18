@@ -46,27 +46,21 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Interfaces\IColumn.cs" />
-    <Compile Include="Interfaces\IDataRow.cs" />
     <Compile Include="Interfaces\IDb.cs" />
     <Compile Include="Interfaces\IDbManagement.cs" />
     <Compile Include="Interfaces\IDbMetadata.cs" />
     <Compile Include="Interfaces\IMeasurement.cs" />
     <Compile Include="Interfaces\IMeasurementMetadata.cs" />
-    <Compile Include="Interfaces\INullableQuerySerie.cs" />
-    <Compile Include="Interfaces\INullableQueryTable.cs" />
-    <Compile Include="Interfaces\IObjectQuerySerie.cs" />
-    <Compile Include="Interfaces\IObjectQuerySerieBase.cs" />
-    <Compile Include="Interfaces\IObjectQueryTable.cs" />
-    <Compile Include="Interfaces\IQueryResult.cs" />
-    <Compile Include="Interfaces\IQuerySerie.cs" />
-    <Compile Include="Interfaces\IQuerySerieBase.cs" />
-    <Compile Include="Interfaces\IQueryTable.cs" />
-    <Compile Include="Interfaces\IQueryTableBase.cs" />
-    <Compile Include="Interfaces\ISingleDataRow.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Timeenator\Timeenator.csproj">
+      <Project>{21720DF1-0488-49B8-BA41-9ACCD8F7469D}</Project>
+      <Name>Timeenator</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

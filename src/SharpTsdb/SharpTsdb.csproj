@@ -148,6 +148,10 @@
       <Project>{C8912CF7-2CA3-4DD8-85D9-6BD7136FD178}</Project>
       <Name>GrafanaAdapter</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Timeenator\Timeenator.csproj">
+      <Project>{21720DF1-0488-49B8-BA41-9ACCD8F7469D}</Project>
+      <Name>Timeenator</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

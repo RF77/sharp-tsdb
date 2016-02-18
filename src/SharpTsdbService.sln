@@ -29,7 +29,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Infrastructure", "Infrastru
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GrafanaAdapter", "GrafanaAdapter\GrafanaAdapter.csproj", "{C8912CF7-2CA3-4DD8-85D9-6BD7136FD178}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "QueryLanguage", "QueryLanguage\QueryLanguage.csproj", "{A805E090-842F-4725-88FA-7D5963C0E73C}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Timeenator", "Timeenator\Timeenator.csproj", "{21720DF1-0488-49B8-BA41-9ACCD8F7469D}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -65,10 +65,10 @@ Global
 		{C8912CF7-2CA3-4DD8-85D9-6BD7136FD178}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C8912CF7-2CA3-4DD8-85D9-6BD7136FD178}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C8912CF7-2CA3-4DD8-85D9-6BD7136FD178}.Release|Any CPU.Build.0 = Release|Any CPU
-		{A805E090-842F-4725-88FA-7D5963C0E73C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{A805E090-842F-4725-88FA-7D5963C0E73C}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{A805E090-842F-4725-88FA-7D5963C0E73C}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{A805E090-842F-4725-88FA-7D5963C0E73C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{21720DF1-0488-49B8-BA41-9ACCD8F7469D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{21720DF1-0488-49B8-BA41-9ACCD8F7469D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{21720DF1-0488-49B8-BA41-9ACCD8F7469D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{21720DF1-0488-49B8-BA41-9ACCD8F7469D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -76,6 +76,5 @@ Global
 	GlobalSection(NestedProjects) = preSolution
 		{E65A3D01-0656-4522-AAF8-1CF2B11270F3} = {5AC46751-0CB1-40F9-BD9C-C519634196FD}
 		{8858A25C-EF24-48DB-B049-BF28027482EB} = {5AC46751-0CB1-40F9-BD9C-C519634196FD}
-		{A805E090-842F-4725-88FA-7D5963C0E73C} = {5AC46751-0CB1-40F9-BD9C-C519634196FD}
 	EndGlobalSection
 EndGlobal

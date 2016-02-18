@@ -153,13 +153,13 @@
       <Project>{8858A25C-EF24-48DB-B049-BF28027482EB}</Project>
       <Name>SharpFileDb</Name>
     </ProjectReference>
-    <ProjectReference Include="..\QueryLanguage\QueryLanguage.csproj">
-      <Project>{a805e090-842f-4725-88fa-7d5963c0e73c}</Project>
-      <Name>QueryLanguage</Name>
-    </ProjectReference>
     <ProjectReference Include="..\SharpTsdb\SharpTsdb.csproj">
       <Project>{ecc29a1d-4f22-4349-acb4-3d714e242ad0}</Project>
       <Name>SharpTsdb</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Timeenator\Timeenator.csproj">
+      <Project>{21720DF1-0488-49B8-BA41-9ACCD8F7469D}</Project>
+      <Name>Timeenator</Name>
     </ProjectReference>
   </ItemGroup>
   <Choose>
