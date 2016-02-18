@@ -7,7 +7,7 @@ using FluentAssertions;
 using NUnit.Framework;
 using QueryLanguage.Grouping.ByTrigger;
 
-namespace Tests
+namespace Tests.QueryLanguage
 {
     [TestFixture]
     public class GroupByTriggerTests

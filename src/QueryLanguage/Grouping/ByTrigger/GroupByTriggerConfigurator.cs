@@ -1,5 +1,6 @@
 using System;
 using DbInterfaces.Interfaces;
+using FileDb.InterfaceImpl;
 
 namespace QueryLanguage.Grouping.ByTrigger
 {
@@ -14,6 +15,7 @@ namespace QueryLanguage.Grouping.ByTrigger
         public TimeStampType TimeStampType { get; set; }
         public bool EndTimeIsStartTime { get; set; }
         public bool StartTimeIsEndTime { get; set; }
+        public TimeSpan? Tolerance { get; set; }
 
         public IGroupByTriggerOptional Aggregate(Func<IQuerySerie<T>, T?> aggregationFunc)
         {
@@ -37,6 +39,16 @@ namespace QueryLanguage.Grouping.ByTrigger
         {
             EndOffsetTimeSpan = offset;
             return this;
+        }
+
+        public IGroupByTriggerOptional StartOffset(string offset)
+        {
+            return StartOffset(offset.ToTimeSpan());
+        }
+
+        public IGroupByTriggerOptional EndOffset(string offset)
+        {
+            return EndOffset(offset.ToTimeSpan());
         }
 
         public IGroupByTriggerOptional TimeStampIsStart()
@@ -67,6 +79,17 @@ namespace QueryLanguage.Grouping.ByTrigger
         {
             StartTimeIsEndTime = true;
             return this;
+        }
+
+        public IGroupByTriggerOptional TimeTolerance(TimeSpan tolerance)
+        {
+            Tolerance = tolerance;
+            return this;
+        }
+
+        public IGroupByTriggerOptional TimeTolerance(string tolerance)
+        {
+            return TimeTolerance(tolerance.ToTimeSpan());
         }
 
         IGroupByTriggerOptional IGroupTimesByTriggerConfigurator<T>.TriggerWhen(Func<ISingleDataRow<T>, bool> predicate)

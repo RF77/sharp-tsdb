@@ -1,0 +1,8 @@
+- Sägezahn normalisieren
+- Difference
+- Median
+- Derivative
+- Integral
+- Arithmetik zwischen Serien
+- moving averaage
+- group by condition (z.B. jede Stunde)

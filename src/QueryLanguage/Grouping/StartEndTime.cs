@@ -1,11 +1,15 @@
 using System;
+using System.Diagnostics;
 
 namespace QueryLanguage.Grouping
 {
+    [DebuggerDisplay("{Start} - {End}: {Duration}")]
     public class StartEndTime
     {
         public DateTime Start { get; set; }
         public DateTime End { get; set; }
+
+        public TimeSpan Duration => End - Start;
 
         public StartEndTime(DateTime start, DateTime end)
         {

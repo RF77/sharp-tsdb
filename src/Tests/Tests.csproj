@@ -118,6 +118,7 @@
     <Compile Include="Grafana\GrafanaExampleTests.cs" />
     <Compile Include="QueryLanguage\AggregationTests.cs" />
     <Compile Include="QueryLanguage\DynamicTableTests.cs" />
+    <Compile Include="QueryLanguage\StartEndTimeTests.cs" />
     <Compile Include="QueryLanguage\GroupByTriggerTests.cs" />
     <Compile Include="QueryLanguage\WhereGroupingTests.cs" />
     <Compile Include="QueryLanguage\QuerySerieTests.cs" />
