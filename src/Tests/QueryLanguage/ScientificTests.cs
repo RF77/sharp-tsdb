@@ -1,9 +1,9 @@
 using DbInterfaces.Interfaces;
 using FileDb.InterfaceImpl;
 using NUnit.Framework;
-using QueryLanguage.Converting;
-using QueryLanguage.Grouping;
-using QueryLanguage.Scientific;
+using Timeenator.Impl.Converting;
+using Timeenator.Impl.Grouping;
+using Timeenator.Impl.Scientific;
 
 namespace Tests.QueryLanguage
 {
@@ -28,7 +28,7 @@ namespace Tests.QueryLanguage
             var db = new DbManagement().GetDb("fux");
             var queryTable = db.GetTable<float>("Aussen.Wetterstation.(?<k>.*?)$", "time > now() - 1y");
             var result = queryTable
-                .Do(i => i.GroupByHours(1, o => o.Mean()))
+                .Do(i => TimeGroupingExtensions.GroupByHours<float>(i, 1, o => AggregationExtensions.Mean<float>(o)))
                 .DewPoint("Temperatur", "Feuchtigkeit", "Taupunkt");
         }
 

@@ -1,4 +1,4 @@
-﻿namespace QueryLanguage.Grouping
+﻿namespace Timeenator.Impl.Grouping
 {
     public enum TimeStampType
     {

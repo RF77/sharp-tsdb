@@ -1,8 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
-using DbInterfaces.Interfaces;
+using Timeenator.Interfaces;
 
-namespace FileDb.InterfaceImpl
+namespace Timeenator.Impl
 {
     public abstract class QuerySerieBase<T>:IQuerySerieBase<T> where T : struct
     {

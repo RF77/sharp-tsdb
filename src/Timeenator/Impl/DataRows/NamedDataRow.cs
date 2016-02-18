@@ -1,6 +1,6 @@
-﻿using DbInterfaces.Interfaces;
+﻿using Timeenator.Interfaces;
 
-namespace QueryLanguage.DataRows
+namespace Timeenator.Impl.DataRows
 {
     public class NamedDataRow<T> where T:struct 
     {

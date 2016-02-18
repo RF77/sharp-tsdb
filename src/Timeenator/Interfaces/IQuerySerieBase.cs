@@ -1,6 +1,4 @@
-using System.Collections.Generic;
-
-namespace DbInterfaces.Interfaces
+namespace Timeenator.Interfaces
 {
     public interface IQuerySerieBase<T> : IObjectQuerySerieBase where T : struct
     {

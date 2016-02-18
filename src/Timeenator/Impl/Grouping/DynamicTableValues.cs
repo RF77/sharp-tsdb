@@ -1,7 +1,7 @@
 ﻿using System.Dynamic;
-using DbInterfaces.Interfaces;
+using Timeenator.Interfaces;
 
-namespace QueryLanguage.Grouping
+namespace Timeenator.Impl.Grouping
 {
     public class DynamicTableValues : DynamicObject
     {

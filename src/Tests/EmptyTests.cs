@@ -1,8 +1,5 @@
 using FileDb.InterfaceImpl;
 using NUnit.Framework;
-using QueryLanguage.Converting;
-using QueryLanguage.Grouping;
-using QueryLanguage.Scientific;
 
 namespace Tests
 {

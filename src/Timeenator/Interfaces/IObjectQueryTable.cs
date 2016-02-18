@@ -1,7 +1,6 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
-namespace DbInterfaces.Interfaces
+namespace Timeenator.Interfaces
 {
     public interface IObjectQueryTable : IQueryResult
     {

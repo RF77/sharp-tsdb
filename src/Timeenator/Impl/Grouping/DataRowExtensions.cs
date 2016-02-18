@@ -1,10 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Runtime.InteropServices;
-using DbInterfaces.Interfaces;
-using QueryLanguage.DataRows;
+﻿using Timeenator.Impl.DataRows;
+using Timeenator.Interfaces;
 
-namespace QueryLanguage.Grouping
+namespace Timeenator.Impl.Grouping
 {
     public static class DataRowExtensions
     {

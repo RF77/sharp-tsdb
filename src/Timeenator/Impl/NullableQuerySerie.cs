@@ -1,8 +1,8 @@
 using System;
 using System.Collections.Generic;
-using DbInterfaces.Interfaces;
+using Timeenator.Interfaces;
 
-namespace FileDb.InterfaceImpl
+namespace Timeenator.Impl
 {
     public class NullableQuerySerie<T> : QuerySerieBase<T>, INullableQuerySerie<T> where T : struct
     {

@@ -1,8 +1,7 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
-using DbInterfaces.Interfaces;
+using Timeenator.Interfaces;
 
-namespace FileDb.InterfaceImpl
+namespace Timeenator.Impl
 {
     public class QueryTable<T> : QueryTableBase<T>, IQueryTable<T> where T : struct
     {

@@ -1,11 +1,10 @@
-﻿
-using System;
+﻿using System;
 using System.Linq;
-using DbInterfaces.Interfaces;
 using MathNet.Numerics.Statistics;
-using QueryLanguage.Converting;
+using Timeenator.Impl.Converting;
+using Timeenator.Interfaces;
 
-namespace QueryLanguage.Grouping
+namespace Timeenator.Impl.Grouping
 {
     public static class AggregationExtensions
     {
@@ -106,7 +105,7 @@ namespace QueryLanguage.Grouping
         public static TimeSpan? TimeWhere<T>(this IQuerySerie<T> serie, Func<T, bool> predicate) where T:struct 
         {
             if (!serie.Rows.Any()) return null;
-            TimeSpan timeSpan = TimeSpan.Zero;
+            TimeSpan? timeSpan = null;
             var rows = serie.Rows;
 
             ISingleDataRow<T> prevRow = null;

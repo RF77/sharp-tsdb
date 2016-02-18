@@ -3,11 +3,12 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using DbInterfaces.Interfaces;
 using FileDb.InterfaceImpl;
+using FileDb.Scripting;
 using NUnit.Framework;
-using QueryLanguage.Converting;
-using QueryLanguage.Grouping;
-using QueryLanguage.Scientific;
-using QueryLanguage.Scripting;
+using Timeenator.Impl;
+using Timeenator.Impl.Converting;
+using Timeenator.Impl.Grouping;
+using Timeenator.Interfaces;
 
 namespace Tests.QueryLanguage
 {
@@ -41,7 +42,7 @@ namespace Tests.QueryLanguage
             var db = new DbManagement().GetDb("fux");
             var queryTable = db.GetTable<float>("Aussen.Wetterstation.(?<k>[TF]).*?$", "time > now() - 1M");
             var result = queryTable
-                .Do(i => i.GroupByHours(1, o => o.Mean()))
+                .Do(i => TimeGroupingExtensions.GroupByHours<float>(i, 1, o => AggregationExtensions.Mean<float>(o)))
                 .ZipAndAdd<float>("Sum", t => t.T + t.F);
         }
 

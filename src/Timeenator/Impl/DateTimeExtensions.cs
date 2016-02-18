@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace FileDb.InterfaceImpl
+namespace Timeenator.Impl
 {
     public static class DateTimeExtensions
     {

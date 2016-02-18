@@ -6,9 +6,10 @@ using DbInterfaces.Interfaces;
 using FileDb.InterfaceImpl;
 using Microsoft.CodeAnalysis.CSharp.Scripting;
 using Microsoft.CodeAnalysis.Scripting;
-using QueryLanguage.Grouping;
+using Timeenator.Impl.Grouping;
+using Timeenator.Interfaces;
 
-namespace QueryLanguage.Scripting
+namespace FileDb.Scripting
 {
     public class Globals
     {
@@ -72,9 +73,9 @@ namespace QueryLanguage.Scripting
                 typeof (DateTime).Assembly,
                 typeof (IEnumerable<>).Assembly,
                 typeof (Enumerable).Assembly,
+                typeof (IObjectQuerySerie).Assembly,
                 typeof (IDb).Assembly,
-                typeof (Column).Assembly,
-                typeof (FillExtensions).Assembly,
+                typeof (ScriptingEngine).Assembly,
                 typeof (Microsoft.CSharp.RuntimeBinder.CSharpArgumentInfo).Assembly,
                 typeof (System.Dynamic.DynamicObject).Assembly,
                 typeof (System.Dynamic.ExpandoObject).Assembly,
@@ -87,10 +88,12 @@ namespace QueryLanguage.Scripting
                 "System.Diagnostics",
                 "System.Linq",
                 "DbInterfaces.Interfaces",
+                "Timeenator.Interfaces",
                 "FileDb.InterfaceImpl",
-                "QueryLanguage.Grouping",
-                "QueryLanguage.Scientific",
-                "QueryLanguage.Converting",
+                "FileDb",
+                "Timeenator.Impl.Grouping",
+                "Timeenator.Impl.Scientific",
+                "Timeenator.Impl.Converting",
                 "Microsoft.CSharp",
                 "System.Dynamic"
             });

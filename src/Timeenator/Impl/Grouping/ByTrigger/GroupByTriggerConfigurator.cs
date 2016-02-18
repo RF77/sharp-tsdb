@@ -1,8 +1,7 @@
 using System;
-using DbInterfaces.Interfaces;
-using FileDb.InterfaceImpl;
+using Timeenator.Interfaces;
 
-namespace QueryLanguage.Grouping.ByTrigger
+namespace Timeenator.Impl.Grouping.ByTrigger
 {
     internal class GroupByTriggerConfigurator<T> : IGroupByTriggerConfigurator<T>, IGroupTimesByTriggerConfigurator<T>,
         IGroupByTriggerAggregation<T>,

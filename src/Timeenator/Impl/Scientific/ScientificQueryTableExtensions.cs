@@ -1,9 +1,8 @@
 using System;
-using DbInterfaces.Interfaces;
-using QueryLanguage.Converting;
-using QueryLanguage.Grouping;
+using Timeenator.Impl.Converting;
+using Timeenator.Interfaces;
 
-namespace QueryLanguage.Scientific
+namespace Timeenator.Impl.Scientific
 {
     public static class ScientificQueryTableExtensions
     {
@@ -53,7 +52,7 @@ namespace QueryLanguage.Scientific
         {
             return sourceTable.ToNewTable((o, n) =>
             {
-                n.AddSerie(sourceTable.TryGetSerie(humidityName).CalcValue(humidity => CalcSnowingTemperature(dewPoint, humidity), resultName));
+                n.AddSerie(sourceTable.TryGetSerie(humidityName).CalcValue(humidity => CalcSnowingTemperature<T>(dewPoint, humidity), resultName));
             });
         }
 

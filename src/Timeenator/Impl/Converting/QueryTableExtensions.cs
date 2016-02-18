@@ -1,11 +1,10 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using DbInterfaces.Interfaces;
-using FileDb.InterfaceImpl;
-using QueryLanguage.Grouping;
+using Timeenator.Impl.Grouping;
+using Timeenator.Interfaces;
 
-namespace QueryLanguage.Converting
+namespace Timeenator.Impl.Converting
 {
     public static class QueryTableExtensions
     {

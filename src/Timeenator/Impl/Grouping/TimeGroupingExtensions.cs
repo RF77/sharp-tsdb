@@ -2,10 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
-using DbInterfaces.Interfaces;
-using FileDb.InterfaceImpl;
+using Timeenator.Interfaces;
 
-namespace QueryLanguage.Grouping
+namespace Timeenator.Impl.Grouping
 {
     public static class TimeGroupingExtensions
     {

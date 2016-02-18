@@ -1,10 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using DbInterfaces.Interfaces;
-using FileDb.InterfaceImpl;
+using Timeenator.Interfaces;
 
-namespace QueryLanguage.Converting
+namespace Timeenator.Impl.Converting
 {
     public static class ValueExtensions
     {

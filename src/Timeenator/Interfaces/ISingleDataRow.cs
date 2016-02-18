@@ -1,6 +1,6 @@
 using System;
 
-namespace DbInterfaces.Interfaces
+namespace Timeenator.Interfaces
 {
     public interface ISingleDataRow<T> : IObjectSingleDataRow
     {

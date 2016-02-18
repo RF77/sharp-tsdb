@@ -1,7 +1,7 @@
 using System;
 using System.Diagnostics;
 
-namespace QueryLanguage.Grouping
+namespace Timeenator.Impl.Grouping
 {
     [DebuggerDisplay("{Start} - {End}: {Duration}")]
     public class StartEndTime

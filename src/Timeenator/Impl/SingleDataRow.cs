@@ -1,8 +1,8 @@
 using System;
 using System.Diagnostics;
-using DbInterfaces.Interfaces;
+using Timeenator.Interfaces;
 
-namespace FileDb.InterfaceImpl
+namespace Timeenator.Impl
 {
     [DebuggerDisplay("{Key}: {Value}")]
     public class SingleDataRow<T> : DataRow, ISingleDataRow<T>

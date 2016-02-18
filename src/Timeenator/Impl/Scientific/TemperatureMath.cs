@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace QueryLanguage.Scientific
+namespace Timeenator.Impl.Scientific
 {
     public class TemperatureMath
     {

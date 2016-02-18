@@ -1,9 +1,7 @@
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using DbInterfaces.Interfaces;
+using Timeenator.Interfaces;
 
-namespace FileDb.InterfaceImpl
+namespace Timeenator.Impl
 {
     public class NullableQueryTable<T> : QueryTableBase<T>, INullableQueryTable<T> where T : struct
     {

@@ -6,6 +6,7 @@ using DbInterfaces.Interfaces;
 using FileDb.InterfaceImpl;
 using GrafanaAdapter.Queries;
 using SharpTsdb.Properties;
+using Timeenator.Impl;
 
 namespace SharpTsdb
 {

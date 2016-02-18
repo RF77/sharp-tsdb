@@ -4,7 +4,9 @@ using DbInterfaces.Interfaces;
 using FileDb.InterfaceImpl;
 using FluentAssertions;
 using NUnit.Framework;
-using QueryLanguage.Grouping;
+using Timeenator.Impl;
+using Timeenator.Impl.Grouping;
+using Timeenator.Interfaces;
 
 namespace Tests.QueryLanguage
 {

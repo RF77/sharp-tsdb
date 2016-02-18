@@ -7,7 +7,9 @@ using FileDb.InterfaceImpl;
 using FluentAssertions;
 using MathNet.Numerics.Statistics;
 using NUnit.Framework;
-using QueryLanguage.Grouping;
+using Timeenator.Impl;
+using Timeenator.Impl.Grouping;
+using Timeenator.Interfaces;
 
 namespace Tests.FileDb
 {

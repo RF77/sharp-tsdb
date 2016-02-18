@@ -1,7 +1,7 @@
 using System;
-using DbInterfaces.Interfaces;
+using Timeenator.Interfaces;
 
-namespace QueryLanguage.Grouping.ByTrigger
+namespace Timeenator.Impl.Grouping.ByTrigger
 {
     public interface IGroupByTriggerConfigurator<T> where T:struct
     {

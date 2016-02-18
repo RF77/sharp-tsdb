@@ -1,9 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using FileDb.InterfaceImpl;
 
-namespace QueryLanguage.Grouping
+namespace Timeenator.Impl.Grouping
 {
     public static class StartEndTimeExtensions
     {

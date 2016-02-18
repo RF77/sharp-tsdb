@@ -7,6 +7,8 @@ using System.Threading;
 using DbInterfaces.Interfaces;
 using FileDb.Properties;
 using Infrastructure;
+using Timeenator.Impl;
+using Timeenator.Interfaces;
 
 namespace FileDb.InterfaceImpl
 {

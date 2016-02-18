@@ -5,11 +5,13 @@ using System.IO;
 using System.Linq;
 using DbInterfaces.Interfaces;
 using FileDb.InterfaceImpl;
+using FileDb.Scripting;
 using FluentAssertions;
 using MathNet.Numerics.Statistics;
 using NUnit.Framework;
-using QueryLanguage.Grouping;
-using QueryLanguage.Scripting;
+using Timeenator.Impl;
+using Timeenator.Impl.Grouping;
+using Timeenator.Interfaces;
 
 namespace Tests.FileDb
 {

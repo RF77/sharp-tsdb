@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace DbInterfaces.Interfaces
+namespace Timeenator.Interfaces
 {
     public interface IQueryTable<T> : IQueryTableBase<T> where T : struct
     {

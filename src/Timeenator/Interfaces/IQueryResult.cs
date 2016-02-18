@@ -1,4 +1,4 @@
-﻿namespace DbInterfaces.Interfaces
+﻿namespace Timeenator.Interfaces
 {
     public interface IQueryResult
     {
