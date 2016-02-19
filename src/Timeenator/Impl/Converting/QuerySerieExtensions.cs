@@ -49,5 +49,42 @@ namespace Timeenator.Impl.Converting
             }
             return serie;
         }
+
+        /// <summary>
+        /// Normalize a saw tooth like series due to overflows or resets
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="serie"></param>
+        /// <param name="resetValue">let it null to take the first value after the overflow, otherwise set the value explicitly</param>
+        /// <returns></returns>
+        public static IQuerySerie<T> NormalizeOverflows<T>(this IQuerySerie<T> serie, double? resetValue = null) where T : struct
+        {
+            if (serie.Rows.Any())
+            {
+                var newRows = new List<ISingleDataRow<T>>(serie.Rows.Count);
+                double offset = 0;
+                double previousValue = serie.Rows.First().Value.ToDouble();
+                foreach (var row in serie.Rows)
+                {
+                    double rowValue = row.Value.ToDouble();
+                    if (previousValue > rowValue)
+                    {
+                        if (resetValue != null)
+                        {
+                            offset += previousValue - (rowValue - resetValue.Value);
+                        }
+                        else
+                        {
+                            offset += previousValue;
+                        }
+                        
+                    }
+                    newRows.Add(new SingleDataRow<T>(row.Time, (rowValue + offset).ToType<T>()));
+                    previousValue = rowValue;
+                }
+                return new QuerySerie<T>(newRows, serie);
+            }
+            return serie;
+        }
     }
 }

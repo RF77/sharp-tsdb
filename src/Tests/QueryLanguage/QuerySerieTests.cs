@@ -78,6 +78,48 @@ namespace Tests.QueryLanguage
         }
 
         [Test]
+        public void SawToothDefault()
+        {
+            var rows = new List<ISingleDataRow<float>>();
+            rows.Add(new SingleDataRow<float>(new DateTime(1000, 1, 1), 2));
+            rows.Add(new SingleDataRow<float>(new DateTime(1000, 1, 1, 0, 1, 0), 4));
+            rows.Add(new SingleDataRow<float>(new DateTime(1000, 1, 1, 0, 8, 0), 6));
+            rows.Add(new SingleDataRow<float>(new DateTime(1000, 1, 1, 0, 10, 0), 4));
+            rows.Add(new SingleDataRow<float>(new DateTime(1000, 1, 1, 0, 11, 0), 6));
+            rows.Add(new SingleDataRow<float>(new DateTime(1000, 1, 1, 0, 12, 0), 4));
+            rows.Add(new SingleDataRow<float>(new DateTime(1000, 1, 1, 0, 13, 0), 6));
+            rows.Add(new SingleDataRow<float>(new DateTime(1000, 1, 1, 0, 14, 0), 4));
+            rows.Add(new SingleDataRow<float>(new DateTime(1000, 1, 1, 0, 15, 0), 6));
+
+            var serie = new QuerySerie<float>(rows, new DateTime(1000, 1, 1), new DateTime(1000, 1, 1, 0, 15, 0));
+
+            var normalizedSerie = serie.NormalizeOverflows();
+            normalizedSerie.Rows[8].Value.Should().Be(24);
+
+        }
+
+        [Test]
+        public void SawToothWithResetValueOne()
+        {
+            var rows = new List<ISingleDataRow<float>>();
+            rows.Add(new SingleDataRow<float>(new DateTime(1000, 1, 1), 2));
+            rows.Add(new SingleDataRow<float>(new DateTime(1000, 1, 1, 0, 1, 0), 4));
+            rows.Add(new SingleDataRow<float>(new DateTime(1000, 1, 1, 0, 8, 0), 6));
+            rows.Add(new SingleDataRow<float>(new DateTime(1000, 1, 1, 0, 10, 0), 4));
+            rows.Add(new SingleDataRow<float>(new DateTime(1000, 1, 1, 0, 11, 0), 6));
+            rows.Add(new SingleDataRow<float>(new DateTime(1000, 1, 1, 0, 12, 0), 4));
+            rows.Add(new SingleDataRow<float>(new DateTime(1000, 1, 1, 0, 13, 0), 6));
+            rows.Add(new SingleDataRow<float>(new DateTime(1000, 1, 1, 0, 14, 0), 4));
+            rows.Add(new SingleDataRow<float>(new DateTime(1000, 1, 1, 0, 15, 0), 6));
+
+            var serie = new QuerySerie<float>(rows, new DateTime(1000, 1, 1), new DateTime(1000, 1, 1, 0, 15, 0));
+
+            var normalizedSerie = serie.NormalizeOverflows(1);
+            normalizedSerie.Rows[8].Value.Should().Be(15);
+
+        }
+
+        [Test]
         public void Test()
         {
         }
