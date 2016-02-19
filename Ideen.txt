@@ -1,4 +1,4 @@
-- Sägezahn normalisieren
+- Sägezahn normalisieren (erledigt)
 - Difference
 - Median
 - Derivative

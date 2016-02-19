@@ -125,5 +125,16 @@ namespace Tests.FileDb
         }
 
 
+        [Test]
+        public void TestAggreggationDifference()
+        {
+            var sw = Stopwatch.StartNew();
+            var result = _unitUnderTest50Int.GroupByMinutes(5, a => a.Difference()).Rows;
+            sw.Stop();
+            (_unitUnderTest50Int.Rows.Last().Value - _unitUnderTest50Int.Rows.First().Value)
+                .Should().Be(result.Sum(i => i.Value));
+        }
+
+
     }
 }
