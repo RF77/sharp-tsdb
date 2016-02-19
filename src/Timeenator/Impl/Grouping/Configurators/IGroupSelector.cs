@@ -1,9 +1,12 @@
-using Timeenator.Impl.Grouping.Configurators;
+using System;
+using System.Collections.Generic;
+using Timeenator.Interfaces;
 
-namespace Timeenator.Impl.Grouping
+namespace Timeenator.Impl.Grouping.Configurators
 {
     public interface IGroupSelector<T>  where T:struct
     {
-        IGroupByTriggerConfigurator<T> ByTrigger();
+        IGroupByStartEndTimesConfiguratorOptional<T> ByTrigger(Func<ISingleDataRow<T>, bool> predicate);
+        IGroupByStartEndTimesConfiguratorOptional<T> ByTimeRanges(IReadOnlyList<StartEndTime> groupTimes);
     }
 }

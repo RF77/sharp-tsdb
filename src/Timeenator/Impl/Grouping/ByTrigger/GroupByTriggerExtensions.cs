@@ -8,7 +8,7 @@ namespace Timeenator.Impl.Grouping.ByTrigger
 {
     public static class GroupByTriggerExtensions
     {
-        public static IReadOnlyList<StartEndTime> GroupTimesByTrigger<T>(this IQuerySerie<T> serie, Func<IGroupByTriggerConfigurator<T>, IGroupByStartEndTimesConfigurator<T>> configFunc)
+        public static IReadOnlyList<StartEndTime> GroupTimesByTrigger<T>(this IQuerySerie<T> serie, Func<IGroupByTriggerConfigurator<T>, IGroupByStartEndTimesConfiguratorOptional<T>> configFunc)
            where T : struct
         {
             var rows = serie.Rows;

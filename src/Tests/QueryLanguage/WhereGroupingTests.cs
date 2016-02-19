@@ -37,7 +37,8 @@ namespace Tests.QueryLanguage
             var serie = PrepareForGroupTests();
             StartEndTime groupTime = new StartEndTime(new DateTime(1000, 1, 1, 0, 0, 0), new DateTime(1000, 1, 1, 0, 10, 0)); ;
 
-            var result = serie.GroupBy(new[] {groupTime}, i => i.MeanByTime());
+            //var result = serie.GroupBy(new[] { groupTime }, i => i.MeanByTime());
+            var result = serie.Group(g => g.ByTimeRanges(new[] { groupTime }).Aggregate(i => i.MeanByTime()));
             result.Rows.Count.Should().Be(1);
             result.Rows[0].Time.Should().Be(new DateTime(1000, 1, 1));
             result.Rows[0].Value.Should().Be(4.2f);
@@ -50,7 +51,7 @@ namespace Tests.QueryLanguage
             var startTime = new DateTime(1000, 1, 1, 0, 0, 0) - TimeSpan.FromMinutes(1);
             StartEndTime groupTime = new StartEndTime(startTime, new DateTime(1000, 1, 1, 0, 10, 0)); ;
 
-            var result = serie.GroupBy(new[] { groupTime }, i => i.MeanByTime());
+            var result = serie.Group(g => g.ByTimeRanges(new[] { groupTime }).Aggregate(i => i.MeanByTime()));
             result.Rows.Count.Should().Be(1);
             result.Rows[0].Time.Should().Be(startTime);
             result.Rows[0].Value.Should().BeLessThan(4.2f);
@@ -63,7 +64,7 @@ namespace Tests.QueryLanguage
             var startTime = new DateTime(1000, 1, 1, 0, 2, 0);
             StartEndTime groupTime = new StartEndTime(startTime, new DateTime(1000, 1, 1, 0, 9, 0)); ;
 
-            var result = serie.GroupBy(new[] { groupTime }, i => i.MeanByTime());
+            var result = serie.Group(g => g.ByTimeRanges(new[] { groupTime }).Aggregate(i => i.MeanByTime()));
             result.Rows.Count.Should().Be(1);
             result.Rows[0].Time.Should().Be(startTime);
             result.Rows[0].Value.Should().BeApproximately(4.285f, 3);

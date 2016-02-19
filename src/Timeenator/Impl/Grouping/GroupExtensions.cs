@@ -1,4 +1,5 @@
 ﻿using System;
+using Timeenator.Impl.Grouping.Configurators;
 using Timeenator.Interfaces;
 
 namespace Timeenator.Impl.Grouping

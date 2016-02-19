@@ -8,14 +8,13 @@ namespace Timeenator.Impl.Grouping.Configurators
     {
         private readonly IQuerySerie<T> _serie;
 
-        public GroupByTriggerConfigurator(IQuerySerie<T> serie)
+        public GroupByTriggerConfigurator(IQuerySerie<T> serie):base(serie)
         {
-            _serie = serie;
         }
 
         public Func<ISingleDataRow<T>, bool> PredicateFunc { get; set; }
 
-        public IGroupByStartEndTimesConfigurator<T> TriggerWhen(Func<ISingleDataRow<T>, bool> predicate)
+        public IGroupByStartEndTimesConfiguratorOptional<T> TriggerWhen(Func<ISingleDataRow<T>, bool> predicate)
         {
             PredicateFunc = predicate;
             return this;

@@ -1,7 +1,8 @@
-using Timeenator.Impl.Grouping.Configurators;
+using System;
+using System.Collections.Generic;
 using Timeenator.Interfaces;
 
-namespace Timeenator.Impl.Grouping
+namespace Timeenator.Impl.Grouping.Configurators
 {
     public class GroupSelector<T> : IGroupSelector<T> where T : struct
     {
@@ -12,9 +13,16 @@ namespace Timeenator.Impl.Grouping
             _serie = serie;
         }
 
-        public IGroupByTriggerConfigurator<T> ByTrigger()
+        public IGroupByTriggerConfigurator<T> ByTrigger => new GroupByTriggerConfigurator<T>(_serie);
+        public IGroupByStartEndTimesConfigurator<T> ByTimeRanges => new GroupByStartEndTimesConfigurator<T>(_serie);
+        IGroupByStartEndTimesConfiguratorOptional<T> IGroupSelector<T>.ByTrigger(Func<ISingleDataRow<T>, bool> predicate)
         {
-            return new GroupByTriggerConfigurator<T>(_serie);
+            return ByTrigger.TriggerWhen(predicate);
+        }
+
+        IGroupByStartEndTimesConfiguratorOptional<T> IGroupSelector<T>.ByTimeRanges(IReadOnlyList<StartEndTime> groupTimes)
+        {
+            return ByTimeRanges.ByTimeRanges(groupTimes);
         }
     }
 }

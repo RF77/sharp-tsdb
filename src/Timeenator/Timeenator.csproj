@@ -59,7 +59,9 @@
     <Compile Include="Impl\Grouping\Configurators\GroupConfigurator.cs" />
     <Compile Include="Impl\Grouping\Configurators\IGroupByStartEndTimesConfigurator.cs" />
     <Compile Include="Impl\Grouping\Configurators\IGroupAggregationConfigurator.cs" />
+    <Compile Include="Impl\Grouping\Configurators\IGroupByStartEndTimesConfiguratorOptional.cs" />
     <Compile Include="Impl\Grouping\Configurators\IGroupByTriggerConfigurator.cs" />
+    <Compile Include="Impl\Grouping\Configurators\IGroupMultipleAggregationConfigurator.cs" />
     <Compile Include="Impl\Grouping\DataRowExtensions.cs" />
     <Compile Include="Impl\Grouping\DynamicTable.cs" />
     <Compile Include="Impl\Grouping\DynamicTableValues.cs" />
