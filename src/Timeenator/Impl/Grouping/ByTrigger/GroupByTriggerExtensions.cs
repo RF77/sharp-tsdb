@@ -1,13 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Timeenator.Impl.Grouping.Configurators;
 using Timeenator.Interfaces;
 
 namespace Timeenator.Impl.Grouping.ByTrigger
 {
     public static class GroupByTriggerExtensions
     {
-        public static IReadOnlyList<StartEndTime> GroupTimesByTrigger<T>(this IQuerySerie<T> serie, Func<IGroupTimesByTriggerConfigurator<T>, IGroupByTriggerOptional> configFunc)
+        public static IReadOnlyList<StartEndTime> GroupTimesByTrigger<T>(this IQuerySerie<T> serie, Func<IGroupByTriggerConfigurator<T>, IGroupByStartEndTimesConfigurator<T>> configFunc)
            where T : struct
         {
             var rows = serie.Rows;
@@ -15,7 +16,7 @@ namespace Timeenator.Impl.Grouping.ByTrigger
 
             if (rows.Any() == false) return groupTimes;
 
-            var config = new GroupByTriggerConfigurator<T>();
+            var config = new GroupByTriggerConfigurator<T>(serie);
             configFunc(config);
 
 

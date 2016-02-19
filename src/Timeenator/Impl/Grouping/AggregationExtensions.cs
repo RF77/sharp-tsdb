@@ -105,7 +105,7 @@ namespace Timeenator.Impl.Grouping
         public static TimeSpan? TimeWhere<T>(this IQuerySerie<T> serie, Func<T, bool> predicate) where T:struct 
         {
             if (!serie.Rows.Any()) return null;
-            TimeSpan? timeSpan = null;
+            TimeSpan? timeSpan = TimeSpan.Zero;
             var rows = serie.Rows;
 
             ISingleDataRow<T> prevRow = null;

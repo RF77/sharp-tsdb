@@ -62,7 +62,7 @@ namespace Tests.QueryLanguage
                 NextRow = new SingleDataRow<float>(new DateTime(1000, 1, 1, 0, 11, 0), 11)
             };
             var result = serie.TimeWhere(v => v == 7f)?.TotalMinutes;
-            result.Should().Be(null);
+            result.Should().Be(0);
         }
 
         [Test]
