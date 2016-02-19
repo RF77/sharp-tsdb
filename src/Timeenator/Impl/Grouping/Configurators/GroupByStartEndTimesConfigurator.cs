@@ -5,17 +5,25 @@ using Timeenator.Interfaces;
 
 namespace Timeenator.Impl.Grouping.Configurators
 {
-    internal class GroupByStartEndTimesConfigurator<T>: GroupConfigurator<T>, IGroupByStartEndTimesConfigurator<T>, IGroupByStartEndTimesConfiguratorOptional<T> where T:struct
+    internal class GroupByStartEndTimesConfigurator<T> : GroupConfigurator<T>, IGroupByStartEndTimesConfigurator<T>,
+        IGroupByStartEndTimesConfiguratorOptional<T>, IGroupTimesCreator where T : struct
     {
+        public GroupByStartEndTimesConfigurator(IQuerySerie<T> serie) : base(serie)
+        {
+        }
+
         public TimeSpan? StartOffsetTimeSpan { get; set; }
         public TimeSpan? EndOffsetTimeSpan { get; set; }
         public TimeStampType TimeStampType { get; set; }
         public bool EndTimeIsStartTime { get; set; }
         public bool StartTimeIsEndTime { get; set; }
         public TimeSpan? Tolerance { get; set; }
+        protected List<StartEndTime> GroupTimes { get; set; }
 
-        public GroupByStartEndTimesConfigurator(IQuerySerie<T> serie):base(serie)
+        public IGroupByStartEndTimesConfiguratorOptional<T> ByTimeRanges(IReadOnlyList<StartEndTime> groupTimes)
         {
+            GroupTimes = (groupTimes as List<StartEndTime>) ?? groupTimes.ToList();
+            return this;
         }
 
         public IGroupByStartEndTimesConfiguratorOptional<T> StartOffset(TimeSpan offset)
@@ -87,14 +95,14 @@ namespace Timeenator.Impl.Grouping.Configurators
             if (!rows.Any() || !GroupTimes.Any())
                 return new NullableQuerySerie<T>(new List<ISingleDataRow<T?>>(), Serie);
 
-            int index = 0;
-            int max = rows.Count;
+            var index = 0;
+            var max = rows.Count;
 
-            List<ISingleDataRow<T?>> result = new List<ISingleDataRow<T?>>();
+            var result = new List<ISingleDataRow<T?>>();
 
             foreach (var groupTime in GroupTimes)
             {
-                List<ISingleDataRow<T>> group = new List<ISingleDataRow<T>>();
+                var group = new List<ISingleDataRow<T>>();
                 while (index < max && rows[index].Time < groupTime.Start)
                 {
                     index++;
@@ -120,12 +128,30 @@ namespace Timeenator.Impl.Grouping.Configurators
             return resultData;
         }
 
-        public IGroupByStartEndTimesConfiguratorOptional<T> ByTimeRanges(IReadOnlyList<StartEndTime> groupTimes)
+        protected StartEndTime CreateGroupTime(DateTime startTime, DateTime endTime)
         {
-            GroupTimes = groupTimes;
-            return this;
+            if (EndTimeIsStartTime)
+            {
+                endTime = startTime;
+            }
+            if (StartTimeIsEndTime)
+            {
+                startTime = endTime;
+            }
+            if (StartOffsetTimeSpan != null)
+            {
+                startTime = startTime + StartOffsetTimeSpan.Value;
+            }
+            if (EndOffsetTimeSpan != null)
+            {
+                endTime = endTime + EndOffsetTimeSpan.Value;
+            }
+            return new StartEndTime(startTime, endTime);
         }
 
-        protected IReadOnlyList<StartEndTime> GroupTimes { get; set; }
+        public virtual IReadOnlyList<StartEndTime> CreateGroupTimes()
+        {
+            return GroupTimes;
+        }
     }
 }

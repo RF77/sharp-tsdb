@@ -4,7 +4,7 @@ using Timeenator.Interfaces;
 
 namespace Timeenator.Impl.Grouping.Configurators
 {
-    public class GroupSelector<T> : IGroupSelector<T> where T : struct
+    public class GroupSelector<T> : IGroupSelector<T>, ITimeRangeSelector<T> where T : struct
     {
         private readonly IQuerySerie<T> _serie;
 
@@ -23,6 +23,11 @@ namespace Timeenator.Impl.Grouping.Configurators
         IGroupByStartEndTimesConfiguratorOptional<T> IGroupSelector<T>.ByTimeRanges(IReadOnlyList<StartEndTime> groupTimes)
         {
             return ByTimeRanges.ByTimeRanges(groupTimes);
+        }
+
+        IGroupByStartEndTimesConfiguratorOptional<T> ITimeRangeSelector<T>.ByTrigger(Func<ISingleDataRow<T>, bool> predicate)
+        {
+            return ByTrigger.TriggerWhen(predicate);
         }
     }
 }

@@ -1,12 +1,10 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using DbInterfaces.Interfaces;
-using FileDb.InterfaceImpl;
 using FluentAssertions;
 using NUnit.Framework;
 using Timeenator.Impl;
-using Timeenator.Impl.Grouping.ByTrigger;
+using Timeenator.Impl.Grouping;
 using Timeenator.Interfaces;
 
 namespace Tests.QueryLanguage
@@ -60,7 +58,7 @@ namespace Tests.QueryLanguage
         [Test]
         public void GroupTimesDefaultTest()
         {
-            var times = _serie.GroupTimesByTrigger(c => c.TriggerWhen(i => i.Value > 5));
+            var times = _serie.TimeRanges(t => t.ByTrigger(i => i.Value > 5));
 
             times.Count.Should().Be(3);
             times[0].Start.Should().Be(new DateTime(1000, 1, 1, 0, 0, 0));
@@ -75,7 +73,7 @@ namespace Tests.QueryLanguage
         public void GroupTimesDefaultWithoutNextTest()
         {
             _serie.NextRow = null;
-            var times = _serie.GroupTimesByTrigger(c => c.TriggerWhen(i => i.Value > 5));
+            var times = _serie.TimeRanges(t => t.ByTrigger(i => i.Value > 5));
 
             times.Count.Should().Be(3);
             times[0].Start.Should().Be(new DateTime(1000, 1, 1, 0, 0, 0));
@@ -90,7 +88,7 @@ namespace Tests.QueryLanguage
         public void GroupTimesDefault2WithoutNextTest()
         {
             _serie2.NextRow = null;
-            var times = _serie2.GroupTimesByTrigger(c => c.TriggerWhen(i => i.Value > 5));
+            var times = _serie2.TimeRanges(t => t.ByTrigger(i => i.Value > 5));
 
             times.Count.Should().Be(2);
             times[0].Start.Should().Be(new DateTime(1000, 1, 1, 0, 0, 0));
@@ -102,7 +100,7 @@ namespace Tests.QueryLanguage
         [Test]
         public void GroupTimesDefault2Test()
         {
-            var times = _serie2.GroupTimesByTrigger(c => c.TriggerWhen(i => i.Value > 5));
+            var times = _serie2.TimeRanges(t => t.ByTrigger(i => i.Value > 5));
 
             times.Count.Should().Be(2);
             times[0].Start.Should().Be(new DateTime(1000, 1, 1, 0, 0, 0));
@@ -115,7 +113,7 @@ namespace Tests.QueryLanguage
         public void GroupTimesDefaultOnly18Test()
         {
             _serie2.EndTime = new DateTime(1000, 1, 1, 0, 18, 0);
-            var times = _serie2.GroupTimesByTrigger(c => c.TriggerWhen(i => i.Value > 5));
+            var times = _serie2.TimeRanges(t => t.ByTrigger(i => i.Value > 5));
 
             times.Count.Should().Be(2);
             times[0].Start.Should().Be(new DateTime(1000, 1, 1, 0, 0, 0));
@@ -128,7 +126,7 @@ namespace Tests.QueryLanguage
         public void GroupTimesDefaultEndIsTriggerTest()
         {
             _serie3.EndTime = new DateTime(1000, 1, 1, 0, 18, 0);
-            var times = _serie3.GroupTimesByTrigger(c => c.TriggerWhen(i => i.Value > 5));
+            var times = _serie3.TimeRanges(t => t.ByTrigger(i => i.Value > 5));
 
             times.Count.Should().Be(3);
             times[0].Start.Should().Be(new DateTime(1000, 1, 1, 0, 0, 0));
@@ -144,7 +142,7 @@ namespace Tests.QueryLanguage
         {
             _serie3.EndTime = new DateTime(1000, 1, 1, 0, 18, 0);
             _serie3.NextRow = null;
-            var times = _serie3.GroupTimesByTrigger(c => c.TriggerWhen(i => i.Value > 5));
+            var times = _serie3.TimeRanges(t => t.ByTrigger(i => i.Value > 5));
 
             times.Count.Should().Be(3);
             times[0].Start.Should().Be(new DateTime(1000, 1, 1, 0, 0, 0));
@@ -160,7 +158,7 @@ namespace Tests.QueryLanguage
         {
             _serie3.EndTime = new DateTime(1000, 1, 1, 0, 18, 0);
             _serie3.NextRow = null;
-            var times = _serie3.GroupTimesByTrigger(c => c.TriggerWhen(i => i.Value > 5)
+            var times = _serie3.TimeRanges(t => t.ByTrigger(i => i.Value > 5)
                 .StartOffset(TimeSpan.FromMinutes(-2)).EndOffset(TimeSpan.FromMinutes(3)));
 
             times.Count.Should().Be(3);
@@ -177,7 +175,7 @@ namespace Tests.QueryLanguage
         {
             _serie3.EndTime = new DateTime(1000, 1, 1, 0, 18, 0);
             _serie3.NextRow = null;
-            var times = _serie3.GroupTimesByTrigger(c => c.TriggerWhen(i => i.Value > 5).EndIsStart()
+            var times = _serie3.TimeRanges(t => t.ByTrigger(i => i.Value > 5).EndIsStart()
                 .StartOffset(TimeSpan.FromMinutes(-2)).EndOffset(TimeSpan.FromMinutes(3)));
 
             times.Count.Should().Be(3);
@@ -194,7 +192,7 @@ namespace Tests.QueryLanguage
         {
             _serie3.EndTime = new DateTime(1000, 1, 1, 0, 18, 0);
             _serie3.NextRow = null;
-            var times = _serie3.GroupTimesByTrigger(c => c.TriggerWhen(i => i.Value > 5).StartIsEnd()
+            var times = _serie3.TimeRanges(t => t.ByTrigger(i => i.Value > 5).StartIsEnd()
                 );
 
             times.Count.Should().Be(3);
