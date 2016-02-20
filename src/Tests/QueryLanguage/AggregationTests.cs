@@ -133,6 +133,15 @@ namespace Tests.FileDb
             result[6].Value.Should().Be(46);
         }
 
+        [Test]
+        public void TestAggreggationSum()
+        {
+            var sw = Stopwatch.StartNew();
+            var result = _unitUnderTest50Int.GroupByMinutes(5, a => a.Sum()).Rows;
+            sw.Stop();
+            result[6].Value.Should().Be(364);
+        }
+
 
         [Test]
         public void TestAggreggationDifference()
