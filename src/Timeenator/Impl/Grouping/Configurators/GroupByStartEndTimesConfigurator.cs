@@ -119,13 +119,16 @@ namespace Timeenator.Impl.Grouping.Configurators
             if (!rows.Any() || !GroupTimes.Any())
                 return new NullableQuerySerie<T>(new List<ISingleDataRow<T?>>(), Serie);
 
-            var index = 0;
+            int index = 0;
             var max = rows.Count;
 
             var result = new List<ISingleDataRow<T?>>();
+            int? nextTimeRangeIndex = null;
 
-            foreach (var groupTime in GroupTimes)
+            for(int groupIndex = 0; groupIndex < GroupTimes.Count; groupIndex++)
             {
+                StartEndTime groupTime = GroupTimes[groupIndex];
+                StartEndTime nextGroupTime = (groupIndex + 1 < GroupTimes.Count)? GroupTimes[groupIndex+1]:null;
                 var group = new List<ISingleDataRow<T>>();
                 while (index < max && rows[index].Time < groupTime.Start)
                 {
@@ -136,6 +139,10 @@ namespace Timeenator.Impl.Grouping.Configurators
                 while (index < max && rows[index].Time < groupTime.End)
                 {
                     group.Add(rows[index]);
+                    if (nextTimeRangeIndex == null && nextGroupTime != null && rows[index].Time > nextGroupTime.Start)
+                    {
+                        nextTimeRangeIndex = index - 1;
+                    }
 
                     index++;
                 }
@@ -146,6 +153,11 @@ namespace Timeenator.Impl.Grouping.Configurators
                 };
                 result.Add(new SingleDataRow<T?>(groupTime.GetTimeStampByType(TimeStampType),
                     AggregationFunc(aggregationData)));
+                if (nextTimeRangeIndex != null)
+                {
+                    index = nextTimeRangeIndex.Value;
+                    nextTimeRangeIndex = null;
+                }
             }
 
             var resultData = new NullableQuerySerie<T>(result, Serie);
