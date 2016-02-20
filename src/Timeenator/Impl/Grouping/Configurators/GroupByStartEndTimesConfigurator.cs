@@ -19,6 +19,8 @@ namespace Timeenator.Impl.Grouping.Configurators
         public bool StartTimeIsEndTime { get; set; }
         public TimeSpan? Tolerance { get; set; }
         protected List<StartEndTime> GroupTimes { get; set; }
+        public double? ExpandFactor { get; set; }
+        public TimeSpan? ExpandTime { get; set; }
 
         public IGroupByStartEndTimesConfiguratorOptional<T> ByTimeRanges(IReadOnlyList<StartEndTime> groupTimes)
         {
@@ -78,6 +80,23 @@ namespace Timeenator.Impl.Grouping.Configurators
             return this;
         }
 
+        public IGroupByStartEndTimesConfiguratorOptional<T> ExpandTimeRangeByFactor(double factor)
+        {
+            ExpandFactor = factor;
+            return this;
+        }
+
+        public IGroupByStartEndTimesConfiguratorOptional<T> ExpandTimeRange(TimeSpan timeSpan)
+        {
+            ExpandTime = timeSpan;
+            return this;
+        }
+
+        public IGroupByStartEndTimesConfiguratorOptional<T> ExpandTimeRange(string timeSpanExpression)
+        {
+            return ExpandTimeRange(timeSpanExpression.ToTimeSpan());
+        }
+
         public IGroupByStartEndTimesConfiguratorOptional<T> TimeTolerance(TimeSpan tolerance)
         {
             Tolerance = tolerance;
@@ -87,6 +106,11 @@ namespace Timeenator.Impl.Grouping.Configurators
         public IGroupByStartEndTimesConfiguratorOptional<T> TimeTolerance(string tolerance)
         {
             return TimeTolerance(tolerance.ToTimeSpan());
+        }
+
+        public virtual IReadOnlyList<StartEndTime> CreateGroupTimes()
+        {
+            return GroupTimes;
         }
 
         public override INullableQuerySerie<T> ExecuteGrouping()
@@ -146,12 +170,19 @@ namespace Timeenator.Impl.Grouping.Configurators
             {
                 endTime = endTime + EndOffsetTimeSpan.Value;
             }
+            if (ExpandFactor != null)
+            {
+                double ms = (endTime - startTime).TotalMilliseconds;
+                double oneSide = ((ExpandFactor.Value - 1)/2)*ms;
+                startTime -= TimeSpan.FromMilliseconds(oneSide);
+                endTime += TimeSpan.FromMilliseconds(oneSide);
+            }
+            if (ExpandTime != null)
+            {
+                startTime -= ExpandTime.Value;
+                endTime += ExpandTime.Value;
+            }
             return new StartEndTime(startTime, endTime);
-        }
-
-        public virtual IReadOnlyList<StartEndTime> CreateGroupTimes()
-        {
-            return GroupTimes;
         }
     }
 }

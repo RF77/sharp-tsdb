@@ -100,6 +100,12 @@ namespace Timeenator.Impl.Grouping
             return (serie.Rows.Last().Value.ToDouble() - (serie.PreviousRow?.Value.ToDouble() ?? serie.Rows.First().Value.ToDouble())).ToType<T>();
         }
 
+        public static T? Median<T>(this IQuerySerie<T> serie) where T : struct
+        {
+            if (!serie.Rows.Any()) return null;
+            return serie.Rows.Select(i => i.Value.ToDouble()).Median().ToType<T>();
+        }
+
         /// <summary>
         /// Calculates the time span where a specified condition (predicate) is true
         /// e.g. serie.TimeWhere(v => v == 9.6f)?.TotalMinutes

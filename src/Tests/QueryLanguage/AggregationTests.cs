@@ -124,6 +124,15 @@ namespace Tests.FileDb
             sw.Stop();
         }
 
+        [Test]
+        public void TestAggreggationMedian()
+        {
+            var sw = Stopwatch.StartNew();
+            var result = _unitUnderTest50Int.GroupByMinutes(5, a => a.Median()).Rows;
+            sw.Stop();
+            result[6].Value.Should().Be(46);
+        }
+
 
         [Test]
         public void TestAggreggationDifference()

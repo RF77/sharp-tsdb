@@ -15,6 +15,31 @@ namespace Timeenator.Impl.Grouping.Configurators
         IGroupByStartEndTimesConfiguratorOptional<T> StartIsEnd();
 
         /// <summary>
+        /// Expands the current time range by a specified factor
+        /// e.g. is grouped by one hour and expanded by factor 5
+        /// Result: time range inlcudes now the previous 2h, the grouped hour and 2h aftwerwards
+        /// </summary>
+        /// <param name="factor"></param>
+        /// <returns></returns>
+        IGroupByStartEndTimesConfiguratorOptional<T> ExpandTimeRangeByFactor(double factor);
+
+        /// <summary>
+        /// Expands the current time range by a specified time
+        /// e.g. is grouped by one hour and expanded 2h
+        /// Result: time range inlcudes now the previous hour, the grouped hour and 1h aftwerwards
+        /// </summary>
+        /// <returns></returns>
+        IGroupByStartEndTimesConfiguratorOptional<T> ExpandTimeRange(TimeSpan timeSpan);
+
+        /// <summary>
+        /// Expands the current time range by a specified time
+        /// e.g. is grouped by one hour and expanded 2h
+        /// Result: time range inlcudes now the previous hour, the grouped hour and 1h aftwerwards
+        /// </summary>
+
+        IGroupByStartEndTimesConfiguratorOptional<T> ExpandTimeRange(string timeSpanExpression);
+
+        /// <summary>
         /// Time between two groups must be higher than the tolareance otherwise the groups will be merged
         /// </summary>
         /// <param name="tolerance"></param>

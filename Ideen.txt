@@ -1,8 +1,9 @@
 - Sägezahn normalisieren (erledigt)
-- Difference
-- Median
+- Difference (erledigt)
+- Median(erledigt)
 - Derivative
 - Integral
 - Arithmetik zwischen Serien
 - moving averaage
 - group by condition (z.B. jede Stunde)
+- Werte innerhalb Zeitbereich selektieren (z.B. max Wert)
