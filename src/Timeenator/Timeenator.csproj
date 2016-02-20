@@ -52,6 +52,9 @@
     <Compile Include="Impl\DataRow.cs" />
     <Compile Include="Impl\DataRows\NamedDataRow.cs" />
     <Compile Include="Impl\DateTimeExtensions.cs" />
+    <Compile Include="Impl\Grouping\Configurators\GroupByTimeConfigurator.cs" />
+    <Compile Include="Impl\Grouping\Configurators\IGroupByTimeConfigurator.cs" />
+    <Compile Include="Impl\Grouping\SelectExtensions.cs" />
     <Compile Include="Impl\Grouping\AggregationExtensions.cs" />
     <Compile Include="Impl\Grouping\Configurators\GroupByStartEndTimesConfigurator.cs" />
     <Compile Include="Impl\Grouping\Configurators\GroupByTriggerConfigurator.cs" />
@@ -60,6 +63,7 @@
     <Compile Include="Impl\Grouping\Configurators\IGroupAggregationConfigurator.cs" />
     <Compile Include="Impl\Grouping\Configurators\IGroupByStartEndTimesConfiguratorOptional.cs" />
     <Compile Include="Impl\Grouping\Configurators\IGroupByTriggerConfigurator.cs" />
+    <Compile Include="Impl\Grouping\Configurators\IGroupItemSelectorConfigurator.cs" />
     <Compile Include="Impl\Grouping\Configurators\IGroupMultipleAggregationConfigurator.cs" />
     <Compile Include="Impl\Grouping\Configurators\IGroupTimesCreator.cs" />
     <Compile Include="Impl\Grouping\Configurators\ITimeRangeSelector.cs" />

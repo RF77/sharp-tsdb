@@ -15,6 +15,7 @@ namespace Timeenator.Impl.Grouping.Configurators
 
         public IGroupByTriggerConfigurator<T> ByTrigger => new GroupByTriggerConfigurator<T>(_serie);
         public IGroupByStartEndTimesConfigurator<T> ByTimeRanges => new GroupByStartEndTimesConfigurator<T>(_serie);
+        public IGroupByTimeConfigurator<T> ByTime => new GroupByTimeConfigurator<T>(_serie);
         IGroupByStartEndTimesConfiguratorOptional<T> IGroupSelector<T>.ByTrigger(Func<ISingleDataRow<T>, bool> predicate)
         {
             return ByTrigger.TriggerWhen(predicate);

@@ -42,6 +42,7 @@ namespace Tests.QueryLanguage
         {
         }
 
+
         [Test]
         public void CombineByToleranceWith5min()
         {

@@ -34,19 +34,19 @@ namespace Timeenator.Impl.Grouping
             switch (type)
             {
                 case "s":
-                    return serie.GroupBySeconds(number, aggregationFunc);
+                    return serie.GroupBySeconds(number, aggregationFunc, timeStampType);
                 case "m":
-                    return serie.GroupByMinutes(number, aggregationFunc);
+                    return serie.GroupByMinutes(number, aggregationFunc, timeStampType);
                 case "h":
-                    return serie.GroupByHours(number, aggregationFunc);
+                    return serie.GroupByHours(number, aggregationFunc, timeStampType);
                 case "d":
-                    return serie.GroupByDays(number, aggregationFunc);
+                    return serie.GroupByDays(number, aggregationFunc, 0, timeStampType);
                 case "w":
-                    return serie.GroupByWeeks(number, aggregationFunc);
+                    return serie.GroupByWeeks(number, aggregationFunc, DayOfWeek.Monday, timeStampType);
                 case "M":
-                    return serie.GroupByMonths(number, aggregationFunc);
+                    return serie.GroupByMonths(number, aggregationFunc, timeStampType);
                 case "y":
-                    return serie.GroupByYears(number, aggregationFunc);
+                    return serie.GroupByYears(number, aggregationFunc, timeStampType);
             }
 
             throw new ArgumentException($"expression {expression} has unknown type");

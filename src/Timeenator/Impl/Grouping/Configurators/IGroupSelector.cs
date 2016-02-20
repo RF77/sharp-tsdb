@@ -8,5 +8,7 @@ namespace Timeenator.Impl.Grouping.Configurators
     {
         IGroupByStartEndTimesConfiguratorOptional<T> ByTrigger(Func<ISingleDataRow<T>, bool> predicate);
         IGroupByStartEndTimesConfiguratorOptional<T> ByTimeRanges(IReadOnlyList<StartEndTime> groupTimes);
+        IGroupByTimeConfigurator<T> ByTime { get; }
+        //IGroupByStartEndTimesConfiguratorOptional<T> ByTime(TimeSpan timeSpan);
     }
 }

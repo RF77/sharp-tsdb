@@ -5,7 +5,7 @@ using Timeenator.Interfaces;
 
 namespace Timeenator.Impl.Grouping.Configurators
 {
-    internal class GroupByStartEndTimesConfigurator<T> : GroupConfigurator<T>, IGroupByStartEndTimesConfigurator<T>,
+    public class GroupByStartEndTimesConfigurator<T> : GroupConfigurator<T>, IGroupByStartEndTimesConfigurator<T>,
         IGroupByStartEndTimesConfiguratorOptional<T>, IGroupTimesCreator where T : struct
     {
         public GroupByStartEndTimesConfigurator(IQuerySerie<T> serie) : base(serie)
@@ -58,7 +58,7 @@ namespace Timeenator.Impl.Grouping.Configurators
 
         public IGroupByStartEndTimesConfiguratorOptional<T> TimeStampIsMiddle()
         {
-            TimeStampType = TimeStampType.Start;
+            TimeStampType = TimeStampType.Middle;
             return this;
         }
 
@@ -141,7 +141,7 @@ namespace Timeenator.Impl.Grouping.Configurators
                     group.Add(rows[index]);
                     if (nextTimeRangeIndex == null && nextGroupTime != null && rows[index].Time > nextGroupTime.Start)
                     {
-                        nextTimeRangeIndex = index - 1;
+                        nextTimeRangeIndex = Math.Max(index - 1, 0);
                     }
 
                     index++;
@@ -196,5 +196,6 @@ namespace Timeenator.Impl.Grouping.Configurators
             }
             return new StartEndTime(startTime, endTime);
         }
+
     }
 }

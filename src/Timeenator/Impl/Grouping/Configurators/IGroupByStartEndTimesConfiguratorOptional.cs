@@ -2,7 +2,8 @@ using System;
 
 namespace Timeenator.Impl.Grouping.Configurators
 {
-    public interface IGroupByStartEndTimesConfiguratorOptional<T> : IGroupAggregationConfigurator<T> where T : struct
+    public interface IGroupByStartEndTimesConfiguratorOptional<T> : IGroupAggregationConfigurator<T>,
+        IGroupItemSelectorConfigurator<T> where T : struct
     {
         IGroupByStartEndTimesConfiguratorOptional<T> StartOffset(TimeSpan offset);
         IGroupByStartEndTimesConfiguratorOptional<T> EndOffset(TimeSpan offset);
