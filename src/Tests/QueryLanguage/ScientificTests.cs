@@ -1,9 +1,12 @@
+using System.Linq;
 using DbInterfaces.Interfaces;
 using FileDb.InterfaceImpl;
 using NUnit.Framework;
+using Timeenator.Impl;
 using Timeenator.Impl.Converting;
 using Timeenator.Impl.Grouping;
 using Timeenator.Impl.Scientific;
+using Timeenator.Interfaces;
 
 namespace Tests.QueryLanguage
 {
@@ -47,5 +50,21 @@ namespace Tests.QueryLanguage
                 .RemoveSerie("Feuchtigkeit")
                 ;
         }
+
+        [Test]
+        public void MovingAverage()
+        {
+            var db = new DbManagement().GetDb("fux");
+            var time = "time < now() - 14d and time > now() - 21d";
+
+            var serie = db.GetSerie<float>("Aussen.Wetterstation.Temperatur", time)
+                .Group(
+                    g =>
+                        g.ByTime.Minutes(10)
+                            .TimeStampIsMiddle()
+                            .ExpandTimeRangeByFactor(20)
+                            .Aggregate(a => a.MeanByTime()));
+        }
+
     }
 }

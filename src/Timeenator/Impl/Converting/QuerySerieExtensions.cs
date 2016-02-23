@@ -50,6 +50,23 @@ namespace Timeenator.Impl.Converting
             return serie;
         }
 
+        public static IQuerySerie<T> Alias<T>(this IQuerySerie<T> serie, string name) where T : struct
+        {
+            serie.Name = name;
+            return serie;
+        }
+
+        public static INullableQuerySerie<T> Alias<T>(this INullableQuerySerie<T> serie, string name) where T : struct
+        {
+            serie.Name = name;
+            return serie;
+        }
+
+        public static INullableQuerySerie<T> ToNullable<T>(this IQuerySerie<T> serie) where T : struct
+        {
+            return new NullableQuerySerie<T>(serie.Rows.Select(i => new SingleDataRow<T?>(i.Time, i.Value)).ToList(), serie);
+        }
+
         /// <summary>
         /// Normalize a saw tooth like series due to overflows or resets
         /// </summary>

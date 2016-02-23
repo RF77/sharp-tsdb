@@ -24,6 +24,10 @@ namespace FileDb.InterfaceImpl
 
         [DataMember]
         public string Name { get; set; }
+
+        [DataMember]
+        public HashSet<string> Aliases { get; } = new HashSet<string>();
+
         [DataMember]
         public HashSet<string> Tags { get; } = new HashSet<string>();
         [DataMember]

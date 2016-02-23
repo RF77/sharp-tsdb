@@ -16,7 +16,8 @@ namespace SharpTsdb
         private QueryHandler _handler = new QueryHandler();
 
         [Route("query")]
-        public QueryRoot Get(string db, string q)
+        [HttpGet()]
+        public QueryRoot Get(string db,  string q)
         {
             return _handler.HandleQuery(db, q);
         }

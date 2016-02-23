@@ -95,7 +95,8 @@ namespace FileDb.Scripting
                 "Timeenator.Impl.Scientific",
                 "Timeenator.Impl.Converting",
                 "Microsoft.CSharp",
-                "System.Dynamic"
+                "System.Dynamic",
+                "DbInterfaces.Extensions"
             });
             
         }
@@ -117,6 +118,6 @@ namespace FileDb.Scripting
             _scripts[scriptText] = _script;
         }
 
-        private string ScriptText => $"db.{_expression}";
+        private string ScriptText => _expression;
     }
 }

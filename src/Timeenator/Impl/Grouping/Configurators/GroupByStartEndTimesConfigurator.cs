@@ -110,6 +110,7 @@ namespace Timeenator.Impl.Grouping.Configurators
 
         public virtual IReadOnlyList<StartEndTime> CreateGroupTimes()
         {
+            GroupTimes = GroupTimes.Select(i => CreateGroupTime(i.Start, i.End)).ToList();
             return GroupTimes;
         }
 

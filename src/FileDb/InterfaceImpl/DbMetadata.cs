@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Runtime.Serialization;
 using DbInterfaces.Interfaces;
+using Newtonsoft.Json;
 
 namespace FileDb.InterfaceImpl
 {
@@ -21,10 +22,7 @@ namespace FileDb.InterfaceImpl
         [DataMember]
         public string DbPath { get; set; }
 
-        public string DbMetadataPath
-        {
-            get { return GetMetadataPath(DbPath); }
-        }
+        public string DbMetadataPath => GetMetadataPath(DbPath);
 
         public IMeasurement GetMeasurement(string name)
         {
@@ -39,11 +37,26 @@ namespace FileDb.InterfaceImpl
         [DataMember]
         public Dictionary<string, Measurement> Measurements { get; private set; }
 
+        [JsonIgnore]
+        private Dictionary<string, Measurement> MeasurementsWithAliases { get; set; }
 
         public static string GetMetadataPath(string dbPath)
         {
             return Path.Combine(dbPath, "Metadata.json");
         }
 
+        [OnDeserialized]
+        internal void OnDeserializingMethod(StreamingContext context)
+        {
+            MeasurementsWithAliases =new Dictionary<string, Measurement>();
+            foreach (var meas in Measurements.Values)
+            {
+                MeasurementsWithAliases[meas.Metadata.Name] = meas;
+                foreach (var alias in meas.Metadata.Aliases)
+                {
+                    MeasurementsWithAliases[alias] = meas;
+                }
+            }
+        }
     }
 }

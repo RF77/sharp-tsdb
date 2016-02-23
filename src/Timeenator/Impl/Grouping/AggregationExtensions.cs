@@ -100,6 +100,22 @@ namespace Timeenator.Impl.Grouping
             return (serie.Rows.Last().Value.ToDouble() - (serie.PreviousRow?.Value.ToDouble() ?? serie.Rows.First().Value.ToDouble())).ToType<T>();
         }
 
+        public static T? Derivative<T>(this IQuerySerie<T> serie, TimeSpan timeSpan) where T : struct
+        {
+            if (!serie.Rows.Any()) return null;
+            var firstValue = serie.PreviousRow ?? serie.Rows.First();
+            var lastValue = serie.Rows.Last();
+            var diffTime = lastValue.Time - firstValue.Time;
+            double diffValue = lastValue.Value.ToDouble() - firstValue.Value.ToDouble();
+            var result = diffValue*timeSpan.Ticks/diffTime.Ticks;
+            return result.ToType<T>();
+        }
+
+        public static T? Derivative<T>(this IQuerySerie<T> serie, string timeSpanExpression) where T : struct
+        {
+            return Derivative(serie, timeSpanExpression.ToTimeSpan());
+        }
+
         public static T? Median<T>(this IQuerySerie<T> serie) where T : struct
         {
             if (!serie.Rows.Any()) return null;

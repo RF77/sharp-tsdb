@@ -37,8 +37,10 @@ namespace SharpTsdb
 
             config.Formatters.JsonFormatter.SupportedMediaTypes.Add(new MediaTypeHeaderValue("text/html"));
             //config.Filters.Add(new AddCustomHeaderFilter());
+            
 
             appBuilder.UseWebApi(config);
         }
+
     }
 }

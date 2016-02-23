@@ -195,5 +195,11 @@ namespace Timeenator.Impl.Grouping.Configurators
 
             return this;
         }
+
+        public override INullableQuerySerie<T> ExecuteGrouping()
+        {
+            CreateGroupTimes(); //used to assigne optional time range
+            return base.ExecuteGrouping();
+        }
     }
 }

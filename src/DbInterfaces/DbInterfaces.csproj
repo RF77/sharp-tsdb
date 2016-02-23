@@ -45,6 +45,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Extensions\DbExtensions.cs" />
     <Compile Include="Interfaces\IColumn.cs" />
     <Compile Include="Interfaces\IDb.cs" />
     <Compile Include="Interfaces\IDbManagement.cs" />
