@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Web.Http;
 using System.Web.Http.Filters;
@@ -46,12 +47,12 @@ namespace SharpTsdb
 
         [Route("clearMeas")]
         [HttpGet]
-        public string ClearMeas(string db, string name)
+        public string ClearMeas(string db, string name, DateTime? after)
         {
             IDbManagement dbm = new DbManagement();
 
             var myDb = dbm.GetDb(db);
-            myDb.GetMeasurement(name).ClearDataPoints();
+            myDb.GetMeasurement(name).ClearDataPoints(after);
             return "ok";
         }
 

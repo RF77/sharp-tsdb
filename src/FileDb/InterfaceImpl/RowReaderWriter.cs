@@ -9,5 +9,6 @@ namespace FileDb.InterfaceImpl
         public int RowLength { get; set; }
         public abstract void WriteRow(BinaryWriter writer, IDataRow row);
         public abstract ISingleDataRow<T> ReadRow<T>(BinaryReader reader);
+        public abstract IDataRow ReadRow(BinaryReader reader);
     }
 }

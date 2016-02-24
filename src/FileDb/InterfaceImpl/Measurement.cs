@@ -59,13 +59,21 @@ namespace FileDb.InterfaceImpl
             return GetDataPoints<T>(expression.From, expression.To);
         }
 
-        public void ClearDataPoints()
+        public void ClearDataPoints(DateTime? after)
         {
             WriterLock(() =>
             {
-                using (var fs = File.Open(BinaryFilePath, FileMode.Create, FileAccess.Write, FileShare.None))
+                if (after == null)
                 {
+                    using (var fs = File.Open(BinaryFilePath, FileMode.Create, FileAccess.Write, FileShare.None))
+                    {
+                    }                    
                 }
+                else
+                {
+                    ClearDataPointsAfter(after.Value);
+                }
+
             });
         }
 
@@ -87,6 +95,38 @@ namespace FileDb.InterfaceImpl
                 }
             });
         }
+
+        private void ClearDataPointsAfter(DateTime after) 
+        {
+                using (var fs = File.Open(BinaryFilePath, FileMode.Open, FileAccess.ReadWrite, FileShare.ReadWrite))
+                {
+                    var items = fs.Length / _rowReaderWriter.RowLength;
+                    var currentItem = items / 2;
+
+                    using (var binaryReader = new BinaryReader(fs))
+                    {
+                        var itemToStart = GetItemToStart(after, fs, binaryReader, currentItem, currentItem, 0);
+                        if (itemToStart > 0)
+                        {
+                            itemToStart--;
+                        }
+                        fs.Position = itemToStart * _rowReaderWriter.RowLength;
+
+                        while (fs.Position < fs.Length)
+                        {
+                            long position = fs.Position;
+                            var readRow = _rowReaderWriter.ReadRow(binaryReader);
+
+                            if (readRow.Key >= after)
+                            {
+                                fs.SetLength(position);
+                                break;
+                            }
+                        }
+                    }
+                }
+        }
+
 
         public IQuerySerie<T> GetDataPoints<T>(DateTime? @from = null, DateTime? to = null) where T : struct
         {

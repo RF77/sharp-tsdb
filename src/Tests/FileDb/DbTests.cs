@@ -114,6 +114,33 @@ namespace Tests.FileDb
         }
 
         [Test]
+        public void ClearItemsAfterDate()
+        {
+            var measurement = _unitUnderTest.CreateMeasurement(TestMeasName, typeof(float));
+            var numberOfRows = 10000;
+            measurement.AppendDataPoints(CreateFloatRows(numberOfRows));
+
+            File.Exists(measurement.BinaryFilePath).Should().BeTrue();
+            new FileInfo(measurement.BinaryFilePath).Length.Should()
+                .Be(measurement.Metadata.Columns.Sum(i => i.Size) * numberOfRows);
+
+            measurement.ClearDataPoints(new DateTime(2010,1,2,0,1,0));
+
+            var serie = measurement.GetDataPoints<float>();
+            serie.Rows.Count.Should().Be(numberOfRows);
+
+            var after = new DateTime(2000, 1, 2, 0, 1, 0);
+            measurement.ClearDataPoints(after);
+            serie = measurement.GetDataPoints<float>();
+            var last = serie.Rows.Last();
+            last.Time.Should().BeBefore(after);
+
+            measurement.ClearDataPoints(new DateTime(200, 1, 2, 0, 1, 0));
+            serie = measurement.GetDataPoints<float>();
+            serie.Rows.Count.Should().Be(0);
+        }
+
+        [Test]
         public void ReadItems()
         {
             var measurement = _unitUnderTest.CreateMeasurement(TestMeasName, typeof(float));

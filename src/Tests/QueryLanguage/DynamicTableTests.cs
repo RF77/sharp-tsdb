@@ -75,7 +75,7 @@ namespace Tests.QueryLanguage
             var result =
                 new ScriptingEngine(db,
                     @"db.GetTable<float>(""Aussen.Wetterstation.(?<k>[TF]).*?$"", ""time > now() - 1M"")
-.Do(i => i.GroupByHours(1, o => o.Mean()))
+.Transform(i => i.GroupByHours(1, o => o.Mean()))
 .ZipAndAdd<float>(""Sum"", t => t.T + t.F)").Execute();
         }
 

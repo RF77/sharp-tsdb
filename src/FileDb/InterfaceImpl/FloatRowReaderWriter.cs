@@ -25,5 +25,10 @@ namespace FileDb.InterfaceImpl
 
             return row;
         }
+
+        public override IDataRow ReadRow(BinaryReader reader)
+        {
+            return new DataRow { Key = DateTime.FromBinary(reader.ReadInt64()), Value = reader.ReadSingle() };
+        }
     }
 }
