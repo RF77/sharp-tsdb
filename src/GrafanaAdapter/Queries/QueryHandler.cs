@@ -10,9 +10,7 @@ namespace GrafanaAdapter.Queries
 {
     public class QueryHandler
     {
-        public static IDbManagement _dbm = new DbManagement();
-
-        public QueryRoot HandleQuery(string db, string query)
+        public QueryRoot HandleQuery(string db, string query, IDbManagement dbm)
         {
             var root = new QueryRoot();
             var result = new QueryResult();
@@ -25,7 +23,7 @@ namespace GrafanaAdapter.Queries
                 serie.columns.Add("name");
 
 
-                var myDb = _dbm.GetDb(db);
+                var myDb = dbm.GetDb(db);
                 serie.values.AddRange(myDb.GetMeasurementNames().Select(i => new List<object>() {i}));
 
                 result.series.Add(serie);
@@ -34,7 +32,7 @@ namespace GrafanaAdapter.Queries
                 return root;
 
             }
-            var dbInstance = _dbm.GetDb(db);
+            var dbInstance = dbm.GetDb(db);
             var scriptingEngine = new ScriptingEngine(dbInstance, query);
             var res = scriptingEngine.Execute();
 

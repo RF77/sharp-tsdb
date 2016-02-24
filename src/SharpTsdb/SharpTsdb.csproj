@@ -53,14 +53,6 @@
       <HintPath>..\packages\Autofac.3.5.2\lib\net40\Autofac.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Deedle, Version=1.2.4.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Deedle.1.2.4\lib\net40\Deedle.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="Deedle.RProvider.Plugin, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Deedle.RPlugin.1.2.4\lib\net40\Deedle.RProvider.Plugin.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
     <Reference Include="DynamicInterop, Version=0.7.4.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\DynamicInterop.0.7.4\lib\net40\DynamicInterop.dll</HintPath>
       <Private>True</Private>
@@ -89,26 +81,6 @@
       <HintPath>..\packages\Owin.1.0\lib\net40\Owin.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="RDotNet, Version=1.6.4.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\R.NET.Community.1.6.4\lib\net40\RDotNet.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="RDotNet.FSharp, Version=1.6.4.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\R.NET.Community.FSharp.1.6.4\lib\net40\RDotNet.FSharp.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="RDotNet.NativeLibrary, Version=1.6.4.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\R.NET.Community.1.6.4\lib\net40\RDotNet.NativeLibrary.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="RProvider, Version=1.1.13.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\RProvider.1.1.13\lib\net40\RProvider.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="RProvider.Runtime, Version=1.1.13.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\RProvider.1.1.13\lib\net40\RProvider.Runtime.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Net.Http.Formatting, Version=5.2.3.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
@@ -132,6 +104,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DbController.cs" />
     <Compile Include="DbService.cs" />
     <Compile Include="GrafanaController.cs" />
     <Compile Include="InfluxQueryParams.cs" />

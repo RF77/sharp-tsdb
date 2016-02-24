@@ -31,5 +31,14 @@ namespace SharpTsdb.Properties {
                 return ((string)(this["DbDirectory"]));
             }
         }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("9003")]
+        public ushort Port {
+            get {
+                return ((ushort)(this["Port"]));
+            }
+        }
     }
 }

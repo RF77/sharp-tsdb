@@ -2,11 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Web.Http;
-using System.Web.Http.Filters;
 using DbInterfaces.Interfaces;
 using FileDb.InterfaceImpl;
 using GrafanaAdapter.Queries;
-using SharpTsdb.Properties;
 using Timeenator.Impl;
 
 namespace SharpTsdb
@@ -20,27 +18,17 @@ namespace SharpTsdb
         [HttpGet()]
         public QueryRoot Get(string db,  string q)
         {
-            return _handler.HandleQuery(db, q);
+            return _handler.HandleQuery(db, q, DbService.DbManagement);
         }
 
 
-        [Route("createDb")]
-        [HttpGet]
-        public string CreateDb(string dbName)
-        {
-            IDbManagement db = new DbManagement();
-
-            db.CreateDb(Settings.Default.DbDirectory, dbName);
-            return "ok";
-        }
+        
 
         [Route("createMeas")]
         [HttpGet]
         public string CreateMeas(string db, string name)
         {
-            IDbManagement dbm = new DbManagement();
-
-            var myDb = dbm.GetDb(db);
+            var myDb = DbService.DbManagement.GetDb(db);
             myDb.CreateMeasurement(name, typeof (float));
             return "ok";
         }
@@ -49,9 +37,7 @@ namespace SharpTsdb
         [HttpGet]
         public string ClearMeas(string db, string name, DateTime? after)
         {
-            IDbManagement dbm = new DbManagement();
-
-            var myDb = dbm.GetDb(db);
+            var myDb = DbService.DbManagement.GetDb(db);
             myDb.GetMeasurement(name).ClearDataPoints(after);
             return "ok";
         }
@@ -60,9 +46,7 @@ namespace SharpTsdb
         [HttpPost]
         public string WritePoints(string db, string meas, [FromBody]List<WritePoint> points)
         {
-            IDbManagement dbm = new DbManagement();
-
-            var myDb = dbm.GetDb(db);
+            var myDb = DbService.DbManagement.GetDb(db);
             var measurement = myDb.GetOrCreateMeasurement(meas);
             measurement.AppendDataPoints(points.Select(i => new DataRow() {Key = i.t, Value = i.v}));
             return "ok";

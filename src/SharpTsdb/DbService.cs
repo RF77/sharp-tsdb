@@ -1,18 +1,20 @@
 ﻿using System;
-using System.Web.Http;
+using DbInterfaces.Interfaces;
+using FileDb.InterfaceImpl;
 using Microsoft.Owin.Hosting;
-using Owin;
+using SharpTsdb.Properties;
 
 namespace SharpTsdb
 {
     public class DbService
     {
-        public string baseAddress = "http://localhost:9003/";
+        public static IDbManagement DbManagement { get; } = new DbManagement();
+        public string BaseAddress = $"http://localhost:{Settings.Default.Port}/";
         private IDisposable _server;
 
         public void Init()
         {
-            _server = WebApp.Start<Startup>(url: baseAddress);
+            _server = WebApp.Start<Startup>(BaseAddress);
         }
 
         public void Stop()
