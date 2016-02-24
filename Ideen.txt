@@ -4,6 +4,7 @@
 - Derivative
 - Integral
 - Arithmetik zwischen Serien
-- moving averaage
+- moving averaage (erledigt)
 - group by condition (z.B. jede Stunde)
 - Werte innerhalb Zeitbereich selektieren (z.B. max Wert)
+- Serie Transform

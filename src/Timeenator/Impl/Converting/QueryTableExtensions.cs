@@ -25,7 +25,7 @@ namespace Timeenator.Impl.Converting
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <param name="sourceTable">Source table with keyed series</param>
-        /// <param name="newSerieName">Name of zipped serie in the new table</param>
+        /// <param name="newSerieKeyOrName">Name of zipped serie in the new table</param>
         /// <param name="zipFunc">
         /// Given is a dynamic source table where you can get the current iteration value
         /// e.g. you have to series with the key "A" and "B" in the source table.
@@ -35,14 +35,14 @@ namespace Timeenator.Impl.Converting
         /// zipped serie has {3,4,5,8}
         /// </param>
         /// <returns>New table with the zipped result</returns>
-        public static INullableQueryTable<T> ZipToNew<T>(this INullableQueryTable<T> sourceTable, string newSerieName, Func<dynamic, T?> zipFunc) where T : struct
+        public static INullableQueryTable<T> ZipToNew<T>(this INullableQueryTable<T> sourceTable, string newSerieKeyOrName, Func<dynamic, T?> zipFunc) where T : struct
         {
             var table = new NullableQueryTable<T>();
             var dynamicTable = new DynamicTableValues(sourceTable);
             var firstSerie = sourceTable.Series.First();
             var count = firstSerie.Rows.Count;
             var newRows = new List<ISingleDataRow<T?>>(count);
-            var newSerie = new NullableQuerySerie<T>(newRows, firstSerie) {Name = newSerieName};
+            var newSerie = new NullableQuerySerie<T>(newRows, firstSerie) {Name = newSerieKeyOrName};
             table.AddSerie(newSerie);
             for (int i = 0; i < count; i++)
             {
@@ -54,13 +54,44 @@ namespace Timeenator.Impl.Converting
             return table;
         }
 
+        public static IReadOnlyList<INullableQueryTable<T>> GroupSeries<T>(this INullableQueryTable<T> sourceTable)
+            where T : struct
+        {
+            List<INullableQueryTable<T>> newTables = new List<INullableQueryTable<T>>();
+            var groupedTables = sourceTable.Series.ToLookup(i => i.GroupName);
+            foreach (var groupedTable in groupedTables)
+            {
+                var table = new NullableQueryTable<T>();
+                newTables.Add(table);
+                foreach (var serie in groupedTable)
+                {
+                    table.AddSerie(serie);
+                }
+            }
+            return newTables;
+        }
+
+        public static INullableQueryTable<T> MergeTables<T>(this IEnumerable<INullableQueryTable<T>> sourceTables)
+    where T : struct
+        {
+            var newTable = new NullableQueryTable<T>();
+            foreach (var groupedTable in sourceTables)
+            {
+                foreach (var serie in groupedTable.Series)
+                {
+                    newTable.AddSerie(serie);
+                }
+            }
+            return newTable;
+        }
+
         /// <summary>
         /// Adds a new zipped serie to the source table from a time aligned source table
         /// Due to the dynamic implementation and with big data performance hits are possible
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <param name="sourceTable">Source table with keyed series</param>
-        /// <param name="newSerieName">Name of zipped serie in the new table</param>
+        /// <param name="newSerieKeyOrName">Name of zipped serie in the new table</param>
         /// <param name="zipFunc">
         /// Given is a dynamic source table where you can get the current iteration value
         /// e.g. you have to series with the key "A" and "B" in the source table.
@@ -70,10 +101,10 @@ namespace Timeenator.Impl.Converting
         /// zipped serie has {3,4,5,8}
         /// </param>
         /// <returns>Source table with added serie</returns>
-        public static INullableQueryTable<T> ZipAndAdd<T>(this INullableQueryTable<T> sourceTable, string newSerieName,
+        public static INullableQueryTable<T> ZipAndAdd<T>(this INullableQueryTable<T> sourceTable, string newSerieKeyOrName,
             Func<dynamic, T?> zipFunc) where T : struct
         {
-            return sourceTable.MergeTable(sourceTable.ZipToNew(newSerieName, zipFunc));
+            return sourceTable.MergeTable(sourceTable.ZipToNew(newSerieKeyOrName, zipFunc));
         }
 
         public static INullableQueryTable<T> ToNewTable<T>(this INullableQueryTable<T> sourceTable, Action<INullableQueryTable<T>, INullableQueryTable<T>> transformAction) where T : struct

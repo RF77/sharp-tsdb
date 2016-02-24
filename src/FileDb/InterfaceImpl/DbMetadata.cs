@@ -38,7 +38,7 @@ namespace FileDb.InterfaceImpl
         public Dictionary<string, Measurement> Measurements { get; private set; }
 
         [JsonIgnore]
-        private Dictionary<string, Measurement> MeasurementsWithAliases { get; set; }
+        public Dictionary<string, IMeasurement> MeasurementsWithAliases { get; private set; }
 
         public static string GetMetadataPath(string dbPath)
         {
@@ -48,7 +48,7 @@ namespace FileDb.InterfaceImpl
         [OnDeserialized]
         internal void OnDeserializingMethod(StreamingContext context)
         {
-            MeasurementsWithAliases =new Dictionary<string, Measurement>();
+            MeasurementsWithAliases =new Dictionary<string, IMeasurement>();
             foreach (var meas in Measurements.Values)
             {
                 MeasurementsWithAliases[meas.Metadata.Name] = meas;

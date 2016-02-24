@@ -9,6 +9,7 @@ namespace DbInterfaces.Interfaces
         Guid Id { get; set; }
         string DbPath { get; set; }
         string DbMetadataPath { get; }
+        Dictionary<string, IMeasurement> MeasurementsWithAliases { get; }
         IMeasurement GetMeasurement(string name);
         void SetMeasurement(string name, IMeasurement measurement);
     }

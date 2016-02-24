@@ -8,6 +8,7 @@ using DbInterfaces.Interfaces;
 using FileDb.Properties;
 using Infrastructure;
 using Timeenator.Impl;
+using Timeenator.Impl.Converting;
 using Timeenator.Interfaces;
 
 namespace FileDb.InterfaceImpl
@@ -59,18 +60,18 @@ namespace FileDb.InterfaceImpl
 
         public IQuerySerie<T> GetSerie<T>(string measurementName, string timeExpression) where T : struct
         {
-            return ReaderLock(() => GetMeasurement(measurementName).GetDataPoints<T>(timeExpression));
+            return ReaderLock(() => GetMeasurement(measurementName).GetDataPoints<T>(timeExpression).Alias(measurementName));
         }
 
         public IQueryTable<T> GetTable<T>(string measurementRegex, string timeExpression) where T : struct
         {
             var result = new QueryTable<T>();
-            foreach (var meas in MetadataInternal.Measurements)
+            foreach (var meas in MetadataInternal.MeasurementsWithAliases)
             {
                 var match = Regex.Match(meas.Key, measurementRegex);
                 if (match.Success)
                 {
-                    var serie = meas.Value.GetDataPoints<T>(timeExpression);
+                    var serie = meas.Value.GetDataPoints<T>(timeExpression).Alias(meas.Key);
 
                     Group g = match.Groups["g"];
 
