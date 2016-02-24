@@ -34,22 +34,19 @@ namespace GrafanaAdapter.Queries
                 return root;
 
             }
-            else
-            {
-                var dbInstance = _dbm.GetDb(db);
-                var scriptingEngine = new ScriptingEngine(dbInstance, query);
-                var res = scriptingEngine.Execute();
+            var dbInstance = _dbm.GetDb(db);
+            var scriptingEngine = new ScriptingEngine(dbInstance, query);
+            var res = scriptingEngine.Execute();
 
-                if (res.ResultAsSerie != null)
-                {
-                    CreateSerieResult(serie, res.ResultAsSerie, result, root);
-                }
-                if (res.ResultAsTable != null)
-                {
-                    CreateTableResult(res.ResultAsTable, result, root);
-                }
-                return root;
+            if (res.ResultAsSerie != null)
+            {
+                CreateSerieResult(serie, res.ResultAsSerie, result, root);
             }
+            if (res.ResultAsTable != null)
+            {
+                CreateTableResult(res.ResultAsTable, result, root);
+            }
+            return root;
         }
 
         private void CreateTableResult(IObjectQueryTable resultAsTable, QueryResult result, QueryRoot root)
@@ -72,7 +69,7 @@ namespace GrafanaAdapter.Queries
 
         private static void CreateSingleResult(QuerySerie serie, IObjectQuerySerie res, QueryResult result)
         {
-            serie.name = res.Name;
+            serie.name = res.FullName;
             serie.columns.Add("time");
             serie.columns.Add("value");
 

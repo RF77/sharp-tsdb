@@ -12,8 +12,7 @@ namespace Timeenator.Impl.Converting
             if (firstQuery.Rows.Count != secondQuery.Rows.Count) throw new ArgumentOutOfRangeException(nameof(firstQuery), "Zip with different length of row not possible");
             var resultRows = new List<ISingleDataRow<T?>>(secondQuery.Rows.Count);
 
-            var result = new NullableQuerySerie<T>(resultRows, firstQuery);
-            result.Name = resultQueryName;
+            var result = new NullableQuerySerie<T>(resultRows, firstQuery).Alias(resultQueryName);
             for (int i = 0; i < firstQuery.Rows.Count; i++)
             {
                 if (firstQuery.Rows[i].Time != secondQuery.Rows[i].Time) throw new ArgumentOutOfRangeException(nameof(firstQuery), "Zip with not aligned times");
@@ -50,21 +49,51 @@ namespace Timeenator.Impl.Converting
             return serie;
         }
 
+       
+
+        private static void SetAlias<T>(IQuerySerieBase<T> serie, string name) where T : struct
+        {
+            if (serie.GroupName != null)
+            {
+                serie.Key = name;
+            }
+            else
+            {
+                serie.Name = name;
+            }
+        }
+
         public static IQuerySerie<T> Alias<T>(this IQuerySerie<T> serie, string name) where T : struct
         {
-            serie.Name = name;
+            SetAlias(serie, name);
             return serie;
         }
 
         public static INullableQuerySerie<T> Alias<T>(this INullableQuerySerie<T> serie, string name) where T : struct
         {
-            serie.Name = name;
+            SetAlias(serie, name);
             return serie;
         }
 
         public static INullableQuerySerie<T> ToNullable<T>(this IQuerySerie<T> serie) where T : struct
         {
             return new NullableQuerySerie<T>(serie.Rows.Select(i => new SingleDataRow<T?>(i.Time, i.Value)).ToList(), serie);
+        }
+
+        public static INullableQuerySerie<T> Transform<T>(this INullableQuerySerie<T> serie,
+            Func<T?, T?> transformFunc) where T : struct
+        {
+            var newRows = new List<ISingleDataRow<T?>>(serie.Rows.Count);
+            newRows.AddRange(serie.Rows.Select(r => new SingleDataRow<T?>(r.Time, transformFunc(r.Value))));
+            return new NullableQuerySerie<T>(newRows, serie);
+        }
+
+        public static INullableQuerySerie<T> Transform<T>(this IQuerySerie<T> serie,
+            Func<T, T?> transformFunc) where T : struct
+        {
+            var newRows = new List<ISingleDataRow<T?>>(serie.Rows.Count);
+            newRows.AddRange(serie.Rows.Select(r => new SingleDataRow<T?>(r.Time, transformFunc(r.Value))));
+            return new NullableQuerySerie<T>(newRows, serie);
         }
 
         /// <summary>

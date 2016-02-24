@@ -8,3 +8,4 @@
 - group by condition (z.B. jede Stunde)
 - Werte innerhalb Zeitbereich selektieren (z.B. max Wert)
 - Serie Transform
+Grouping der Serien auf Tables (Group fluent interface)

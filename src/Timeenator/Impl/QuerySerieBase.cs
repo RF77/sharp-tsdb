@@ -1,8 +1,10 @@
 ﻿using System;
+using System.Diagnostics;
 using Timeenator.Interfaces;
 
 namespace Timeenator.Impl
 {
+    [DebuggerDisplay("{FullName}")]
     public abstract class QuerySerieBase<T>:IQuerySerieBase<T> where T : struct
     {
         private string _name;
@@ -11,7 +13,17 @@ namespace Timeenator.Impl
         public DateTime? EndTime { get; set; }
 
 
-        public string FullName => _originalName == null ? _name : $"{_originalName}.{_name}";
+        public string FullName
+        {
+            get
+            {
+                if (GroupName != null && Key != null)
+                {
+                    return $"{GroupName}.{Key}";
+                }
+                return $"{_name}";
+            }
+        }
 
         /// <summary>
         /// Last value before the start time or null

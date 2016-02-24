@@ -19,7 +19,7 @@ namespace Timeenator.Impl
 
         public INullableQueryTable<T> AddSerie(INullableQuerySerie<T> serie)
         {
-            Series[serie.Name] = serie;
+            Series[serie.FullName] = serie;
             return this;
         }
 
@@ -33,7 +33,7 @@ namespace Timeenator.Impl
         {
             foreach (var serie in otherTable.Series)
             {
-                Series[serie.Name] = serie;
+                Series[serie.FullName] = serie;
             }
             return this;
         }

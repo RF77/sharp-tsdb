@@ -1,9 +1,11 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using Timeenator.Interfaces;
 
 namespace Timeenator.Impl
 {
+    [DebuggerDisplay("{FullName} ({Rows.Count()})")] 
     public class NullableQuerySerie<T> : QuerySerieBase<T>, INullableQuerySerie<T> where T : struct
     {
         public IReadOnlyList<ISingleDataRow<T?>> Rows { get; }

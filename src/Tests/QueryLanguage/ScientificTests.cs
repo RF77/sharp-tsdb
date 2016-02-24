@@ -31,7 +31,7 @@ namespace Tests.QueryLanguage
             var db = new DbManagement().GetDb("fux");
             var queryTable = db.GetTable<float>("Aussen.Wetterstation.(?<k>.*?)$", "time > now() - 1y");
             var result = queryTable
-                .Do(i => TimeGroupingExtensions.GroupByHours<float>(i, 1, o => AggregationExtensions.Mean<float>(o)))
+                .Transform(i => TimeGroupingExtensions.GroupByHours<float>(i, 1, o => AggregationExtensions.Mean<float>(o)))
                 .DewPoint("Temperatur", "Feuchtigkeit", "Taupunkt");
         }
 
@@ -41,7 +41,7 @@ namespace Tests.QueryLanguage
             var db = new DbManagement().GetDb("fux");
             var queryTable = db.GetTable<float>("Aussen.Wetterstation.(?<k>.*?)$", "time > now() - 1M");
             var result = queryTable
-                .Do(i => i.GroupByHours(1, o => o.Mean()))
+                .Transform(i => i.GroupByHours(1, o => o.Mean()))
                 .AddDewPoint("Temperatur", "Feuchtigkeit")
                 .AddAbsoluteHumidity("Temperatur", "Feuchtigkeit")
                 .AddHumidex("Temperatur", "Feuchtigkeit")
