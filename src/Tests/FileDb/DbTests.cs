@@ -190,7 +190,7 @@ namespace Tests.FileDb
             var time = Stopwatch.StartNew();
 
             //All (without dates)
-            var scriptingEngine = new ScriptingEngine(_unitUnderTest, $@"GetSerie<float>(""{TestMeasName}"", null)");
+            var scriptingEngine = new ScriptingEngine(_unitUnderTest, $@"db.GetSerie<float>(""{TestMeasName}"", null)");
             var data = scriptingEngine.Execute().ResultAsSerie;
             var allItems = data.Rows;
             allItems.Count().Should().Be(numberOfRows);

@@ -31,7 +31,7 @@ namespace Tests.QueryLanguage
         public void DynamicTableInScript()
         {
             var db = new DbManagement().GetDb("fux");
-            var result = new ScriptingEngine(db, @"GetTable<float>(""Aussen.Wetterstation.(?<k>[TF]).*?$"", ""time > now() - 1M"")
+            var result = new ScriptingEngine(db, @"db.GetTable<float>(""Aussen.Wetterstation.(?<k>[TF]).*?$"", ""time > now() - 1M"")
 .Do(i => i.GroupByHours(1, o => o.Mean()))
 .ZipAndAdd<float>(""Sum"", t => t.T + t.F)").Execute();
         }
