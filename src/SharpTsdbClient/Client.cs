@@ -1,4 +1,9 @@
-﻿namespace SharpTsdbClient
+﻿using System.Collections.Generic;
+using System.IO;
+using System.Threading.Tasks;
+using SharpTsdbClient.Data;
+
+namespace SharpTsdbClient
 {
     // This project can output the Class library as a NuGet Package.
     // To enable this option, right-click on the project and select the Properties menu item. In the Build tab select "Produce outputs on build".
@@ -17,5 +22,25 @@
             _serverAddress = serverAddress;
             _port = port;
         }
+
+        //public async Task WriteAsync(List<WritePoint> points, string name)
+        //{
+        //    var httpWebRequest = (HttpWebRequest)WebRequest.Create($"http://localhost:9003/write?db=fux&meas={name}");
+        //    httpWebRequest.ContentType = "application/json";
+        //    httpWebRequest.Method = "POST";
+
+        //    using (var streamWriter = new StreamWriter(httpWebRequest.GetRequestStream()))
+        //    {
+        //        string json = new JavaScriptSerializer().Serialize(points);
+
+        //        streamWriter.Write(json);
+        //    }
+
+        //    var httpResponse = (HttpWebResponse)await httpWebRequest.GetResponseAsync();
+        //    using (var streamReader = new StreamReader(httpResponse.GetResponseStream()))
+        //    {
+        //        var result = await streamReader.ReadToEndAsync();
+        //    }
+        //}
     }
 }
