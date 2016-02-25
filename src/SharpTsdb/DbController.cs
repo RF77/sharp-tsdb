@@ -36,7 +36,7 @@ namespace SharpTsdb
             return "ok";
         }
 
-        [Route("db/{dbName}/{meas}/write")]
+        [Route("db/{dbName}/{meas}/appendRows")]
         [HttpPost]
         public string WritePoints(string dbName, string meas, [FromBody]List<WritePoint> points)
         {

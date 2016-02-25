@@ -1,7 +1,9 @@
 ﻿using System.Collections.Generic;
 using System.IO;
+using System.Net;
 using System.Threading.Tasks;
-using SharpTsdbClient.Data;
+using Nancy.Json;
+using Timeenator.Interfaces;
 
 namespace SharpTsdbClient
 {
@@ -9,8 +11,8 @@ namespace SharpTsdbClient
     // To enable this option, right-click on the project and select the Properties menu item. In the Build tab select "Produce outputs on build".
     public class Client
     {
-        private readonly string _serverAddress;
-        private readonly ushort _port;
+        public string ServerAddress { get; }
+        public ushort Port { get; }
 
         /// <summary>
         /// Create a client to access the Sharp TSDB Server
@@ -19,28 +21,33 @@ namespace SharpTsdbClient
         /// <param name="port">Port of server (defaults to 9003)</param>
         public Client(string serverAddress, ushort port = 9003)
         {
-            _serverAddress = serverAddress;
-            _port = port;
+            ServerAddress = serverAddress;
+            Port = port;
         }
 
-        //public async Task WriteAsync(List<WritePoint> points, string name)
-        //{
-        //    var httpWebRequest = (HttpWebRequest)WebRequest.Create($"http://localhost:9003/write?db=fux&meas={name}");
-        //    httpWebRequest.ContentType = "application/json";
-        //    httpWebRequest.Method = "POST";
+        public DbClient Db(string name)
+        {
+            return new DbClient(this, name);
+        }
 
-        //    using (var streamWriter = new StreamWriter(httpWebRequest.GetRequestStream()))
-        //    {
-        //        string json = new JavaScriptSerializer().Serialize(points);
+        public async Task WriteAsync<T>(IEnumerable<ISingleDataRow<T>> points, string name)
+        {
+            var httpWebRequest = (HttpWebRequest)WebRequest.Create($"http://{ServerAddress}:{Port}/write?db=fux&meas={name}");
+            httpWebRequest.ContentType = "application/json";
+            httpWebRequest.Method = "POST";
 
-        //        streamWriter.Write(json);
-        //    }
+            using (var streamWriter = new StreamWriter(httpWebRequest.GetRequestStream()))
+            {
+                string json = new JavaScriptSerializer().Serialize(points);
 
-        //    var httpResponse = (HttpWebResponse)await httpWebRequest.GetResponseAsync();
-        //    using (var streamReader = new StreamReader(httpResponse.GetResponseStream()))
-        //    {
-        //        var result = await streamReader.ReadToEndAsync();
-        //    }
-        //}
+                streamWriter.Write(json);
+            }
+
+            var httpResponse = (HttpWebResponse)await httpWebRequest.GetResponseAsync();
+            using (var streamReader = new StreamReader(httpResponse.GetResponseStream()))
+            {
+                var result = await streamReader.ReadToEndAsync();
+            }
+        }
     }
 }
