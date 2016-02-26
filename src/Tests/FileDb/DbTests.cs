@@ -291,5 +291,18 @@ namespace Tests.FileDb
 
         }
 
+        [Test, Ignore]
+        public void RecreateFuxDb()
+        {
+            var dbm = new DbManagement() {};
+            var dbName = "fux";
+            if (dbm.GetDbNames().Contains(dbName))
+            {
+                dbm.DeleteDb(dbName);
+            }
+            dbm.CreateDb(@"c:\DBs\SharpTsdb", dbName);
+
+            }
+
     }
 }

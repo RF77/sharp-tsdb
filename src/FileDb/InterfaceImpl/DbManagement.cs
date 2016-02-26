@@ -98,7 +98,13 @@ namespace FileDb.InterfaceImpl
             WriterLock(() =>
             {
                 var directoryInfo = new FileInfo(_dbNames[name]).Directory;
-                directoryInfo?.Delete(true);
+                if (directoryInfo?.Exists ?? false)
+                {
+                    directoryInfo?.Delete(true);
+                }
+                _dbNames.Remove(name);
+                _loadedDbs.Remove(name);
+                Serialize();
             });
         }
 

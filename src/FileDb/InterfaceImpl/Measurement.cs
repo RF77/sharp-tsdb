@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Runtime.Serialization;
 using DbInterfaces.Interfaces;
 using FileDb.Properties;
@@ -164,7 +165,12 @@ namespace FileDb.InterfaceImpl
         private void Init()
         {
             BinaryFilePath = Path.Combine(_db.MeasurementDirectory,
-                $"{MetadataInternal.Id}{Settings.Default.BinaryFileExtension}");
+                $"{MetadataInternal.Id.First()}\\{MetadataInternal.Id}{Settings.Default.BinaryFileExtension}");
+            var fileInfo = new FileInfo(BinaryFilePath);
+            if (!fileInfo.Directory?.Exists ?? false)
+            {
+                fileInfo.Directory?.Create();
+            }
             if (!File.Exists(BinaryFilePath))
             {
                 using (File.Create(BinaryFilePath))
