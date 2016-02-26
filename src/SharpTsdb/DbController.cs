@@ -38,10 +38,11 @@ namespace SharpTsdb
 
         [Route("db/{dbName}/{meas}/appendRows")]
         [HttpPost]
-        public string WritePoints(string dbName, string meas, [FromBody]List<WritePoint> points)
+        public string WritePoints(string dbName, string meas, [FromBody]List<WritePoint> points, bool truncateDbToFirstElement = false)
         {
             var myDb = DbService.DbManagement.GetDb(dbName);
             var measurement = myDb.GetOrCreateMeasurement(meas);
+            
             measurement.AppendDataPoints(points.Select(i => new DataRow() { Key = i.t, Value = i.v }));
             return "ok";
         }

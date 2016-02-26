@@ -302,7 +302,17 @@ namespace Tests.FileDb
             }
             dbm.CreateDb(@"c:\DBs\SharpTsdb", dbName);
 
-            }
+        }
 
+        [Test, Ignore]
+        public void SortTest()
+        {
+            var sourceList = Enumerable.Range(0, 1000000).Reverse().ToList();
+            var sw = Stopwatch.StartNew();
+            var newList = sourceList.OrderBy(i => i).ToList();
+            //sourceList.Sort();
+            sw.Stop();
+
+        }
     }
 }

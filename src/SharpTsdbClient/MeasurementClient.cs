@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
 using Nancy.Json;
@@ -23,13 +24,14 @@ namespace SharpTsdbClient
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <param name="points">points to add</param>
-        /// <param name="truncateDbToFirstElemnt">
+        /// <param name="truncateDbToFirstElement">
         /// false: No check, if there are already points after the start of the new points
         /// true: The DB deletes all points after the timestamp of the first element of the data to add
         /// </param>
         /// <returns></returns>
-        public async Task<string> AppendAsync<T>(IEnumerable<ISingleDataRow<T>> points, bool truncateDbToFirstElemnt)
+        public async Task<string> AppendAsync<T>(IEnumerable<ISingleDataRow<T>> points, bool truncateDbToFirstElement)
         {
+            //points = points.OrderBy(i => i.)
             return await PostRequestAsync($"db /{Db.DbName}/{MeasurementName}/appendRows", points);
         }
 
