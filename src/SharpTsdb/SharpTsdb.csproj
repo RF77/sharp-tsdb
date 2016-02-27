@@ -104,10 +104,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ControllerLogger.cs" />
     <Compile Include="DbController.cs" />
     <Compile Include="DbService.cs" />
     <Compile Include="GrafanaController.cs" />
     <Compile Include="InfluxQueryParams.cs" />
+    <Compile Include="MethodLogger.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Properties\Settings.Designer.cs">
       <AutoGen>True</AutoGen>
