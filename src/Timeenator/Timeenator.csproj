@@ -118,6 +118,7 @@
     <Compile Include="Interfaces\IObjectQuerySerie.cs" />
     <Compile Include="Interfaces\IObjectQuerySerieBase.cs" />
     <Compile Include="Interfaces\IObjectQueryTable.cs" />
+    <Compile Include="Interfaces\IObjectSingleDataRow.cs" />
     <Compile Include="Interfaces\IQueryResult.cs" />
     <Compile Include="Interfaces\IQuerySerie.cs" />
     <Compile Include="Interfaces\IQuerySerieBase.cs" />

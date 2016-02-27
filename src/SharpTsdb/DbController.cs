@@ -1,11 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Reflection;
 using System.Web.Http;
+using DbInterfaces.Interfaces;
 using log4net;
+using Serialize.Linq.Serializers;
 using SharpTsdb.Properties;
+using SharpTsdbTypes.Communication;
 using Timeenator.Impl;
+using Timeenator.Interfaces;
 
 namespace SharpTsdb
 {
@@ -14,6 +19,7 @@ namespace SharpTsdb
     {
         private static readonly ILog Logger = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
         private static readonly ControllerLogger MeLog = new ControllerLogger(Logger);
+        private static readonly ExpressionSerializer LinqSerializer = new ExpressionSerializer(new BinarySerializer());
 
         [Route("dbs/createDb/{dbName}")]
         [HttpGet]
@@ -52,16 +58,32 @@ namespace SharpTsdb
 
         [Route("db/{dbName}/{meas}/appendRows")]
         [HttpPost]
-        public string WritePoints(string dbName, string meas, [FromBody] List<WritePoint> points,
+        public string WritePoints(string dbName, string meas, [FromBody] DataRows data,
             bool truncateDbToFirstElement = false)
         {
-            using (MeLog.LogDebug($"db: {dbName}, meas: {meas}, point#: {points?.Count}, trunc: {truncateDbToFirstElement}"))
+            using (MeLog.LogDebug($"db: {dbName}, meas: {meas}, point#: {data.Rows.Count}, trunc: {truncateDbToFirstElement}"))
             {
                 var myDb = DbService.DbManagement.GetDb(dbName);
                 var measurement = myDb.GetOrCreateMeasurement(meas);
 
-                measurement.AppendDataPoints(points.Select(i => new DataRow {Key = i.t, Value = i.v}));
+                measurement.AppendDataPoints(data.AsIDataRows());
                 return "ok";
+            }
+        }
+
+        [Route("db/{dbName}/binQuerySerie")]
+        [HttpPost]
+        public DataSerie BinaryQuerySerie(string dbName, [FromBody] byte[] query)
+        {
+            using (MeLog.LogDebug($"db: {dbName}"))
+            {
+                var myDb = DbService.DbManagement.GetDb(dbName);
+                
+
+                var queryExpression = ((Expression<Func<IDb, IObjectQuerySerie>>)LinqSerializer.DeserializeBinary(query)).Compile();
+
+                IObjectQuerySerie result = queryExpression(myDb);
+                return new DataSerie(result);
             }
         }
     }

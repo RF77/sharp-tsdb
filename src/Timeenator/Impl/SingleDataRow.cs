@@ -22,6 +22,11 @@ namespace Timeenator.Impl
             set { base.Value =  value; }
         }
 
+        public object[] ToArray()
+        {
+            return new object[] {Key, Value};
+        }
+
         public SingleDataRow(DateTime time, T value)
         {
             Key = time;

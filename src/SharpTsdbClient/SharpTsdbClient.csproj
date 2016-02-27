@@ -53,6 +53,10 @@
       <HintPath>..\packages\Nancy.1.4.3\lib\net40\Nancy.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="Serialize.Linq, Version=1.2.4.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Serialize.Linq.1.2.4\lib\net45\Serialize.Linq.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -64,11 +68,20 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Client.cs" />
+    <Compile Include="ClientBase.cs" />
     <Compile Include="DbClient.cs" />
     <Compile Include="MeasurementClient.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\DbInterfaces\DbInterfaces.csproj">
+      <Project>{E65A3D01-0656-4522-AAF8-1CF2B11270F3}</Project>
+      <Name>DbInterfaces</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\SharpTsdbTypes\SharpTsdbTypes.csproj">
+      <Project>{063D0CA7-F8E3-4C8C-A646-651472F68986}</Project>
+      <Name>SharpTsdbTypes</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Timeenator\Timeenator.csproj">
       <Project>{21720df1-0488-49b8-ba41-9accd8f7469d}</Project>
       <Name>Timeenator</Name>
