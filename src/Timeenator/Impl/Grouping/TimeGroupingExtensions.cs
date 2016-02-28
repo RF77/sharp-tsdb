@@ -57,7 +57,7 @@ namespace Timeenator.Impl.Grouping
         {
             if (!serie.Rows.Any()) return new NullableQuerySerie<T>(new List<ISingleDataRow<T?>>(), serie);
             ISingleDataRow<T> first = serie.Rows.First();
-            DateTime d = serie.StartTime ?? first.Time;
+            DateTime d = serie.StartTime ?? first.TimeUtc;
 
             int startSeconds = d.Second;
             if (60 % seconds == 0)
@@ -76,7 +76,7 @@ namespace Timeenator.Impl.Grouping
         {
             if (!serie.Rows.Any()) return new NullableQuerySerie<T>(new List<ISingleDataRow<T?>>(), serie);
             ISingleDataRow<T> first = serie.Rows.First();
-            DateTime d = serie.StartTime ?? first.Time;
+            DateTime d = serie.StartTime ?? first.TimeUtc;
 
             int startMinute = d.Minute;
             if (60 % minutes == 0)
@@ -95,7 +95,7 @@ namespace Timeenator.Impl.Grouping
         {
             if (!serie.Rows.Any()) return new NullableQuerySerie<T>(new List<ISingleDataRow<T?>>(), serie);
             ISingleDataRow<T> first = serie.Rows.First();
-            DateTime d = serie.StartTime ?? first.Time;
+            DateTime d = serie.StartTime ?? first.TimeUtc;
 
             int startHour = d.Hour;
             if (24 % hours == 0)
@@ -114,7 +114,7 @@ namespace Timeenator.Impl.Grouping
         {
             if (!serie.Rows.Any()) return new NullableQuerySerie<T>(new List<ISingleDataRow<T?>>(), serie);
             ISingleDataRow<T> first = serie.Rows.First();
-            DateTime d = serie.StartTime ?? first.Time;
+            DateTime d = serie.StartTime ?? first.TimeUtc;
 
             DateTime currentDate = new DateTime(d.Year, d.Month, d.Day, startHour, 0, 0);
 
@@ -126,7 +126,7 @@ Func<IQuerySerie<T>, T?> aggregationFunc, DayOfWeek startDay = DayOfWeek.Monday,
         {
             if (!serie.Rows.Any()) return new NullableQuerySerie<T>(new List<ISingleDataRow<T?>>(), serie);
             ISingleDataRow<T> first = serie.Rows.First();
-            DateTime d = serie.StartTime ?? first.Time;
+            DateTime d = serie.StartTime ?? first.TimeUtc;
 
             DateTime startDate = new DateTime(d.Year, d.Month, d.Day);
 
@@ -143,7 +143,7 @@ Func<IQuerySerie<T>, T?> aggregationFunc, TimeStampType timeStampType = TimeStam
         {
             if (!serie.Rows.Any()) return new NullableQuerySerie<T>(new List<ISingleDataRow<T?>>(), serie);
             ISingleDataRow<T> first = serie.Rows.First();
-            DateTime d = serie.StartTime ?? first.Time;
+            DateTime d = serie.StartTime ?? first.TimeUtc;
 
             int startMonth = d.Month;
             if (12 % months == 0)
@@ -169,7 +169,7 @@ Func<IQuerySerie<T>, T?> aggregationFunc, TimeStampType timeStampType = TimeStam
         {
             if (!serie.Rows.Any()) return new NullableQuerySerie<T>(new List<ISingleDataRow<T?>>(), serie);
             ISingleDataRow<T> first = serie.Rows.First();
-            DateTime d = serie.StartTime ?? first.Time;
+            DateTime d = serie.StartTime ?? first.TimeUtc;
 
             DateTime currentDate = new DateTime(d.Year, 1, 1);
 
@@ -188,7 +188,7 @@ Func<IQuerySerie<T>, T?> aggregationFunc, TimeStampType timeStampType = TimeStam
             do
             {
                 List<ISingleDataRow<T>> list = new List<ISingleDataRow<T>>();
-                while (currentIndex < items.Count && items[currentIndex].Time < endTime)
+                while (currentIndex < items.Count && items[currentIndex].TimeUtc < endTime)
                 {
                     list.Add(items[currentIndex++]);
                 }

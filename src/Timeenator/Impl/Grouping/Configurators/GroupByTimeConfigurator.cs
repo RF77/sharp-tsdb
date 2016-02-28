@@ -68,7 +68,7 @@ namespace Timeenator.Impl.Grouping.Configurators
         {
             if (!Serie.Rows.Any()) return this;
             ISingleDataRow<T> first = Serie.Rows.First();
-            DateTime d = Serie.StartTime ?? first.Time;
+            DateTime d = Serie.StartTime ?? first.TimeUtc;
 
             int startSeconds = d.Second;
             if (60 % seconds == 0)
@@ -86,7 +86,7 @@ namespace Timeenator.Impl.Grouping.Configurators
         {
             if (!Serie.Rows.Any()) return this;
             ISingleDataRow<T> first = Serie.Rows.First();
-            DateTime d = Serie.StartTime ?? first.Time;
+            DateTime d = Serie.StartTime ?? first.TimeUtc;
 
             int startMinute = d.Minute;
             if (60 % minutes == 0)
@@ -103,7 +103,7 @@ namespace Timeenator.Impl.Grouping.Configurators
         {
             if (!Serie.Rows.Any()) return this;
             ISingleDataRow<T> first = Serie.Rows.First();
-            DateTime d = Serie.StartTime ?? first.Time;
+            DateTime d = Serie.StartTime ?? first.TimeUtc;
 
             int startHour = d.Hour;
             if (24 % hours == 0)
@@ -120,7 +120,7 @@ namespace Timeenator.Impl.Grouping.Configurators
         {
             if (!Serie.Rows.Any()) return this;
             ISingleDataRow<T> first = Serie.Rows.First();
-            DateTime d = Serie.StartTime ?? first.Time;
+            DateTime d = Serie.StartTime ?? first.TimeUtc;
 
             DateTime currentDate = new DateTime(d.Year, d.Month, d.Day, startHour, 0, 0);
 
@@ -136,7 +136,7 @@ namespace Timeenator.Impl.Grouping.Configurators
         {
             if (!Serie.Rows.Any()) return this;
             ISingleDataRow<T> first = Serie.Rows.First();
-            DateTime d = Serie.StartTime ?? first.Time;
+            DateTime d = Serie.StartTime ?? first.TimeUtc;
 
             DateTime startDate = new DateTime(d.Year, d.Month, d.Day);
 
@@ -151,7 +151,7 @@ namespace Timeenator.Impl.Grouping.Configurators
         {
             if (!Serie.Rows.Any()) return this;
             ISingleDataRow<T> first = Serie.Rows.First();
-            DateTime d = Serie.StartTime ?? first.Time;
+            DateTime d = Serie.StartTime ?? first.TimeUtc;
 
             int startMonth = d.Month;
             if (12 % months == 0)
@@ -175,7 +175,7 @@ namespace Timeenator.Impl.Grouping.Configurators
         {
             if (!Serie.Rows.Any()) return this;
             ISingleDataRow<T> first = Serie.Rows.First();
-            DateTime d = Serie.StartTime ?? first.Time;
+            DateTime d = Serie.StartTime ?? first.TimeUtc;
 
             DateTime currentDate = new DateTime(d.Year, 1, 1);
 
@@ -188,7 +188,7 @@ namespace Timeenator.Impl.Grouping.Configurators
             List<StartEndTime> result = new List<StartEndTime>();
             DateTime endTime = calcNewDateMethod(startTime);
 
-            DateTime lastTime = stopTime ?? Serie.Rows.Last().Time;
+            DateTime lastTime = stopTime ?? Serie.Rows.Last().TimeUtc;
 
             while (startTime < lastTime)
             {

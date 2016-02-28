@@ -59,7 +59,7 @@ namespace Tests.QueryLanguage
         public void WhereTest()
         {
             IQuerySerie<float> serie = new QuerySerie<float>(_rows, new DateTime(1000, 1, 1), new DateTime(1000, 1, 1, 0, 10, 0));
-            var newSerie = serie.Where(i => i.Time > new DateTime(1000, 1, 1, 0, 5, 0));
+            var newSerie = serie.Where(i => i.TimeUtc > new DateTime(1000, 1, 1, 0, 5, 0));
             serie.Rows.Count.Should().Be(3);
             newSerie.Rows.Count.Should().Be(1);
 

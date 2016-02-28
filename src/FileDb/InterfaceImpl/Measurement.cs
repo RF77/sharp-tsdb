@@ -195,9 +195,9 @@ namespace FileDb.InterfaceImpl
             {
                 var readRow = _rowReaderWriter.ReadRow<T>(binaryReader);
 
-                if (readRow.Time >= start)
+                if (readRow.TimeUtc >= start)
                 {
-                    if (readRow.Time <= stop)
+                    if (readRow.TimeUtc <= stop)
                     {
                         rows.Add(readRow);
                     }
@@ -207,7 +207,7 @@ namespace FileDb.InterfaceImpl
                     firstRow = readRow;
                 }
 
-                if (readRow.Time >= stop)
+                if (readRow.TimeUtc >= stop)
                 {
                     data.NextRow = readRow;
                     break;

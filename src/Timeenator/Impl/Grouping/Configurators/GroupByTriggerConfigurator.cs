@@ -53,18 +53,18 @@ namespace Timeenator.Impl.Grouping.Configurators
                 if (condition && !currentlyConditionIsTrue)
                 {
                     currentlyConditionIsTrue = true;
-                    startTime = rows[i].Time;
+                    startTime = rows[i].TimeUtc;
                 }
                 if (currentlyConditionIsTrue && !condition)
                 {
                     currentlyConditionIsTrue = false;
-                    GroupTimes.Add(CreateGroupTime(startTime.Value, rows[i].Time));
+                    GroupTimes.Add(CreateGroupTime(startTime.Value, rows[i].TimeUtc));
                 }
             }
 
             if (currentlyConditionIsTrue)
             {
-                DateTime endTime = rows.Last().Time;
+                DateTime endTime = rows.Last().TimeUtc;
                 if (Serie.NextRow != null && PredicateFunc(Serie.NextRow))
                 {
                     endTime = Serie.EndTime ?? endTime;

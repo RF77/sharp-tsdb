@@ -54,7 +54,7 @@ namespace Timeenator.Impl.Converting
                 {
                     dynamicTable.Index = i;
                     var newValue = zipFunc(dynamicTable);
-                    newRows.Add(new SingleDataRow<T?>(firstSerie.Rows[i].Time, newValue));
+                    newRows.Add(new SingleDataRow<T?>(firstSerie.Rows[i].TimeUtc, newValue));
                 }
 
                 resultTables.Add(table);

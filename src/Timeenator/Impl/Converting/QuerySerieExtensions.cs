@@ -15,9 +15,9 @@ namespace Timeenator.Impl.Converting
             var result = new NullableQuerySerie<T>(resultRows, firstQuery).Alias(resultQueryName);
             for (int i = 0; i < firstQuery.Rows.Count; i++)
             {
-                if (firstQuery.Rows[i].Time != secondQuery.Rows[i].Time) throw new ArgumentOutOfRangeException(nameof(firstQuery), "Zip with not aligned times");
+                if (firstQuery.Rows[i].TimeUtc != secondQuery.Rows[i].TimeUtc) throw new ArgumentOutOfRangeException(nameof(firstQuery), "Zip with not aligned times");
 
-                resultRows.Add(new SingleDataRow<T?>(firstQuery.Rows[i].Time, transformAction(firstQuery.Rows[i].Value, secondQuery.Rows[i].Value)));
+                resultRows.Add(new SingleDataRow<T?>(firstQuery.Rows[i].TimeUtc, transformAction(firstQuery.Rows[i].Value, secondQuery.Rows[i].Value)));
             }
             return result;
         }
@@ -77,14 +77,14 @@ namespace Timeenator.Impl.Converting
 
         public static INullableQuerySerie<T> ToNullable<T>(this IQuerySerie<T> serie) where T : struct
         {
-            return new NullableQuerySerie<T>(serie.Rows.Select(i => new SingleDataRow<T?>(i.Time, i.Value)).ToList(), serie);
+            return new NullableQuerySerie<T>(serie.Rows.Select(i => new SingleDataRow<T?>(i.TimeUtc, i.Value)).ToList(), serie);
         }
 
         public static INullableQuerySerie<T> Transform<T>(this INullableQuerySerie<T> serie,
             Func<T?, T?> transformFunc) where T : struct
         {
             var newRows = new List<ISingleDataRow<T?>>(serie.Rows.Count);
-            newRows.AddRange(serie.Rows.Select(r => new SingleDataRow<T?>(r.Time, transformFunc(r.Value))));
+            newRows.AddRange(serie.Rows.Select(r => new SingleDataRow<T?>(r.TimeUtc, transformFunc(r.Value))));
             return new NullableQuerySerie<T>(newRows, serie);
         }
 
@@ -92,7 +92,7 @@ namespace Timeenator.Impl.Converting
             Func<T, T?> transformFunc) where T : struct
         {
             var newRows = new List<ISingleDataRow<T?>>(serie.Rows.Count);
-            newRows.AddRange(serie.Rows.Select(r => new SingleDataRow<T?>(r.Time, transformFunc(r.Value))));
+            newRows.AddRange(serie.Rows.Select(r => new SingleDataRow<T?>(r.TimeUtc, transformFunc(r.Value))));
             return new NullableQuerySerie<T>(newRows, serie);
         }
 
@@ -125,7 +125,7 @@ namespace Timeenator.Impl.Converting
                         }
                         
                     }
-                    newRows.Add(new SingleDataRow<T>(row.Time, (rowValue + offset).ToType<T>()));
+                    newRows.Add(new SingleDataRow<T>(row.TimeUtc, (rowValue + offset).ToType<T>()));
                     previousValue = rowValue;
                 }
                 return new QuerySerie<T>(newRows, serie);

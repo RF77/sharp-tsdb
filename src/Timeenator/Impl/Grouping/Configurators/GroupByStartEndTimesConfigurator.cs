@@ -131,16 +131,16 @@ namespace Timeenator.Impl.Grouping.Configurators
                 StartEndTime groupTime = GroupTimes[groupIndex];
                 StartEndTime nextGroupTime = (groupIndex + 1 < GroupTimes.Count)? GroupTimes[groupIndex+1]:null;
                 var group = new List<ISingleDataRow<T>>();
-                while (index < max && rows[index].Time < groupTime.Start)
+                while (index < max && rows[index].TimeUtc < groupTime.Start)
                 {
                     index++;
                 }
                 var startIndex = index;
 
-                while (index < max && rows[index].Time < groupTime.End)
+                while (index < max && rows[index].TimeUtc < groupTime.End)
                 {
                     group.Add(rows[index]);
-                    if (nextTimeRangeIndex == null && nextGroupTime != null && rows[index].Time > nextGroupTime.Start)
+                    if (nextTimeRangeIndex == null && nextGroupTime != null && rows[index].TimeUtc > nextGroupTime.Start)
                     {
                         nextTimeRangeIndex = Math.Max(index - 1, 0);
                     }

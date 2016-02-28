@@ -53,7 +53,7 @@ namespace Timeenator.Impl.Grouping
             double valueSum = 0;
             var rows = serie.Rows;
             DateTime start = DateTime.MinValue;
-            DateTime stop = rows.Last().Time;
+            DateTime stop = rows.Last().TimeUtc;
             DateTime? currentTimeStamp = null;
 
 
@@ -70,14 +70,14 @@ namespace Timeenator.Impl.Grouping
                 var newRow = rows[i];
                 if (currentTimeStamp != null)
                 {
-                    valueSum += (newRow.Time - currentTimeStamp.Value).Ticks*currentValue;
+                    valueSum += (newRow.TimeUtc - currentTimeStamp.Value).Ticks*currentValue;
                 }
                 else
                 {
-                    start = newRow.Time;
+                    start = newRow.TimeUtc;
                 }
                 currentValue = newRow.Value.ToDouble();
-                currentTimeStamp = newRow.Time;
+                currentTimeStamp = newRow.TimeUtc;
             }
 
             if (serie.NextRow != null && serie.EndTime != null)
@@ -105,7 +105,7 @@ namespace Timeenator.Impl.Grouping
             if (!serie.Rows.Any()) return null;
             var firstValue = serie.PreviousRow ?? serie.Rows.First();
             var lastValue = serie.Rows.Last();
-            var diffTime = lastValue.Time - firstValue.Time;
+            var diffTime = lastValue.TimeUtc - firstValue.TimeUtc;
             double diffValue = lastValue.Value.ToDouble() - firstValue.Value.ToDouble();
             var result = diffValue*timeSpan.Ticks/diffTime.Ticks;
             return result.ToType<T>();
@@ -151,14 +151,14 @@ namespace Timeenator.Impl.Grouping
                 {
                     if (predicate(serie.PreviousRow.Value))
                     {
-                        timeSpan += (newRow.Time - serie.StartTime.Value);
+                        timeSpan += (newRow.TimeUtc - serie.StartTime.Value);
                     }
                 }
                 else
                 {
                     if (prevRow != null && predicate(prevRow.Value))
                     {
-                        timeSpan += (newRow.Time - prevRow.Time);
+                        timeSpan += (newRow.TimeUtc - prevRow.TimeUtc);
                     }
                 }
 
@@ -169,7 +169,7 @@ namespace Timeenator.Impl.Grouping
             {
                 if (predicate(prevRow.Value))
                 {
-                    timeSpan += (serie.EndTime.Value - prevRow.Time);
+                    timeSpan += (serie.EndTime.Value - prevRow.TimeUtc);
                 }
             }
 

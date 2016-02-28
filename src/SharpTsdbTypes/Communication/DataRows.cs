@@ -21,7 +21,7 @@ namespace SharpTsdbTypes.Communication
 
         public DataRows(IEnumerable<IDataRow> rows)
         {
-            Rows = rows.Select(i => new[] {i.Key.ToBinary(), i.Value}).ToList();
+            Rows = rows.Select(i => new[] {i.Key.ToFileTimeUtc(), i.Value}).ToList();
         }
 
         public IEnumerable<ISingleDataRow<T>> AsTyped<T>() where T : struct
@@ -31,7 +31,7 @@ namespace SharpTsdbTypes.Communication
 
         private static DateTime ToDateTime(object[] i)
         {
-            return DateTime.FromBinary((long)i[0]);
+            return DateTime.FromFileTimeUtc((long)i[0]);
         }
 
         public IEnumerable<ISingleDataRow<T?>> AsNullableTyped<T>() where T : struct

@@ -9,7 +9,7 @@ namespace SharpTsdbTypes.Communication
     {
         public static ISingleDataRow<T> ToSingleDataRow<T>(this object[] objects) where T:struct 
         {
-            return new SingleDataRow<T>(DateTime.FromBinary((long)objects[0]), objects[1].ToType<T>());
+            return new SingleDataRow<T>(DateTime.FromFileTimeUtc((long)objects[0]), objects[1].ToType<T>());
         } 
     }
 }

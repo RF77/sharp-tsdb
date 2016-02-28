@@ -13,7 +13,7 @@ namespace Timeenator.Impl.Converting
             var rows = new List<ISingleDataRow<T?>>(serie.Rows.Count);
             if (serie.Rows.Any())
             {
-                rows.AddRange(serie.Rows.Select(row => new SingleDataRow<T?>(row.Time, calculationFunc(row.Value))));
+                rows.AddRange(serie.Rows.Select(row => new SingleDataRow<T?>(row.TimeUtc, calculationFunc(row.Value))));
             }
             var newSerie = new NullableQuerySerie<T>(rows, serie);
             if (newSerieName != null)
@@ -29,7 +29,7 @@ namespace Timeenator.Impl.Converting
             var rows = new List<ISingleDataRow<T>>(serie.Rows.Count);
             if (serie.Rows.Any())
             {
-                rows.AddRange(serie.Rows.Select(row => new SingleDataRow<T>(row.Time, calculationFunc(row.Value))));
+                rows.AddRange(serie.Rows.Select(row => new SingleDataRow<T>(row.TimeUtc, calculationFunc(row.Value))));
             }
             var newSerie = new QuerySerie<T>(rows, serie);
             if (newSerieName != null)
@@ -45,7 +45,7 @@ namespace Timeenator.Impl.Converting
             var rows = new List<ISingleDataRow<T?>>(serie.Rows.Count);
             if (serie.Rows.Any())
             {
-                rows.AddRange(serie.Rows.Select(row => new SingleDataRow<T?>(row.Time, calculationFunc(row.Value))));
+                rows.AddRange(serie.Rows.Select(row => new SingleDataRow<T?>(row.TimeUtc, calculationFunc(row.Value))));
             }
             var newSerie = new NullableQuerySerie<T>(rows, serie);
             if (newSerieName != null)

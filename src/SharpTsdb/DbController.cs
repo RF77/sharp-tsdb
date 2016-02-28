@@ -35,12 +35,12 @@ namespace SharpTsdb
 
         [Route("db/{dbName}/createMeasurment/{name}")]
         [HttpGet]
-        public string CreateMeasurement(string dbName, string name)
+        public string CreateMeasurement(string dbName, string name, string type = "float")
         {
             using (MeLog.LogDebug($"db: {dbName}, meas: {name}"))
             {
                 var myDb = DbService.DbManagement.GetDb(dbName);
-                myDb.CreateMeasurement(name, typeof (float));
+                myDb.CreateMeasurement(name, Type.GetType(type));
                 return "ok";
             }
         }

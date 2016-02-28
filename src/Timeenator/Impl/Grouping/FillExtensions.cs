@@ -20,7 +20,7 @@ namespace Timeenator.Impl.Grouping
 
         public static IQuerySerie<T> RemoveNulls<T>(this INullableQuerySerie<T> serie) where T : struct
         {
-            return new QuerySerie<T>(serie.Rows.Where(i => i.Value != null).Select(i => new SingleDataRow<T>(i.Time, i.Value.Value)).ToList(), serie);
+            return new QuerySerie<T>(serie.Rows.Where(i => i.Value != null).Select(i => new SingleDataRow<T>(i.TimeUtc, i.Value.Value)).ToList(), serie);
         }
 
         public static INullableQuerySerie<T> Fill<T>(this INullableQuerySerie<T> serie, ValueForNull fillValue) where T : struct

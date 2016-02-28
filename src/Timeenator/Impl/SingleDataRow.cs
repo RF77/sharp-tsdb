@@ -7,7 +7,7 @@ namespace Timeenator.Impl
     [DebuggerDisplay("{Key}: {Value}")]
     public class SingleDataRow<T> : DataRow, ISingleDataRow<T>
     {
-        public DateTime Time
+        public DateTime TimeUtc
         {
             get
             {
