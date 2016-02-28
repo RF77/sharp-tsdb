@@ -66,14 +66,12 @@
   <ItemGroup>
     <Compile Include="Extensions\Converting\ConvertExtensions.cs" />
     <Compile Include="Extensions\Converting\QueryTableExtensions.cs" />
-    <Compile Include="Extensions\Converting\ValueExtensions.cs" />
     <Compile Include="Impl\DataRow.cs" />
     <Compile Include="Impl\DataRows\NamedDataRow.cs" />
     <Compile Include="Extensions\DateTimeExtensions.cs" />
     <Compile Include="Impl\Grouping\Configurators\GroupByTimeConfigurator.cs" />
     <Compile Include="Impl\Grouping\Configurators\IGroupByTimeConfigurator.cs" />
     <Compile Include="Extensions\Grouping\SelectExtensions.cs" />
-    <Compile Include="Extensions\Grouping\AggregationExtensions.cs" />
     <Compile Include="Impl\Grouping\Configurators\GroupByStartEndTimesConfigurator.cs" />
     <Compile Include="Impl\Grouping\Configurators\GroupByTriggerConfigurator.cs" />
     <Compile Include="Impl\Grouping\Configurators\GroupConfigurator.cs" />
@@ -103,6 +101,7 @@
     <Compile Include="Extensions\LongExtensions.cs" />
     <Compile Include="Impl\NullableQuerySerie.cs" />
     <Compile Include="Impl\NullableQueryTable.cs" />
+    <Compile Include="Impl\QuerySerie.Aggregation.cs" />
     <Compile Include="Impl\QuerySerie.cs" />
     <Compile Include="Impl\QuerySerieBase.cs" />
     <Compile Include="Impl\QueryTable.cs" />

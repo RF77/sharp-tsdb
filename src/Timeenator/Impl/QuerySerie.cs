@@ -8,7 +8,7 @@ using Timeenator.Interfaces;
 namespace Timeenator.Impl
 {
     [DebuggerDisplay("{FullName} ({Rows.Count()})")]
-    public class QuerySerie<T> : QuerySerieBase<T>, IQuerySerie<T> where T : struct
+    public partial class QuerySerie<T> : QuerySerieBase<T>, IQuerySerie<T> where T : struct
     {
         public IReadOnlyList<ISingleDataRow<T>> Rows { get; }
 
@@ -117,6 +117,36 @@ namespace Timeenator.Impl
         public INullableQuerySerie<T> ToNullable()
         {
             return new NullableQuerySerie<T>(Rows.Select(i => new SingleDataRow<T?>(i.TimeUtc, i.Value)).ToList(), this);
+        }
+
+        public IQuerySerie<T> CalcValue(Func<T, T> calculationFunc, string newSerieName = null)
+        {
+            var rows = new List<ISingleDataRow<T>>(Rows.Count);
+            if (Rows.Any())
+            {
+                rows.AddRange(Rows.Select(row => new SingleDataRow<T>(row.TimeUtc, calculationFunc(row.Value))));
+            }
+            var newSerie = new QuerySerie<T>(rows, this);
+            if (newSerieName != null)
+            {
+                newSerie.Name = newSerieName;
+            }
+            return newSerie;
+        }
+
+        public INullableQuerySerie<T> CalcNullableValue(Func<T, T?> calculationFunc, string newSerieName = null)
+        {
+            var rows = new List<ISingleDataRow<T?>>(Rows.Count);
+            if (Rows.Any())
+            {
+                rows.AddRange(Rows.Select(row => new SingleDataRow<T?>(row.TimeUtc, calculationFunc(row.Value))));
+            }
+            var newSerie = new NullableQuerySerie<T>(rows, this);
+            if (newSerieName != null)
+            {
+                newSerie.Name = newSerieName;
+            }
+            return newSerie;
         }
     }
 }

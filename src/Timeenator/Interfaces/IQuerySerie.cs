@@ -23,5 +23,38 @@ namespace Timeenator.Interfaces
         IQuerySerie<T> NormalizeOverflows(double? resetValue = null);
 
         INullableQuerySerie<T> ToNullable();
+        INullableQuerySerie<T> CalcNullableValue(Func<T, T?> calculationFunc, string newSerieName = null);
+        IQuerySerie<T> CalcValue(Func<T, T> calculationFunc, string newSerieName = null);
+        T? First();
+        T? Last();
+        T? Max();
+        T? Min();
+
+        /// <summary>
+        /// Mean of all measurement points without looking to timestamps
+        /// </summary>
+        /// <returns></returns>
+        T? Mean();
+
+        /// <summary>
+        /// Mean of all measurement points with taking the time into account
+        /// </summary>
+        /// <returns></returns>
+        T? MeanByTime();
+
+        T? Difference();
+        T? Derivative(TimeSpan timeSpan);
+        T? Derivative(string timeSpanExpression);
+        T? Median();
+        T? Sum();
+
+        /// <summary>
+        /// Calculates the time span where a specified condition (predicate) is true
+        /// e.g. TimeWhere(v => v == 9.6f)?.TotalMinutes
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="predicate">true, if added to time span</param>
+        /// <returns>Time Span / use for example TotalMinutes to get a value of type T again</returns>
+        TimeSpan? TimeWhere(Func<T, bool> predicate);
     }
 }
