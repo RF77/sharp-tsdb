@@ -66,7 +66,7 @@ namespace Tests.QueryLanguage
             //sw.Stop();
 
             var sw2 = Stopwatch.StartNew();
-            var result2 = table.Transform(i => TimeGroupingExtensions.GroupByMinutes<int>(i, 1, t => AggregationExtensions.First<int>(t))).ZipToNew<int>("DiffTable", t => t.A - t.B);
+            var result2 = table.Transform(i => i.GroupByMinutes(1, t => t.First())).ZipToNew("DiffTable", t => t.A - t.B);
             sw2.Stop();
         }
 
@@ -78,7 +78,7 @@ namespace Tests.QueryLanguage
                 new ScriptingEngine(db,
                     @"db.GetTable<float>(""Aussen.Wetterstation.(?<k>[TF]).*?$"", ""time > now() - 1M"")
 .Transform(i => i.GroupByHours(1, o => o.Mean()))
-.ZipAndAdd<float>(""Sum"", t => t.T + t.F)").Execute();
+.ZipAndAdd(""Sum"", t => t.T + t.F)").Execute();
         }
 
         [Test]
@@ -88,7 +88,7 @@ namespace Tests.QueryLanguage
             var queryTable = db.GetTable<float>("Aussen.Wetterstation.(?<k>[TF]).*?$", "time > now() - 1M");
             var result = queryTable
                 .Transform(i => i.GroupByHours(1, o => o.Mean()))
-                .ZipAndAdd<float>("Sum", t => t.T + t.F);
+                .ZipAndAdd("Sum", t => t.T + t.F);
         }
 
         [Test]
@@ -98,7 +98,7 @@ namespace Tests.QueryLanguage
             var queryTable = db.GetTable<float>("Innen.(?<g>.*).(?<k>Temperatur|Feuchtigkeit)$", "time > now() - 1M");
             var result = queryTable
                 .Transform(i => i.GroupByHours(1, o => o.Mean()))
-                .ZipToNew<float>("Sum", t => t.Temperatur + t.Feuchtigkeit);
+                .ZipToNew("Sum", t => t.Temperatur + t.Feuchtigkeit);
         }
 
         [Test]

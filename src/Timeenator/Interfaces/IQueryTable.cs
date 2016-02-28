@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace Timeenator.Interfaces
 {
@@ -7,5 +8,6 @@ namespace Timeenator.Interfaces
         new IQuerySerie<T> TryGetSerie(string name);
         new IEnumerable<IQuerySerie<T>> Series { get; }
         void AddSerie(IQuerySerie<T> serie);
+        INullableQueryTable<T> Transform(Func<IQuerySerie<T>, INullableQuerySerie<T>> doFunc);
     }
 }

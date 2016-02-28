@@ -84,6 +84,21 @@ namespace Timeenator.Impl
             return new NullableQuerySerie<T>(newRows, this);
         }
 
+        public INullableQuerySerie<T> CalcValue(Func<T?, T?> calculationFunc, string newSerieName = null)
+        {
+            var rows = new List<ISingleDataRow<T?>>(Rows.Count);
+            if (Rows.Any())
+            {
+                rows.AddRange(Rows.Select(row => new SingleDataRow<T?>(row.TimeUtc, calculationFunc(row.Value))));
+            }
+            var newSerie = new NullableQuerySerie<T>(rows, this);
+            if (newSerieName != null)
+            {
+                newSerie.Name = newSerieName;
+            }
+            return newSerie;
+        }
+
         #endregion
     }
 }

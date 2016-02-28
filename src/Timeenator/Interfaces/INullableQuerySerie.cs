@@ -10,5 +10,6 @@ namespace Timeenator.Interfaces
         INullableQuerySerie<T> Zip(INullableQuerySerie<T> secondQuery, string resultQueryName, Func<T?, T?, T?> transformAction);
         INullableQuerySerie<T> Alias(string name);
         INullableQuerySerie<T> Transform(Func<T?, T?> transformFunc);
+        INullableQuerySerie<T> CalcValue(Func<T?, T?> calculationFunc, string newSerieName = null);
     }
 }

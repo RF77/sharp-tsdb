@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Timeenator.Interfaces;
 
 namespace Timeenator.Impl
@@ -31,6 +32,17 @@ namespace Timeenator.Impl
         public override IObjectQuerySerieBase TryGetSerie(string name)
         {
             return ((IQueryTable<T>)this).TryGetSerie(name);
+        }
+
+        public INullableQueryTable<T> Transform(Func<IQuerySerie<T>, INullableQuerySerie<T>> doFunc)
+        {
+            var table = new NullableQueryTable<T>();
+            foreach (var serie in Series.Values)
+            {
+                table.AddSerie(doFunc(serie));
+            }
+
+            return table;
         }
     }
 }
