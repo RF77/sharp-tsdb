@@ -8,9 +8,7 @@ namespace Timeenator.Impl.Grouping.Configurators
     internal class GroupByTriggerConfigurator<T> : GroupByStartEndTimesConfigurator<T>, IGroupByTriggerConfigurator<T>
          where T : struct
     {
-        private readonly IQuerySerie<T> _Serie;
-
-        public GroupByTriggerConfigurator(IQuerySerie<T> Serie):base(Serie)
+        public GroupByTriggerConfigurator(IQuerySerie<T> serie):base(serie)
         {
         }
 

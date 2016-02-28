@@ -116,7 +116,7 @@ namespace Timeenator.Impl.Grouping.Configurators
 
             return GroupByTime(currentDate, Serie.EndTime, dt => dt + TimeSpan.FromHours(hours));
         }
-        public IGroupByStartEndTimesConfiguratorOptional<T> Days(int days, int startHour = 0)
+        public IGroupByStartEndTimesConfiguratorOptional<T> Days(int days, int startHour)
         {
             if (!Serie.Rows.Any()) return this;
             ISingleDataRow<T> first = Serie.Rows.First();
@@ -126,6 +126,12 @@ namespace Timeenator.Impl.Grouping.Configurators
 
             return GroupByTime(currentDate, Serie.EndTime, dt => dt + TimeSpan.FromDays(days));
         }
+
+        public IGroupByStartEndTimesConfiguratorOptional<T> Days(int days)
+        {
+            return Days(days, 0);
+        }
+
         public IGroupByStartEndTimesConfiguratorOptional<T> Weeks(int weeks, DayOfWeek startDay = DayOfWeek.Monday)
         {
             if (!Serie.Rows.Any()) return this;

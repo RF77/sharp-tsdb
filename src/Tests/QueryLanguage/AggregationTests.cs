@@ -2,22 +2,17 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
-using DbInterfaces.Interfaces;
-using FileDb.InterfaceImpl;
 using FluentAssertions;
-using MathNet.Numerics.Statistics;
 using NUnit.Framework;
 using Timeenator.Impl;
 using Timeenator.Impl.Grouping;
 using Timeenator.Interfaces;
 
-namespace Tests.FileDb
+namespace Tests.QueryLanguage
 {
     [TestFixture]
     public class AggregationTests
     {
-        private QuerySerie<float> _unitUnderTest1000;
-        private QuerySerie<float> _unitUnderTest9m;
         private QuerySerie<float> _unitUnderTest50;
         private QuerySerie<float> _unitUnderTest50Even;
         private QuerySerie<int> _unitUnderTest50Int;
@@ -25,7 +20,6 @@ namespace Tests.FileDb
         [SetUp]
         public void Setup()
         {
-            var unitUnderTest1000 = new List<ISingleDataRow<float>>();
             var unitUnderTest50 = new List<ISingleDataRow<float>>();
             var unitUnderTest50Int = new List<ISingleDataRow<int>>();
             var unitUnderTest50Even = new List<ISingleDataRow<float>>();
@@ -33,22 +27,22 @@ namespace Tests.FileDb
             int items50 = 50;
             var startDate = new DateTime(2010, 1, 1, 13, 27, 14);
             var startDateEven = new DateTime(2010, 1, 1, 0, 0, 0);
-            var current40s = startDate;
-            var current40sEven = startDateEven;
+            var current40S = startDate;
+            var current40SEven = startDateEven;
 
             for (int i = 0; i < items; i++)
             {
-                unitUnderTest1000.Add(new SingleDataRow<float>(current40s, 0.5f * i ));
+                //unitUnderTest1000.Add(new SingleDataRow<float>(current40s, 0.5f * i ));
                 if (i < items50)
                 {
-                    unitUnderTest50.Add(new SingleDataRow<float>(current40s, 0.5f * i));
-                    unitUnderTest50Int.Add(new SingleDataRow<int>(current40s, i));
-                    unitUnderTest50Even.Add(new SingleDataRow<float>(current40sEven, 0.5f * i));
+                    unitUnderTest50.Add(new SingleDataRow<float>(current40S, 0.5f * i));
+                    unitUnderTest50Int.Add(new SingleDataRow<int>(current40S, i));
+                    unitUnderTest50Even.Add(new SingleDataRow<float>(current40SEven, 0.5f * i));
                 }
-                current40s += TimeSpan.FromSeconds(40);
-                current40sEven += TimeSpan.FromSeconds(60);
+                current40S += TimeSpan.FromSeconds(40);
+                current40SEven += TimeSpan.FromSeconds(60);
             }
-            _unitUnderTest1000 = new QuerySerie<float>(unitUnderTest1000, startDate, null);
+            //_unitUnderTest1000 = new QuerySerie<float>(unitUnderTest1000, startDate, null);
             _unitUnderTest50 = new QuerySerie<float>(unitUnderTest50, startDate, null);
             _unitUnderTest50Int = new QuerySerie<int>(unitUnderTest50Int, startDate, null);
       

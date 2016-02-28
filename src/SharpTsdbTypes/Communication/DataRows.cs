@@ -12,21 +12,36 @@ namespace SharpTsdbTypes.Communication
     public class DataRows
     {
         [DataMember]
-        public List<object[]> Rows { get; }
+        public List<object[]> Rows { get; set; }
+
+        public DataRows()
+        {
+            
+        }
 
         public DataRows(IEnumerable<IDataRow> rows)
         {
-            Rows = rows.Select(i => new[] {i.Key, i.Value}).ToList();
+            Rows = rows.Select(i => new[] {i.Key.ToBinary(), i.Value}).ToList();
         }
 
         public IEnumerable<ISingleDataRow<T>> AsTyped<T>() where T : struct
         {
-            return Rows?.Select(i => new SingleDataRow<T>((DateTime)i[0], i[1].ToType<T>()));
+            return Rows?.Select(i => new SingleDataRow<T>(ToDateTime(i), i[1].ToType<T>()));
+        }
+
+        private static DateTime ToDateTime(object[] i)
+        {
+            return DateTime.FromBinary((long)i[0]);
+        }
+
+        public IEnumerable<ISingleDataRow<T?>> AsNullableTyped<T>() where T : struct
+        {
+            return Rows?.Select(i => new SingleDataRow<T?>(ToDateTime(i), i[1]?.ToType<T>()));
         }
 
         public IEnumerable<IDataRow> AsIDataRows()
         {
-            return Rows?.Select(i => new DataRow { Key = (DateTime)i[0], Value = i[1]});
+            return Rows?.Select(i => new DataRow { Key = ToDateTime(i), Value = i[1]});
         }
     }
 }

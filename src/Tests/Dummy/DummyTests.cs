@@ -3,7 +3,10 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Dynamic;
 using FileDb.Scripting;
+using FluentAssertions;
+using Nancy.Json;
 using NUnit.Framework;
+using Timeenator.Impl;
 using Timeenator.Impl.Converting;
 
 namespace Tests.Dummy
@@ -179,5 +182,132 @@ namespace Tests.Dummy
             
         }
 
+        [Test]
+        public void BinaryDateTimePerformance()
+        {
+            DateTime now = DateTime.Now;
+            long nowLong = 0;
+            DateTime newDate = DateTime.MinValue;
+            var sw = Stopwatch.StartNew();
+            for (int i = 0; i < 1000000; i++)
+            {
+                nowLong = now.ToBinary();
+                newDate = DateTime.FromBinary(nowLong);
+            }
+            sw.Stop();
+            newDate.Should().Be(now);
+            //Zeit 729ms
+        }
+
+        [Test]
+        public void Miliseconds1970DateTimePerformance()
+        {
+            DateTime now = DateTime.Now;
+            long nowLong = 0;
+            DateTime newDate = DateTime.MinValue;
+            var sw = Stopwatch.StartNew();
+            for (int i = 0; i < 1000000; i++)
+            {
+                nowLong = now.ToMiliSecondsAfter1970();
+                newDate = nowLong.FromMilisecondsAfter1970ToDateTime();
+            }
+            sw.Stop();
+            //newDate.Should().Be(now);
+            //Zeit 759ms
+        }
+
+        [Test]
+        public void Miliseconds1970DateTimeUtcPerformance()
+        {
+            DateTime now = DateTime.UtcNow;
+            long nowLong = 0;
+            DateTime newDate = DateTime.MinValue;
+            var sw = Stopwatch.StartNew();
+            for (int i = 0; i < 1000000; i++)
+            {
+                nowLong = now.ToMiliSecondsAfter1970Utc();
+                newDate = nowLong.FromMilisecondsAfter1970ToDateTimeUtc();
+            }
+            sw.Stop();
+            //newDate.Should().Be(now);
+            //Zeit 759ms
+        }
+
+        [Test]
+        public void FileTimeDateTimePerformance()
+        {
+            DateTime now = DateTime.Now;
+            long nowLong = 0;
+            DateTime newDate = DateTime.MinValue;
+            var sw = Stopwatch.StartNew();
+            for (int i = 0; i < 1000000; i++)
+            {
+                nowLong = now.ToFileTimeUtc();
+                newDate = DateTime.FromFileTimeUtc(nowLong);
+            }
+            sw.Stop();
+            //newDate.Should().Be(now);
+            //Zeit 793ms
+        }
+
+        [Test]
+        public void FileTimeDateTimeUtcPerformance()
+        {
+            DateTime now = DateTime.UtcNow;
+            long nowLong = 0;
+            DateTime newDate = DateTime.MinValue;
+            var sw = Stopwatch.StartNew();
+            for (int i = 0; i < 1000000; i++)
+            {
+                nowLong = now.ToFileTimeUtc();
+                //var nowLong2 = now.ToFileTime();
+                //var str = nowLong.ToString();
+                //var lo = long.Parse(str);
+                newDate = DateTime.FromFileTimeUtc(nowLong);
+            }
+            sw.Stop();
+            newDate.Should().Be(now);
+            //Zeit 793ms
+        }
+
+        [Test]
+        public void StringDateTimeUtcPerformance()
+        {
+            DateTime now = DateTime.UtcNow;
+            DateTime newDate = DateTime.MinValue;
+            var s = new JavaScriptSerializer();
+            var sw = Stopwatch.StartNew();
+            for (int i = 0; i < 1000000; i++)
+            {
+                var str = s.Serialize(now);
+                newDate = s.Deserialize<DateTime>(str);
+            }
+            sw.Stop();
+            newDate.Should().Be(now);
+            //Zeit 793ms
+        }
+
+        [Test]
+        public void TicksDateTimePerformance()
+        {
+            DateTime now = DateTime.UtcNow;
+            long nowLong = 0;
+            DateTime newDate = DateTime.MinValue;
+            var sw = Stopwatch.StartNew();
+            for (int i = 0; i < 1000000; i++)
+            {
+                nowLong = now.Ticks;
+                newDate = DateTime.FromBinary(nowLong);
+            }
+            sw.Stop();
+            //newDate.Should().Be(now);
+            //Zeit 793ms
+            var sommer = new DateTime(1850, 7, 1, 5, 0, 0);
+            var winter = new DateTime(1850, 1, 1, 5, 0, 0);
+
+            var somUtc = sommer.ToUniversalTime();
+            var winUtc = winter.ToUniversalTime();
+
+        }
     }
 }

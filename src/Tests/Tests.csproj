@@ -79,6 +79,10 @@
       <HintPath>..\packages\Moq.4.2.1510.2205\lib\net40\Moq.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="Nancy, Version=1.4.2.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Nancy.1.4.3\lib\net40\Nancy.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="nunit.framework, Version=2.6.4.14350, Culture=neutral, PublicKeyToken=96d09a1eb7f44a77, processorArchitecture=MSIL">
       <HintPath>..\packages\NUnit.2.6.4\lib\nunit.framework.dll</HintPath>
       <Private>True</Private>
@@ -101,6 +105,7 @@
     </Otherwise>
   </Choose>
   <ItemGroup>
+    <Compile Include="Client\QueryTests.cs" />
     <Compile Include="Dummy\DummyTests.cs" />
     <Compile Include="FileDb\DbTests.cs" />
     <Compile Include="FileDb\TimeExpressionsTests.cs" />
@@ -141,6 +146,10 @@
     <ProjectReference Include="..\FileDb\SharpFileDb.csproj">
       <Project>{8858A25C-EF24-48DB-B049-BF28027482EB}</Project>
       <Name>SharpFileDb</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\SharpTsdbClient\SharpTsdbClient.csproj">
+      <Project>{775BAC09-6176-4361-A4C7-9EEB86B8C548}</Project>
+      <Name>SharpTsdbClient</Name>
     </ProjectReference>
     <ProjectReference Include="..\SharpTsdb\SharpTsdb.csproj">
       <Project>{ecc29a1d-4f22-4349-acb4-3d714e242ad0}</Project>

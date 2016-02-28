@@ -18,29 +18,30 @@ namespace SharpTsdbClient
             var httpWebRequest =
                 (HttpWebRequest)
                     WebRequest.Create($"http://{Db.Client.ServerAddress}:{Db.Client.Port}/{url}");
-            httpWebRequest.ContentType = "application/json";
+            httpWebRequest.ContentType = asJson ? "application/json" : "application/octet-stream";
             httpWebRequest.Method = "POST";
 
-            using (var streamWriter = new StreamWriter(httpWebRequest.GetRequestStream()))
+            Stream requestStream = httpWebRequest.GetRequestStream();
+            if (asJson)
             {
-                if (asJson)
+                using (var streamWriter = new StreamWriter(requestStream))
                 {
                     string json = _scriptSerializer.Serialize(objectToserialize);
                     streamWriter.Write(json);
                 }
-                else
-                {
-                    streamWriter.Write(objectToserialize);
-                }
+            }
+            else
+            {
+                byte[] bytes = (byte[])objectToserialize;
+                requestStream.Write(bytes,0,bytes.Length);
             }
 
             var httpResponse = (HttpWebResponse)await httpWebRequest.GetResponseAsync();
             using (var streamReader = new StreamReader(httpResponse.GetResponseStream()))
             {
                 var result = await streamReader.ReadToEndAsync();
-                _scriptSerializer.Deserialize<T>(result);
+                return _scriptSerializer.Deserialize<T>(result);
             }
-            return default(T);
         }
 
         protected async Task<string> GetRequestAsync(string url)

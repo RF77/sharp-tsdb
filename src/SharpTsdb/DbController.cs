@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
+using System.Threading.Tasks;
 using System.Web.Http;
 using DbInterfaces.Interfaces;
 using log4net;
@@ -73,12 +74,13 @@ namespace SharpTsdb
 
         [Route("db/{dbName}/binQuerySerie")]
         [HttpPost]
-        public DataSerie BinaryQuerySerie(string dbName, [FromBody] byte[] query)
+        public async Task<DataSerie> BinaryQuerySerie(string dbName)
         {
             using (MeLog.LogDebug($"db: {dbName}"))
             {
                 var myDb = DbService.DbManagement.GetDb(dbName);
-                
+
+                byte[] query = await Request.Content.ReadAsByteArrayAsync();
 
                 var queryExpression = ((Expression<Func<IDb, IObjectQuerySerie>>)LinqSerializer.DeserializeBinary(query)).Compile();
 
