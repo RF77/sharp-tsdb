@@ -63,6 +63,11 @@ namespace FileDb.InterfaceImpl
             return ReaderLock(() => GetMeasurement(measurementName).GetDataPoints<T>(timeExpression).Alias(measurementName));
         }
 
+        public IQuerySerie<T> GetSerie<T>(string measurementName) where T : struct
+        {
+            return GetSerie<T>(measurementName, null);
+        }
+
         public IQueryTable<T> GetTable<T>(string measurementRegex, string timeExpression) where T : struct
         {
             var result = new QueryTable<T>();
@@ -114,7 +119,7 @@ namespace FileDb.InterfaceImpl
             WriterLock(() => MetadataInternal.Measurements.Clear());
         }
 
-        public IMeasurement GetOrCreateMeasurement(string name)
+        public IMeasurement GetOrCreateMeasurement(string name, string type = "float")
         {
             return WriterLock(() =>
             {
@@ -122,7 +127,7 @@ namespace FileDb.InterfaceImpl
                 {
                     return GetMeasurement(name);
                 }
-                return CreateMeasurement(name, typeof (float));
+                return CreateMeasurement(name, type.ToType());
             });
         }
     }

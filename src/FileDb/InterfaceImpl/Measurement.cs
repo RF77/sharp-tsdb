@@ -56,8 +56,12 @@ namespace FileDb.InterfaceImpl
 
         public IQuerySerie<T> GetDataPoints<T>(string timeExpression) where T : struct
         {
-            var expression = new TimeExpression(timeExpression);
-            return GetDataPoints<T>(expression.From, expression.To);
+            if (timeExpression != null)
+            {
+                var expression = new TimeExpression(timeExpression);
+                return GetDataPoints<T>(expression.From, expression.To);
+            }
+            return GetDataPoints<T>();
         }
 
         public void ClearDataPoints(DateTime? after)

@@ -40,32 +40,37 @@ namespace SharpTsdb
             using (MeLog.LogDebug($"db: {dbName}, meas: {name}"))
             {
                 var myDb = DbService.DbManagement.GetDb(dbName);
-                myDb.CreateMeasurement(name, Type.GetType(type));
+                myDb.CreateMeasurement(name, type.ToType());
                 return "ok";
             }
         }
 
         [Route("db/{dbName}/clearMeasurment/{name}")]
         [HttpGet]
-        public string ClearMeasurement(string dbName, string name, DateTime? after)
+        public string ClearMeasurement(string dbName, string name, long? after)
         {
             using (MeLog.LogDebug($"db: {dbName}, meas: {name}, after: {after}"))
             {
                 var myDb = DbService.DbManagement.GetDb(dbName);
-                myDb.GetMeasurement(name).ClearDataPoints(after);
+                DateTime? afterTime = null;
+                if (after != null)
+                {
+                    afterTime = DateTime.FromFileTimeUtc(after.Value);
+                }
+                myDb.GetMeasurement(name).ClearDataPoints(afterTime);
                 return "ok";
             }
         }
 
         [Route("db/{dbName}/{meas}/appendRows")]
         [HttpPost]
-        public string WritePoints(string dbName, string meas, [FromBody] DataRows data,
+        public string WritePoints(string dbName, string meas, [FromBody] DataRows data, string type = "float",
             bool truncateDbToFirstElement = false)
         {
             using (MeLog.LogDebug($"db: {dbName}, meas: {meas}, point#: {data.Rows.Count}, trunc: {truncateDbToFirstElement}"))
             {
                 var myDb = DbService.DbManagement.GetDb(dbName);
-                var measurement = myDb.GetOrCreateMeasurement(meas);
+                var measurement = myDb.GetOrCreateMeasurement(meas, type);
 
                 measurement.AppendDataPoints(data.AsIDataRows());
                 return "ok";

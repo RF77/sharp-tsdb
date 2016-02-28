@@ -100,6 +100,7 @@
     <Compile Include="Impl\Grouping\TimeStampType.cs" />
     <Compile Include="Impl\Grouping\ValueForNull.cs" />
     <Compile Include="Impl\Grouping\WhereGroupingExtensions.cs" />
+    <Compile Include="Impl\IntExtensions.cs" />
     <Compile Include="Impl\LongExtensions.cs" />
     <Compile Include="Impl\NullableQuerySerie.cs" />
     <Compile Include="Impl\NullableQueryTable.cs" />
@@ -112,6 +113,7 @@
     <Compile Include="Impl\SingleDataRow.cs" />
     <Compile Include="Impl\StringExtensions.cs" />
     <Compile Include="Impl\TimeExpression.cs" />
+    <Compile Include="Impl\TypeExtensions.cs" />
     <Compile Include="Interfaces\IDataRow.cs" />
     <Compile Include="Interfaces\INullableQuerySerie.cs" />
     <Compile Include="Interfaces\INullableQueryTable.cs" />

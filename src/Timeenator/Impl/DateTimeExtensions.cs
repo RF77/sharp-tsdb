@@ -4,9 +4,9 @@ namespace Timeenator.Impl
 {
     public static class DateTimeExtensions
     {
-        public static long ToSecondsAfter1970(this DateTime date)
+        public static UInt32 ToSecondsAfter1970Utc(this DateTime date)
         {
-            return (long)(date.ToUniversalTime() - new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc)).TotalSeconds;
+            return (UInt32)(date - new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc)).TotalSeconds;
         }
         public static long ToMiliSecondsAfter1970(this DateTime date)
         {

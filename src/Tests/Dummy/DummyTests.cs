@@ -288,6 +288,25 @@ namespace Tests.Dummy
         }
 
         [Test]
+        public void SecondsTimeUtcPerformance()
+        {
+            DateTime now = DateTime.UtcNow;
+            DateTime newDate = DateTime.MinValue;
+            var sw = Stopwatch.StartNew();
+            UInt32 number = 0;
+            for (int i = 0; i < 1000000; i++)
+            {
+                number = now.ToSecondsAfter1970Utc();
+                //var nowLong2 = now.ToFileTime();
+                //var str = nowLong.ToString();
+                //var lo = long.Parse(str);
+                newDate = number.FromSecondsAfter1970ToDateTimeUtc();
+            }
+            sw.Stop();
+           // newDatl.Should().Be(now);            //Zeit 793ms
+        }
+
+        [Test]
         public void TicksDateTimePerformance()
         {
             DateTime now = DateTime.UtcNow;
@@ -307,6 +326,20 @@ namespace Tests.Dummy
 
             var somUtc = sommer.ToUniversalTime();
             var winUtc = winter.ToUniversalTime();
+
+        }
+
+        [Test]
+        public void TestDateTimeAsUInt()
+        {
+            var now = DateTime.Now;
+            var now2 = DateTime.UtcNow.ToFileTimeUtc();
+            DateTime d = new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc);
+            DateTime d2 = new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Local);
+            var l1 = d.ToFileTimeUtc();
+            var l2 = d2.ToFileTimeUtc();
+            l1.Should().NotBe(l2);
+
 
         }
     }
