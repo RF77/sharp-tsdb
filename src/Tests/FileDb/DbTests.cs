@@ -151,26 +151,26 @@ namespace Tests.FileDb
             //All (without dates)
             var data = measurement.GetDataPoints<float>();
             var allItems = data.Rows;
-            allItems.Count().Should().Be(numberOfRows);
+            allItems.Count.Should().Be(numberOfRows);
             data.StartTime.Should().Be(null);
             data.EndTime.Should().Be(null);
 
             var dateTime2000 = new DateTime(2000, 1, 1);
             data = measurement.GetDataPoints<float>(dateTime2000);
             allItems = data.Rows;
-            allItems.Count().Should().Be(numberOfRows);
+            allItems.Count.Should().Be(numberOfRows);
             data.StartTime.Should().Be(dateTime2000);
             data.EndTime.Should().Be(null);
 
             var dateTime2200 = new DateTime(2200,1,1);
             data = measurement.GetDataPoints<float>(dateTime2000, dateTime2200);
             allItems = data.Rows;
-            allItems.Count().Should().Be(numberOfRows);
+            allItems.Count.Should().Be(numberOfRows);
             data.StartTime.Should().Be(dateTime2000);
             data.EndTime.Should().Be(dateTime2200);
 
             var singleItems = measurement.GetDataPoints<float>(dateTime2000, dateTime2200).Rows;
-            singleItems.Count().Should().Be(allItems.Count());
+            singleItems.Count.Should().Be(allItems.Count());
 
             var time = Stopwatch.StartNew();
             var dateTimeStart = new DateTime(2000, 1, 7);
@@ -221,7 +221,7 @@ namespace Tests.FileDb
             var scriptingEngine = new ScriptingEngine(_unitUnderTest, $@"db.GetSerie<float>(""{TestMeasName}"", null)");
             var data = scriptingEngine.Execute().ResultAsSerie;
             var allItems = data.Rows;
-            allItems.Count().Should().Be(numberOfRows);
+            allItems.Count.Should().Be(numberOfRows);
             data.StartTime.Should().Be(null);
             data.EndTime.Should().Be(null);
 

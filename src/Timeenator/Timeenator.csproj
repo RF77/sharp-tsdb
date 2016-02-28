@@ -93,7 +93,6 @@
     <Compile Include="Extensions\Grouping\TimeGroupingExtensions.cs" />
     <Compile Include="Impl\Grouping\TimeStampType.cs" />
     <Compile Include="Impl\Grouping\ValueForNull.cs" />
-    <Compile Include="Extensions\Grouping\WhereGroupingExtensions.cs" />
     <Compile Include="Extensions\IntExtensions.cs" />
     <Compile Include="Extensions\LongExtensions.cs" />
     <Compile Include="Impl\NullableQuerySerie.cs" />

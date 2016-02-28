@@ -125,7 +125,7 @@ namespace Tests.QueryLanguage
         public void GroupByDaysAnd9()
         {
             var sw = Stopwatch.StartNew();
-            var result = _unitUnderTest5h.GroupByDays(3, a => a.First(), 9).Rows;
+            var result = _unitUnderTest5h.Group(g => g.ByTime.Days(3, 9).Aggregate(a => a.First())).Rows;
             var result2 = _unitUnderTest5h.Group(c => c.ByTime.Days(3, 9).Aggregate(a => a.First())).Rows;
             result[0].TimeUtc.Should().Be(new DateTime(2010, 5, 19, 9, 0, 0));
             result[1].TimeUtc.Should().Be(new DateTime(2010, 5, 22, 9, 0, 0));
@@ -141,12 +141,10 @@ namespace Tests.QueryLanguage
         public void GroupByMonths()
         {
             var sw = Stopwatch.StartNew();
-            var result = _unitUnderTest5h.GroupByMonths(2, a => a.First()).Rows;
-            var result2 = _unitUnderTest5h.Group(g => g.ByTime.Months(2).Aggregate(a => a.First())).Rows;
+            var result = _unitUnderTest5h.Group(g => g.ByTime.Months(2).Aggregate(a => a.First())).Rows;
             result[0].TimeUtc.Should().Be(new DateTime(2010, 5, 1, 0, 0, 0));
             result[1].TimeUtc.Should().Be(new DateTime(2010, 7, 1, 0, 0, 0));
             result[10].TimeUtc.Should().Be(new DateTime(2012, 1, 1, 0, 0, 0));
-            result.SequenceEqual(result2).Should().BeTrue();
             var last = result.Last();
             sw.Stop();
         }
@@ -157,15 +155,13 @@ namespace Tests.QueryLanguage
         {
             var dayOfWeek = DayOfWeek.Monday;
             var sw = Stopwatch.StartNew();
-            var result = _unitUnderTest5h.GroupByWeeks(1, a => a.First()).Rows;
-            var result2 = _unitUnderTest5h.Group(g => g.ByTime.Weeks(1).Aggregate(a => a.First())).Rows;
+            var result = _unitUnderTest5h.Group(g => g.ByTime.Weeks(1).Aggregate(a => a.First())).Rows;
             result[0].TimeUtc.Should().Be(new DateTime(2010, 5, 17, 0, 0, 0));
             result[0].TimeUtc.DayOfWeek.Should().Be(dayOfWeek);
             result[1].TimeUtc.Should().Be(new DateTime(2010, 5, 24, 0, 0, 0));
             result[1].TimeUtc.DayOfWeek.Should().Be(dayOfWeek);
             result[13].TimeUtc.DayOfWeek.Should().Be(dayOfWeek);
             result.Last().TimeUtc.DayOfWeek.Should().Be(dayOfWeek);
-            result.SequenceEqual(result2).Should().BeTrue();
 
             sw.Stop();
         }
@@ -175,15 +171,13 @@ namespace Tests.QueryLanguage
         {
             var dayOfWeek = DayOfWeek.Saturday;
             var sw = Stopwatch.StartNew();
-            var result = _unitUnderTest5h.GroupByWeeks(1, a => a.First(), dayOfWeek).Rows;
-            var result2 = _unitUnderTest5h.Group(g => g.ByTime.Weeks(1, dayOfWeek).Aggregate(a => a.First())).Rows;
+            var result = _unitUnderTest5h.Group(g => g.ByTime.Weeks(1, dayOfWeek).Aggregate(a => a.First())).Rows;
             result[0].TimeUtc.Should().Be(new DateTime(2010, 5, 15, 0, 0, 0));
             result[0].TimeUtc.DayOfWeek.Should().Be(dayOfWeek);
             result[1].TimeUtc.Should().Be(new DateTime(2010, 5, 22, 0, 0, 0));
             result[1].TimeUtc.DayOfWeek.Should().Be(dayOfWeek);
             result[13].TimeUtc.DayOfWeek.Should().Be(dayOfWeek);
             result.Last().TimeUtc.DayOfWeek.Should().Be(dayOfWeek);
-            result.SequenceEqual(result2).Should().BeTrue();
 
             sw.Stop();
         }
@@ -192,13 +186,11 @@ namespace Tests.QueryLanguage
         public void GroupByYears()
         {
             var sw = Stopwatch.StartNew();
-            var result = _unitUnderTest5h.GroupByYears(2, a => a.First()).Rows;
-            var result2 = _unitUnderTest5h.Group(g => g.ByTime.Years(2).Aggregate(a => a.First())).Rows;
+            var result = _unitUnderTest5h.Group(g => g.ByTime.Years(2).Aggregate(a => a.First())).Rows;
             result[0].TimeUtc.Should().Be(new DateTime(2010, 1, 1, 0, 0, 0));
             result[1].TimeUtc.Should().Be(new DateTime(2012, 1, 1, 0, 0, 0));
             result[2].TimeUtc.Should().Be(new DateTime(2014, 1, 1, 0, 0, 0));
             var last = result.Last();
-            result.SequenceEqual(result2).Should().BeTrue();
             sw.Stop();
         }
 
@@ -288,10 +280,8 @@ namespace Tests.QueryLanguage
         public void GroupByMinutesTestTimeStampEnd()
         {
             var sw = Stopwatch.StartNew();
-            var result = _unitUnderTest9m.GroupByMinutes(6, a => a.First(), TimeStampType.End).Rows;
-            var result2 = _unitUnderTest9m.Group(g => g.ByTime.Minutes(6).TimeStampIsEnd().Aggregate(a => a.First())).Rows;
+            var result = _unitUnderTest9m.Group(g => g.ByTime.Minutes(6).TimeStampIsEnd().Aggregate(a => a.First())).Rows;
             result[0].TimeUtc.Should().Be(new DateTime(2010, 1, 1, 13, 30, 0));
-            result.SequenceEqual(result2).Should().BeTrue();
             sw.Stop();
         }
 
@@ -299,10 +289,8 @@ namespace Tests.QueryLanguage
         public void GroupByMinutesTestTimeStampMiddle()
         {
             var sw = Stopwatch.StartNew();
-            var result = _unitUnderTest9m.GroupByMinutes(6, a => a.First(), TimeStampType.Middle).Rows;
-            var result2 = _unitUnderTest9m.Group(g => g.ByTime.Minutes(6).TimeStampIsMiddle().Aggregate(a => a.First())).Rows;
+            var result = _unitUnderTest9m.Group(g => g.ByTime.Minutes(6).TimeStampIsMiddle().Aggregate(a => a.First())).Rows;
             result[0].TimeUtc.Should().Be(new DateTime(2010, 1, 1, 13, 27, 0));
-            result.SequenceEqual(result2).Should().BeTrue();
             sw.Stop();
         }
 
@@ -311,11 +299,9 @@ namespace Tests.QueryLanguage
         public void GroupByExpressionSeconds()
         {
             var sw = Stopwatch.StartNew();
-            var result = _unitUnderTest40s.GroupBy("30s", a => a.First(), null, TimeStampType.Middle).Rows;
-            var result2 = _unitUnderTest40s.Group(g => g.ByTime.Expression("30s").TimeStampIsMiddle().Aggregate(a => a.First())).Rows;
+            var result = _unitUnderTest40s.Group(g => g.ByTime.Expression("30s").TimeStampIsMiddle().Aggregate(a => a.First())).Rows;
             result[0].TimeUtc.Should().Be(new DateTime(2010, 1, 1, 13, 27, 15));
             result[1].TimeUtc.Should().Be(new DateTime(2010, 1, 1, 13, 27, 45));
-            result.SequenceEqual(result2).Should().BeTrue();
             sw.Stop();
         }
 
@@ -323,7 +309,7 @@ namespace Tests.QueryLanguage
         public void GroupByExpressionMinutes()
         {
             var sw = Stopwatch.StartNew();
-            var result = _unitUnderTest40s.GroupBy("6m", a => a.First(), null, TimeStampType.Middle).Rows;
+            var result = _unitUnderTest40s.Group(g=>g.ByTime.Expression("6m").TimeStampIsMiddle().Aggregate(a => a.First())).Rows;
             result[0].TimeUtc.Should().Be(new DateTime(2010, 1, 1, 13, 27, 0));
             result[1].TimeUtc.Should().Be(new DateTime(2010, 1, 1, 13, 33, 0));
             sw.Stop();
@@ -333,7 +319,7 @@ namespace Tests.QueryLanguage
         public void GroupByExpressionHours()
         {
             var sw = Stopwatch.StartNew();
-            INullableQuerySerie<float> nullableQuerySerie = _unitUnderTest9m.GroupBy("3h", a => a.First(), null, TimeStampType.Start);
+            INullableQuerySerie<float> nullableQuerySerie = _unitUnderTest9m.GroupBy("3h", a => a.First());
             IReadOnlyList<ISingleDataRow<float?>> result = nullableQuerySerie.Rows;
             IObjectQuerySerie result2 = nullableQuerySerie;
             object val = result2.Rows.First().Value;
@@ -346,7 +332,7 @@ namespace Tests.QueryLanguage
         public void GroupByExpressionHoursButExpanded()
         {
             var sw = Stopwatch.StartNew();
-            INullableQuerySerie<float> nullableQuerySerie = _unitUnderTest9m.GroupBy("3h", a => a.First(), null, TimeStampType.Start);
+            INullableQuerySerie<float> nullableQuerySerie = _unitUnderTest9m.GroupBy("3h", a => a.First());
             IReadOnlyList<ISingleDataRow<float?>> result = nullableQuerySerie.Rows;
             IObjectQuerySerie result2 = nullableQuerySerie;
             object val = result2.Rows.First().Value;

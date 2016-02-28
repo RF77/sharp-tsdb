@@ -9,7 +9,7 @@ using Timeenator.Interfaces;
 
 namespace Timeenator.Impl
 {
-    [DebuggerDisplay("{FullName} ({Rows.Count()})")]
+    [DebuggerDisplay("{FullName} ({Rows.Count})")]
     public partial class QuerySerie<T> : QuerySerieBase<T>, IQuerySerie<T> where T : struct
     {
         public IReadOnlyList<ISingleDataRow<T>> Rows { get; }
