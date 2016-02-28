@@ -1,11 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Dynamic;
 using System.Linq;
 using System.Threading.Tasks;
+using CustomDbExtensions;
 using DbInterfaces.Interfaces;
 using Microsoft.CodeAnalysis.CSharp.Scripting;
 using Microsoft.CodeAnalysis.Scripting;
-using Timeenator.Impl.Grouping;
+using Microsoft.CSharp.RuntimeBinder;
 using Timeenator.Interfaces;
 
 namespace FileDb.Scripting
@@ -75,9 +77,10 @@ namespace FileDb.Scripting
                 typeof (IObjectQuerySerie).Assembly,
                 typeof (IDb).Assembly,
                 typeof (ScriptingEngine).Assembly,
-                typeof (Microsoft.CSharp.RuntimeBinder.CSharpArgumentInfo).Assembly,
-                typeof (System.Dynamic.DynamicObject).Assembly,
-                typeof (System.Dynamic.ExpandoObject).Assembly,
+                typeof (CSharpArgumentInfo).Assembly,
+                typeof (DynamicObject).Assembly,
+                typeof (ExpandoObject).Assembly,
+                typeof (DbExtensions).Assembly,
             }.Distinct());
 
             _options = _options.WithImports(new[]
@@ -95,7 +98,8 @@ namespace FileDb.Scripting
                 "Timeenator.Impl.Converting",
                 "Microsoft.CSharp",
                 "System.Dynamic",
-                "DbInterfaces.Extensions"
+                "DbInterfaces.Extensions",
+                "CustomDbExtensions"
             });
             
         }

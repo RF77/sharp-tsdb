@@ -3,9 +3,8 @@ using DbInterfaces.Interfaces;
 using Timeenator.Impl;
 using Timeenator.Impl.Converting;
 using Timeenator.Impl.Grouping;
-using Timeenator.Interfaces;
 
-namespace DbInterfaces.Extensions
+namespace CustomDbExtensions
 {
     public static class DbExtensions
     {

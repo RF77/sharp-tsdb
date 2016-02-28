@@ -37,6 +37,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SharpTsdbClient", "SharpTsd
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SharpTsdbTypes", "SharpTsdbTypes\SharpTsdbTypes.csproj", "{063D0CA7-F8E3-4C8C-A646-651472F68986}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CustomDbExtensions", "CustomDbExtensions\CustomDbExtensions.csproj", "{3DC705DB-D0DF-49E4-842D-49C28745EE80}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -133,6 +135,14 @@ Global
 		{063D0CA7-F8E3-4C8C-A646-651472F68986}.Release|Any CPU.Build.0 = Release|Any CPU
 		{063D0CA7-F8E3-4C8C-A646-651472F68986}.Release|x64.ActiveCfg = Release|Any CPU
 		{063D0CA7-F8E3-4C8C-A646-651472F68986}.Release|x64.Build.0 = Release|Any CPU
+		{3DC705DB-D0DF-49E4-842D-49C28745EE80}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3DC705DB-D0DF-49E4-842D-49C28745EE80}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3DC705DB-D0DF-49E4-842D-49C28745EE80}.Debug|x64.ActiveCfg = Debug|x64
+		{3DC705DB-D0DF-49E4-842D-49C28745EE80}.Debug|x64.Build.0 = Debug|x64
+		{3DC705DB-D0DF-49E4-842D-49C28745EE80}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3DC705DB-D0DF-49E4-842D-49C28745EE80}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3DC705DB-D0DF-49E4-842D-49C28745EE80}.Release|x64.ActiveCfg = Release|Any CPU
+		{3DC705DB-D0DF-49E4-842D-49C28745EE80}.Release|x64.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -140,5 +150,6 @@ Global
 	GlobalSection(NestedProjects) = preSolution
 		{E65A3D01-0656-4522-AAF8-1CF2B11270F3} = {5AC46751-0CB1-40F9-BD9C-C519634196FD}
 		{8858A25C-EF24-48DB-B049-BF28027482EB} = {5AC46751-0CB1-40F9-BD9C-C519634196FD}
+		{3DC705DB-D0DF-49E4-842D-49C28745EE80} = {5AC46751-0CB1-40F9-BD9C-C519634196FD}
 	EndGlobalSection
 EndGlobal
