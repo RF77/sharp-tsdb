@@ -65,7 +65,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Extensions\Converting\ConvertExtensions.cs" />
-    <Compile Include="Extensions\Converting\QuerySerieExtensions.cs" />
     <Compile Include="Extensions\Converting\QueryTableExtensions.cs" />
     <Compile Include="Extensions\Converting\ValueExtensions.cs" />
     <Compile Include="Impl\DataRow.cs" />

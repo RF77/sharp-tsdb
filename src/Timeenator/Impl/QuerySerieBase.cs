@@ -86,5 +86,18 @@ namespace Timeenator.Impl
             GroupName = serie.GroupName;
             Key = serie.Key;
         }
+
+
+        protected void SetAlias(string name) 
+        {
+            if (GroupName != null)
+            {
+                Key = name;
+            }
+            else
+            {
+                Name = name;
+            }
+        }
     }
 }

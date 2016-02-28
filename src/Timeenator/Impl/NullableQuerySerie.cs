@@ -1,6 +1,8 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Linq;
+using Timeenator.Extensions.Converting;
 using Timeenator.Interfaces;
 
 namespace Timeenator.Impl
@@ -50,5 +52,38 @@ namespace Timeenator.Impl
         }
 
         IReadOnlyList<IObjectSingleDataRow> IObjectQuerySerie.Rows => Rows;
+
+
+        #region methods
+        public INullableQuerySerie<T> Zip(INullableQuerySerie<T> secondQuery, string resultQueryName, Func<T?, T?, T?> transformAction)
+        {
+            if (Rows.Count != secondQuery.Rows.Count) throw new ArgumentOutOfRangeException(nameof(secondQuery), "Zip with different length of row not possible");
+            var resultRows = new List<ISingleDataRow<T?>>(secondQuery.Rows.Count);
+
+            var result = new NullableQuerySerie<T>(resultRows, this).Alias(resultQueryName);
+            for (int i = 0; i < Rows.Count; i++)
+            {
+                if (Rows[i].TimeUtc != secondQuery.Rows[i].TimeUtc) throw new ArgumentOutOfRangeException(nameof(secondQuery), "Zip with not aligned times");
+
+                resultRows.Add(new SingleDataRow<T?>(Rows[i].TimeUtc, transformAction(Rows[i].Value, secondQuery.Rows[i].Value)));
+            }
+            return result;
+        }
+
+        public INullableQuerySerie<T> Alias(string name)
+        {
+            SetAlias(name);
+            return this;
+        }
+
+
+        public INullableQuerySerie<T> Transform(Func<T?, T?> transformFunc)
+        {
+            var newRows = new List<ISingleDataRow<T?>>(Rows.Count);
+            newRows.AddRange(Rows.Select(r => new SingleDataRow<T?>(r.TimeUtc, transformFunc(r.Value))));
+            return new NullableQuerySerie<T>(newRows, this);
+        }
+
+        #endregion
     }
 }

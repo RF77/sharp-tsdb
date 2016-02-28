@@ -91,14 +91,16 @@ namespace FileDb.Scripting
                 "System.Linq",
                 "DbInterfaces.Interfaces",
                 "Timeenator.Interfaces",
-                "FileDb.InterfaceImpl",
+                "FileDb.Interfaces",
                 "FileDb",
+                "Timeenator.Impl",
                 "Timeenator.Impl.Grouping",
-                "Timeenator.Impl.Scientific",
-                "Timeenator.Impl.Converting",
+                "Timeenator.Extensions.Grouping",
+                "Timeenator.Extensions.Scientific",
+                "Timeenator.Extensions.Converting",
                 "Microsoft.CSharp",
                 "System.Dynamic",
-                "DbInterfaces.Extensions",
+                "DbInterfaces.Interfaces",
                 "CustomDbExtensions"
             });
             
