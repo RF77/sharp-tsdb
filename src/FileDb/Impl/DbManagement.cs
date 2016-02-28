@@ -18,7 +18,7 @@ using DbInterfaces.Interfaces;
 using Infrastructure;
 using log4net;
 
-namespace FileDb.InterfaceImpl
+namespace FileDb.Impl
 {
     public class DbManagement : ReadWritLockable, IDbManagement
     {

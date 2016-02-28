@@ -5,10 +5,11 @@ using System.Linq;
 using System.Runtime.Serialization;
 using DbInterfaces.Interfaces;
 using FileDb.Properties;
+using FileDb.RowReaderWriter;
 using Timeenator.Impl;
 using Timeenator.Interfaces;
 
-namespace FileDb.InterfaceImpl
+namespace FileDb.Impl
 {
     [DataContract]
     public class Measurement : ReadWritLockable, IMeasurement
@@ -18,7 +19,7 @@ namespace FileDb.InterfaceImpl
         [DataMember] private readonly Db _db;
         private static RowReadWriterFactory _rowReadWriterFactory;
 
-        private RowReaderWriter _rowReaderWriter;
+        private RowReaderWriter.RowReaderWriter _rowReaderWriter;
 
         /// <summary>
         ///     Only for deserialization

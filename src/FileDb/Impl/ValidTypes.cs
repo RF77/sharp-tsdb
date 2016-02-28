@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace FileDb.InterfaceImpl
+namespace FileDb.Impl
 {
     internal static class ValidTypes
     {

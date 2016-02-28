@@ -3,30 +3,30 @@ using System.IO;
 using Timeenator.Impl;
 using Timeenator.Interfaces;
 
-namespace FileDb.InterfaceImpl
+namespace FileDb.RowReaderWriter
 {
-    public class ByteRowReaderWriter : RowReaderWriter
+    public class IntRowReaderWriter : RowReaderWriter
     {
-        public ByteRowReaderWriter()
+        public IntRowReaderWriter()
         {
-            RowLength = 9;
+            RowLength = 12;
         }
 
         public override void WriteRow(BinaryWriter writer, IDataRow row)
         {
             base.WriteRow(writer, row);
-            writer.Write(Convert.ToByte(row.Value));
+            writer.Write(Convert.ToInt32(row.Value));
         }
 
         public override ISingleDataRow<T> ReadRow<T>(BinaryReader reader)
         {
-            var row = new SingleDataRow<T>(ReadDate(reader), (T)Convert.ChangeType(reader.ReadByte(), typeof(T)));
+            var row = new SingleDataRow<T>(ReadDate(reader), (T)Convert.ChangeType(reader.ReadInt32(), typeof(T)));
             return row;
         }
 
         public override IDataRow ReadRow(BinaryReader reader)
         {
-            return new DataRow { Key = ReadDate(reader), Value = reader.ReadByte() };
+            return new DataRow { Key = ReadDate(reader), Value = reader.ReadInt32() };
         }
     }
 }

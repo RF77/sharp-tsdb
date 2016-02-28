@@ -1,7 +1,7 @@
 using System;
 using System.Diagnostics;
 using DbInterfaces.Interfaces;
-using FileDb.InterfaceImpl;
+using FileDb.Impl;
 using FluentAssertions;
 using NUnit.Framework;
 using Timeenator.Impl.Grouping;

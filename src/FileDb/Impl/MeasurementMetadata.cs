@@ -1,10 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Runtime.Serialization;
 using DbInterfaces.Interfaces;
 
-namespace FileDb.InterfaceImpl
+namespace FileDb.Impl
 {
     [DataContract]
     public class MeasurementMetadata : IMeasurementMetadata

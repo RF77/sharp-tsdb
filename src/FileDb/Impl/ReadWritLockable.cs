@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Threading;
 
-namespace FileDb.InterfaceImpl
+namespace FileDb.Impl
 {
     public class ReadWritLockable
     {

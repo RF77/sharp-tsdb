@@ -1,9 +1,9 @@
 using System;
 using System.IO;
-using DbInterfaces.Interfaces;
+using FileDb.Interfaces;
 using Timeenator.Interfaces;
 
-namespace FileDb.InterfaceImpl
+namespace FileDb.RowReaderWriter
 {
     public abstract class RowReaderWriter : IRowWriter, IRowReader
     {

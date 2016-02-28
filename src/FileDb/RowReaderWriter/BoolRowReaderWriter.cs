@@ -3,30 +3,30 @@ using System.IO;
 using Timeenator.Impl;
 using Timeenator.Interfaces;
 
-namespace FileDb.InterfaceImpl
+namespace FileDb.RowReaderWriter
 {
-    public class DecimalRowReaderWriter : RowReaderWriter
+    public class BoolRowReaderWriter : RowReaderWriter
     {
-        public DecimalRowReaderWriter()
+        public BoolRowReaderWriter()
         {
-            RowLength = 24;
+            RowLength = 9;
         }
 
         public override void WriteRow(BinaryWriter writer, IDataRow row)
         {
             base.WriteRow(writer, row);
-            writer.Write(Convert.ToDecimal(row.Value));
+            writer.Write(Convert.ToBoolean(row.Value));
         }
 
         public override ISingleDataRow<T> ReadRow<T>(BinaryReader reader)
         {
-            var row = new SingleDataRow<T>(ReadDate(reader), (T)Convert.ChangeType(reader.ReadDecimal(), typeof(T)));
+            var row = new SingleDataRow<T>(ReadDate(reader), (T)Convert.ChangeType(reader.ReadBoolean(), typeof(T)));
             return row;
         }
 
         public override IDataRow ReadRow(BinaryReader reader)
         {
-            return new DataRow { Key = ReadDate(reader), Value = reader.ReadDecimal() };
+            return new DataRow { Key = ReadDate(reader), Value = reader.ReadBoolean() };
         }
     }
 }

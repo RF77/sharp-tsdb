@@ -1,6 +1,6 @@
 ﻿using System.IO;
 using System.Linq;
-using FileDb.InterfaceImpl;
+using FileDb.Impl;
 using FluentAssertions;
 using NUnit.Framework;
 

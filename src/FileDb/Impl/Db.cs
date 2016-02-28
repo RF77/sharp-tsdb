@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
-using System.Threading;
 using DbInterfaces.Interfaces;
 using FileDb.Properties;
 using Infrastructure;
@@ -11,7 +10,7 @@ using Timeenator.Impl;
 using Timeenator.Impl.Converting;
 using Timeenator.Interfaces;
 
-namespace FileDb.InterfaceImpl
+namespace FileDb.Impl
 {
     public class Db : ReadWritLockable, IDb
     {

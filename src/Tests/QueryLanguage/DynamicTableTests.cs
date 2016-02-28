@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using FileDb.InterfaceImpl;
+using FileDb.Impl;
 using FileDb.Scripting;
 using NUnit.Framework;
 using Timeenator.Impl;

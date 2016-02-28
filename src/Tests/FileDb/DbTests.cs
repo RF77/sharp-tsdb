@@ -4,7 +4,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using DbInterfaces.Interfaces;
-using FileDb.InterfaceImpl;
+using FileDb.Impl;
 using FileDb.Scripting;
 using FluentAssertions;
 using MathNet.Numerics.Statistics;

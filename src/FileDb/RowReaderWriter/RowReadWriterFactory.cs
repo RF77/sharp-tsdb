@@ -1,6 +1,7 @@
 ﻿using System;
+using FileDb.Impl;
 
-namespace FileDb.InterfaceImpl
+namespace FileDb.RowReaderWriter
 {
     public class RowReadWriterFactory
     {

@@ -3,7 +3,7 @@ using System.IO;
 using Timeenator.Impl;
 using Timeenator.Interfaces;
 
-namespace FileDb.InterfaceImpl
+namespace FileDb.RowReaderWriter
 {
     public class DateTimeRowReaderWriter : RowReaderWriter
     {

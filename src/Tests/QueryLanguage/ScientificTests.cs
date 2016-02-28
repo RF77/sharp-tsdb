@@ -1,6 +1,6 @@
 using System.Linq;
 using DbInterfaces.Interfaces;
-using FileDb.InterfaceImpl;
+using FileDb.Impl;
 using NUnit.Framework;
 using Timeenator.Impl;
 using Timeenator.Impl.Converting;
