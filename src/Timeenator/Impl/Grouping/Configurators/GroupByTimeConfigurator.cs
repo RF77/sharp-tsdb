@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
+using Timeenator.Extensions;
 using Timeenator.Interfaces;
 
 namespace Timeenator.Impl.Grouping.Configurators

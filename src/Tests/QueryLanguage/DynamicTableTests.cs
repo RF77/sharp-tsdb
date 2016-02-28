@@ -4,8 +4,10 @@ using System.Diagnostics;
 using FileDb.Impl;
 using FileDb.Scripting;
 using NUnit.Framework;
+using Timeenator.Extensions.Converting;
+using Timeenator.Extensions.Grouping;
+using Timeenator.Extensions.Scientific;
 using Timeenator.Impl;
-using Timeenator.Impl.Converting;
 using Timeenator.Impl.Grouping;
 using Timeenator.Impl.Scientific;
 using Timeenator.Interfaces;
@@ -64,7 +66,7 @@ namespace Tests.QueryLanguage
             //sw.Stop();
 
             var sw2 = Stopwatch.StartNew();
-            var result2 = table.Transform(i => i.GroupByMinutes(1, t => t.First())).ZipToNew<int>("DiffTable", t => t.A - t.B);
+            var result2 = table.Transform(i => TimeGroupingExtensions.GroupByMinutes<int>(i, 1, t => AggregationExtensions.First<int>(t))).ZipToNew<int>("DiffTable", t => t.A - t.B);
             sw2.Stop();
         }
 

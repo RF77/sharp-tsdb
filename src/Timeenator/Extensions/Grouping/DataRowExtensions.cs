@@ -1,7 +1,7 @@
 ﻿using Timeenator.Impl.DataRows;
 using Timeenator.Interfaces;
 
-namespace Timeenator.Impl.Grouping
+namespace Timeenator.Extensions.Grouping
 {
     public static class DataRowExtensions
     {

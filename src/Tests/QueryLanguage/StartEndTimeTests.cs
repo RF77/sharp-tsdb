@@ -1,6 +1,7 @@
 using System;
 using FluentAssertions;
 using NUnit.Framework;
+using Timeenator.Extensions.Grouping;
 using Timeenator.Impl.Grouping;
 
 namespace Tests.QueryLanguage

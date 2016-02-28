@@ -1,9 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using Timeenator.Impl.Grouping;
 using Timeenator.Impl.Grouping.Configurators;
 using Timeenator.Interfaces;
 
-namespace Timeenator.Impl.Grouping
+namespace Timeenator.Extensions.Grouping
 {
     public static class GroupExtensions
     {

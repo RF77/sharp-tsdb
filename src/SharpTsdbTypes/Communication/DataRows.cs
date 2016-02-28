@@ -2,8 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.Serialization;
+using Timeenator.Extensions.Converting;
 using Timeenator.Impl;
-using Timeenator.Impl.Converting;
 using Timeenator.Interfaces;
 
 namespace SharpTsdbTypes.Communication

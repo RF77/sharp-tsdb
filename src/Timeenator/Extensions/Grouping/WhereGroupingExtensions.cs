@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using Timeenator.Interfaces;
-
-namespace Timeenator.Impl.Grouping
+﻿namespace Timeenator.Extensions.Grouping
 {
     public static class WhereGroupingExtensions
     {

@@ -6,8 +6,9 @@ using FileDb.Scripting;
 using FluentAssertions;
 using Nancy.Json;
 using NUnit.Framework;
+using Timeenator.Extensions;
+using Timeenator.Extensions.Converting;
 using Timeenator.Impl;
-using Timeenator.Impl.Converting;
 
 namespace Tests.Dummy
 {

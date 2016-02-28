@@ -6,6 +6,7 @@ using System.Net;
 using System.Threading.Tasks;
 using Nancy.Json;
 using SharpTsdbTypes.Communication;
+using Timeenator.Extensions;
 using Timeenator.Impl;
 using Timeenator.Interfaces;
 

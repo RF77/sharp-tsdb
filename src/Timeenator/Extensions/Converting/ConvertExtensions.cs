@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Timeenator.Impl.Converting
+namespace Timeenator.Extensions.Converting
 {
     public static class ConvertExtensions
     {

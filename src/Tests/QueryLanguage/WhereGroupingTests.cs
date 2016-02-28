@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using DbInterfaces.Interfaces;
 using FluentAssertions;
 using NUnit.Framework;
+using Timeenator.Extensions.Grouping;
 using Timeenator.Impl;
 using Timeenator.Impl.Grouping;
 using Timeenator.Interfaces;

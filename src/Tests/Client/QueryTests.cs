@@ -6,6 +6,7 @@ using FluentAssertions;
 using Nancy.Json;
 using NUnit.Framework;
 using SharpTsdbClient;
+using Timeenator.Extensions.Grouping;
 using Timeenator.Impl;
 using Timeenator.Impl.Grouping;
 

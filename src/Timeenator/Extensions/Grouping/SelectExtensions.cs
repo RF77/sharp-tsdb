@@ -1,10 +1,8 @@
-﻿using System;
-using System.Linq;
-using MathNet.Numerics.Statistics;
-using Timeenator.Impl.Converting;
+﻿using System.Linq;
+using Timeenator.Extensions.Converting;
 using Timeenator.Interfaces;
 
-namespace Timeenator.Impl.Grouping
+namespace Timeenator.Extensions.Grouping
 {
     public static class SelectExtensions
     {

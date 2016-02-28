@@ -1,10 +1,11 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Timeenator.Impl;
 using Timeenator.Impl.Grouping;
 using Timeenator.Interfaces;
 
-namespace Timeenator.Impl.Converting
+namespace Timeenator.Extensions.Converting
 {
     public static class QueryTableExtensions
     {

@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Text.RegularExpressions;
 
-namespace Timeenator.Impl
+namespace Timeenator.Extensions
 {
     /// <summary>
     /// Exrepssion from Grafana, examples:

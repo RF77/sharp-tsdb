@@ -1,8 +1,10 @@
 using System;
 using System.Linq;
+using Timeenator.Impl;
+using Timeenator.Impl.Grouping;
 using Timeenator.Interfaces;
 
-namespace Timeenator.Impl.Grouping
+namespace Timeenator.Extensions.Grouping
 {
     public static class FillExtensions
     {

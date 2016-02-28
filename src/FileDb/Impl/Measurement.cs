@@ -6,6 +6,7 @@ using System.Runtime.Serialization;
 using DbInterfaces.Interfaces;
 using FileDb.Properties;
 using FileDb.RowReaderWriter;
+using Timeenator.Extensions;
 using Timeenator.Impl;
 using Timeenator.Interfaces;
 

@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.Linq;
 using FluentAssertions;
 using NUnit.Framework;
+using Timeenator.Extensions.Grouping;
 using Timeenator.Impl;
 using Timeenator.Impl.Grouping;
 using Timeenator.Interfaces;

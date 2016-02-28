@@ -1,8 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Timeenator.Impl.Grouping;
 
-namespace Timeenator.Impl.Grouping
+namespace Timeenator.Extensions.Grouping
 {
     public static class StartEndTimeExtensions
     {

@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Timeenator.Extensions;
 using Timeenator.Interfaces;
 
 namespace Timeenator.Impl.Grouping.Configurators

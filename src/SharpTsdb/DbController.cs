@@ -10,6 +10,7 @@ using log4net;
 using Serialize.Linq.Serializers;
 using SharpTsdb.Properties;
 using SharpTsdbTypes.Communication;
+using Timeenator.Extensions;
 using Timeenator.Impl;
 using Timeenator.Interfaces;
 

@@ -1,6 +1,6 @@
 using System;
+using Timeenator.Extensions.Converting;
 using Timeenator.Impl;
-using Timeenator.Impl.Converting;
 using Timeenator.Interfaces;
 
 namespace SharpTsdbTypes.Communication

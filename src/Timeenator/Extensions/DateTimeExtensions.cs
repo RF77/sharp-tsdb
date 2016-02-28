@@ -1,12 +1,12 @@
 ﻿using System;
 
-namespace Timeenator.Impl
+namespace Timeenator.Extensions
 {
     public static class DateTimeExtensions
     {
-        public static UInt32 ToSecondsAfter1970Utc(this DateTime date)
+        public static uint ToSecondsAfter1970Utc(this DateTime date)
         {
-            return (UInt32)(date - new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc)).TotalSeconds;
+            return (uint)(date - new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc)).TotalSeconds;
         }
         public static long ToMiliSecondsAfter1970(this DateTime date)
         {

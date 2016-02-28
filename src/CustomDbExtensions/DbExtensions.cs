@@ -1,7 +1,8 @@
 using System;
 using DbInterfaces.Interfaces;
+using Timeenator.Extensions.Converting;
+using Timeenator.Extensions.Grouping;
 using Timeenator.Impl;
-using Timeenator.Impl.Converting;
 using Timeenator.Impl.Grouping;
 
 namespace CustomDbExtensions

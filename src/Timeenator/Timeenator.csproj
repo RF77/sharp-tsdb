@@ -64,17 +64,17 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Impl\Converting\ConvertExtensions.cs" />
-    <Compile Include="Impl\Converting\QuerySerieExtensions.cs" />
-    <Compile Include="Impl\Converting\QueryTableExtensions.cs" />
-    <Compile Include="Impl\Converting\ValueExtensions.cs" />
+    <Compile Include="Extensions\Converting\ConvertExtensions.cs" />
+    <Compile Include="Extensions\Converting\QuerySerieExtensions.cs" />
+    <Compile Include="Extensions\Converting\QueryTableExtensions.cs" />
+    <Compile Include="Extensions\Converting\ValueExtensions.cs" />
     <Compile Include="Impl\DataRow.cs" />
     <Compile Include="Impl\DataRows\NamedDataRow.cs" />
-    <Compile Include="Impl\DateTimeExtensions.cs" />
+    <Compile Include="Extensions\DateTimeExtensions.cs" />
     <Compile Include="Impl\Grouping\Configurators\GroupByTimeConfigurator.cs" />
     <Compile Include="Impl\Grouping\Configurators\IGroupByTimeConfigurator.cs" />
-    <Compile Include="Impl\Grouping\SelectExtensions.cs" />
-    <Compile Include="Impl\Grouping\AggregationExtensions.cs" />
+    <Compile Include="Extensions\Grouping\SelectExtensions.cs" />
+    <Compile Include="Extensions\Grouping\AggregationExtensions.cs" />
     <Compile Include="Impl\Grouping\Configurators\GroupByStartEndTimesConfigurator.cs" />
     <Compile Include="Impl\Grouping\Configurators\GroupByTriggerConfigurator.cs" />
     <Compile Include="Impl\Grouping\Configurators\GroupConfigurator.cs" />
@@ -86,34 +86,34 @@
     <Compile Include="Impl\Grouping\Configurators\IGroupMultipleAggregationConfigurator.cs" />
     <Compile Include="Impl\Grouping\Configurators\IGroupTimesCreator.cs" />
     <Compile Include="Impl\Grouping\Configurators\ITimeRangeSelector.cs" />
-    <Compile Include="Impl\Grouping\DataRowExtensions.cs" />
+    <Compile Include="Extensions\Grouping\DataRowExtensions.cs" />
     <Compile Include="Impl\Grouping\DynamicTable.cs" />
     <Compile Include="Impl\Grouping\DynamicTableValues.cs" />
-    <Compile Include="Impl\Grouping\FillExtensions.cs" />
-    <Compile Include="Impl\Grouping\GroupExtensions.cs" />
+    <Compile Include="Extensions\Grouping\FillExtensions.cs" />
+    <Compile Include="Extensions\Grouping\GroupExtensions.cs" />
     <Compile Include="Impl\Grouping\Configurators\GroupSelector.cs" />
     <Compile Include="Impl\Grouping\Configurators\IExecutableGroup.cs" />
     <Compile Include="Impl\Grouping\Configurators\IGroupSelector.cs" />
     <Compile Include="Impl\Grouping\StartEndTime.cs" />
-    <Compile Include="Impl\Grouping\StartEndTimeExtensions.cs" />
-    <Compile Include="Impl\Grouping\TimeGroupingExtensions.cs" />
+    <Compile Include="Extensions\Grouping\StartEndTimeExtensions.cs" />
+    <Compile Include="Extensions\Grouping\TimeGroupingExtensions.cs" />
     <Compile Include="Impl\Grouping\TimeStampType.cs" />
     <Compile Include="Impl\Grouping\ValueForNull.cs" />
-    <Compile Include="Impl\Grouping\WhereGroupingExtensions.cs" />
-    <Compile Include="Impl\IntExtensions.cs" />
-    <Compile Include="Impl\LongExtensions.cs" />
+    <Compile Include="Extensions\Grouping\WhereGroupingExtensions.cs" />
+    <Compile Include="Extensions\IntExtensions.cs" />
+    <Compile Include="Extensions\LongExtensions.cs" />
     <Compile Include="Impl\NullableQuerySerie.cs" />
     <Compile Include="Impl\NullableQueryTable.cs" />
     <Compile Include="Impl\QuerySerie.cs" />
     <Compile Include="Impl\QuerySerieBase.cs" />
     <Compile Include="Impl\QueryTable.cs" />
     <Compile Include="Impl\QueryTableBase.cs" />
-    <Compile Include="Impl\Scientific\ScientificQueryTableExtensions.cs" />
+    <Compile Include="Extensions\Scientific\ScientificQueryTableExtensions.cs" />
     <Compile Include="Impl\Scientific\TemperatureMath.cs" />
     <Compile Include="Impl\SingleDataRow.cs" />
-    <Compile Include="Impl\StringExtensions.cs" />
-    <Compile Include="Impl\TimeExpression.cs" />
-    <Compile Include="Impl\TypeExtensions.cs" />
+    <Compile Include="Extensions\StringExtensions.cs" />
+    <Compile Include="Extensions\TimeExpression.cs" />
+    <Compile Include="Extensions\TypeExtensions.cs" />
     <Compile Include="Interfaces\IDataRow.cs" />
     <Compile Include="Interfaces\INullableQuerySerie.cs" />
     <Compile Include="Interfaces\INullableQueryTable.cs" />
@@ -132,6 +132,7 @@
   <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

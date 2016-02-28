@@ -1,8 +1,9 @@
 using System;
-using Timeenator.Impl.Converting;
+using Timeenator.Extensions.Converting;
+using Timeenator.Impl.Scientific;
 using Timeenator.Interfaces;
 
-namespace Timeenator.Impl.Scientific
+namespace Timeenator.Extensions.Scientific
 {
     public static class ScientificQueryTableExtensions
     {

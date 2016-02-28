@@ -9,6 +9,7 @@ using FileDb.Scripting;
 using FluentAssertions;
 using MathNet.Numerics.Statistics;
 using NUnit.Framework;
+using Timeenator.Extensions.Grouping;
 using Timeenator.Impl;
 using Timeenator.Impl.Grouping;
 using Timeenator.Interfaces;

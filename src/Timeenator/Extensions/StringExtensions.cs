@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Text.RegularExpressions;
 
-namespace Timeenator.Impl
+namespace Timeenator.Extensions
 {
     public static class StringExtensions
     {

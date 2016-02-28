@@ -1,6 +1,7 @@
 using System;
 using FluentAssertions;
 using NUnit.Framework;
+using Timeenator.Extensions;
 using Timeenator.Impl;
 
 namespace Tests.FileDb

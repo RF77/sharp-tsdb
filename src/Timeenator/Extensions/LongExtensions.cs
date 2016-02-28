@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Timeenator.Impl
+namespace Timeenator.Extensions
 {
     public static class LongExtensions
     {
