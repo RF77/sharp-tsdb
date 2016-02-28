@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using Timeenator.Extensions.Converting;
+using Timeenator.Impl.Grouping;
 using Timeenator.Interfaces;
 
 namespace Timeenator.Impl
@@ -98,6 +99,69 @@ namespace Timeenator.Impl
             }
             return newSerie;
         }
+
+        public INullableQuerySerie<T> FillValue(T fillValue)
+        {
+            foreach (var row in Rows)
+            {
+                if (row.Value == null)
+                {
+                    row.Value = fillValue;
+                }
+            }
+            return this;
+        }
+
+        public IQuerySerie<T> RemoveNulls()
+        {
+            return new QuerySerie<T>(Rows.Where(i => i.Value != null).Select(i => new SingleDataRow<T>(i.TimeUtc, i.Value.Value)).ToList(), this);
+        }
+
+        public INullableQuerySerie<T> Fill(ValueForNull fillValue)
+        {
+            switch (fillValue)
+            {
+                case ValueForNull.Previous:
+                    {
+                        T? previous = PreviousRow?.Value;
+                        foreach (var row in Rows)
+                        {
+                            if (row.Value == null)
+                            {
+                                row.Value = previous;
+                            }
+                            else
+                            {
+                                previous = row.Value;
+                            }
+                        }
+                    }
+                    break;
+                case ValueForNull.Next:
+                    {
+
+                        T? next = NextRow?.Value;
+                        var rows = Rows;
+                        for (int i = rows.Count - 1; i >= 0; i--)
+                        {
+                            var item = rows[i];
+                            if (item.Value == null)
+                            {
+                                item.Value = next;
+                            }
+                            else
+                            {
+                                next = item.Value;
+                            }
+                        }
+                    }
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException(nameof(fillValue), fillValue, null);
+            }
+            return this;
+        }
+
 
         #endregion
     }

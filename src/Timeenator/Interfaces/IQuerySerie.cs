@@ -1,5 +1,7 @@
 using System;
 using System.Collections.Generic;
+using Timeenator.Impl.Grouping;
+using Timeenator.Impl.Grouping.Configurators;
 
 namespace Timeenator.Interfaces
 {
@@ -56,5 +58,12 @@ namespace Timeenator.Interfaces
         /// <param name="predicate">true, if added to time span</param>
         /// <returns>Time Span / use for example TotalMinutes to get a value of type T again</returns>
         TimeSpan? TimeWhere(Func<T, bool> predicate);
+
+        INullableQuerySerie<T> Group(Func<IGroupSelector<T>, IExecutableGroup<T>> groupConfigurator);
+        IReadOnlyList<StartEndTime> TimeRanges(Func<IGroupSelector<T>, IGroupByStartEndTimesConfiguratorOptional<T>> groupConfigurator);
+        ISingleDataRow<T> FirstItem();
+        ISingleDataRow<T> LastItem();
+        ISingleDataRow<T> MaxItem();
+        ISingleDataRow<T> MinItem();
     }
 }

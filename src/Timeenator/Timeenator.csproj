@@ -71,7 +71,6 @@
     <Compile Include="Extensions\DateTimeExtensions.cs" />
     <Compile Include="Impl\Grouping\Configurators\GroupByTimeConfigurator.cs" />
     <Compile Include="Impl\Grouping\Configurators\IGroupByTimeConfigurator.cs" />
-    <Compile Include="Extensions\Grouping\SelectExtensions.cs" />
     <Compile Include="Impl\Grouping\Configurators\GroupByStartEndTimesConfigurator.cs" />
     <Compile Include="Impl\Grouping\Configurators\GroupByTriggerConfigurator.cs" />
     <Compile Include="Impl\Grouping\Configurators\GroupConfigurator.cs" />
@@ -86,8 +85,6 @@
     <Compile Include="Extensions\Grouping\DataRowExtensions.cs" />
     <Compile Include="Impl\Grouping\DynamicTable.cs" />
     <Compile Include="Impl\Grouping\DynamicTableValues.cs" />
-    <Compile Include="Extensions\Grouping\FillExtensions.cs" />
-    <Compile Include="Extensions\Grouping\GroupExtensions.cs" />
     <Compile Include="Impl\Grouping\Configurators\GroupSelector.cs" />
     <Compile Include="Impl\Grouping\Configurators\IExecutableGroup.cs" />
     <Compile Include="Impl\Grouping\Configurators\IGroupSelector.cs" />

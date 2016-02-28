@@ -173,5 +173,44 @@ namespace Timeenator.Impl
 
             return timeSpan;
         }
+
+        public ISingleDataRow<T> FirstItem()
+        {
+            //if (!serie.Rows.Any()) return null;
+            return Rows.FirstOrDefault();
+        }
+
+        public ISingleDataRow<T> LastItem()
+        {
+            return Rows.LastOrDefault();
+        }
+
+        public ISingleDataRow<T> MaxItem()
+        {
+            if (!Rows.Any()) return null;
+            var maxItem = Rows.First();
+            foreach (var row in Rows)
+            {
+                if (row.Value.ToDouble() > maxItem.Value.ToDouble())
+                {
+                    maxItem = row;
+                }
+            }
+            return maxItem;
+        }
+
+        public ISingleDataRow<T> MinItem()
+        {
+            if (!Rows.Any()) return null;
+            var minItem = Rows.First();
+            foreach (var row in Rows)
+            {
+                if (row.Value.ToDouble() < minItem.Value.ToDouble())
+                {
+                    minItem = row;
+                }
+            }
+            return minItem;
+        }
     }
 }

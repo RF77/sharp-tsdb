@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using Timeenator.Extensions.Converting;
+using Timeenator.Impl.Grouping;
+using Timeenator.Impl.Grouping.Configurators;
 using Timeenator.Interfaces;
 
 namespace Timeenator.Impl
@@ -147,6 +149,18 @@ namespace Timeenator.Impl
                 newSerie.Name = newSerieName;
             }
             return newSerie;
+        }
+
+        public INullableQuerySerie<T> Group(Func<IGroupSelector<T>, IExecutableGroup<T>> groupConfigurator)
+        {
+            return groupConfigurator(new GroupSelector<T>(this)).ExecuteGrouping();
+        }
+
+        public IReadOnlyList<StartEndTime> TimeRanges(Func<IGroupSelector<T>, IGroupByStartEndTimesConfiguratorOptional<T>> groupConfigurator)
+        {
+            var groupTimesCreator = groupConfigurator(new GroupSelector<T>(this)) as IGroupTimesCreator;
+
+            return groupTimesCreator?.CreateGroupTimes() ?? new List<StartEndTime>();
         }
     }
 }

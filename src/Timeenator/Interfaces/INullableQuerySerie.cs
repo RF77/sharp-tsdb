@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Timeenator.Impl.Grouping;
 
 namespace Timeenator.Interfaces
 {
@@ -11,5 +12,8 @@ namespace Timeenator.Interfaces
         INullableQuerySerie<T> Alias(string name);
         INullableQuerySerie<T> Transform(Func<T?, T?> transformFunc);
         INullableQuerySerie<T> CalcValue(Func<T?, T?> calculationFunc, string newSerieName = null);
+        INullableQuerySerie<T> FillValue(T fillValue);
+        IQuerySerie<T> RemoveNulls();
+        INullableQuerySerie<T> Fill(ValueForNull fillValue);
     }
 }
