@@ -43,6 +43,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mqtt2SharpTsdb", "Mqtt2Shar
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mqtt2SharpTsdbService", "Mqtt2SharpTsdbService\Mqtt2SharpTsdbService.csproj", "{B9C43B95-97AD-4E54-9745-1DC8FB15485F}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mqtt2SharpTsdbConsole", "Mqtt2SharpTsdbConsole\Mqtt2SharpTsdbConsole.csproj", "{5781EBE4-3416-4FB5-BC50-D98CF93FBB4C}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -149,8 +151,8 @@ Global
 		{3DC705DB-D0DF-49E4-842D-49C28745EE80}.Release|x64.Build.0 = Release|Any CPU
 		{193D6415-26F5-459C-8181-232943FC7860}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{193D6415-26F5-459C-8181-232943FC7860}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{193D6415-26F5-459C-8181-232943FC7860}.Debug|x64.ActiveCfg = Debug|Any CPU
-		{193D6415-26F5-459C-8181-232943FC7860}.Debug|x64.Build.0 = Debug|Any CPU
+		{193D6415-26F5-459C-8181-232943FC7860}.Debug|x64.ActiveCfg = Debug|x64
+		{193D6415-26F5-459C-8181-232943FC7860}.Debug|x64.Build.0 = Debug|x64
 		{193D6415-26F5-459C-8181-232943FC7860}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{193D6415-26F5-459C-8181-232943FC7860}.Release|Any CPU.Build.0 = Release|Any CPU
 		{193D6415-26F5-459C-8181-232943FC7860}.Release|x64.ActiveCfg = Release|Any CPU
@@ -163,6 +165,14 @@ Global
 		{B9C43B95-97AD-4E54-9745-1DC8FB15485F}.Release|Any CPU.Build.0 = Release|Any CPU
 		{B9C43B95-97AD-4E54-9745-1DC8FB15485F}.Release|x64.ActiveCfg = Release|x64
 		{B9C43B95-97AD-4E54-9745-1DC8FB15485F}.Release|x64.Build.0 = Release|x64
+		{5781EBE4-3416-4FB5-BC50-D98CF93FBB4C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5781EBE4-3416-4FB5-BC50-D98CF93FBB4C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5781EBE4-3416-4FB5-BC50-D98CF93FBB4C}.Debug|x64.ActiveCfg = Debug|x64
+		{5781EBE4-3416-4FB5-BC50-D98CF93FBB4C}.Debug|x64.Build.0 = Debug|x64
+		{5781EBE4-3416-4FB5-BC50-D98CF93FBB4C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5781EBE4-3416-4FB5-BC50-D98CF93FBB4C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5781EBE4-3416-4FB5-BC50-D98CF93FBB4C}.Release|x64.ActiveCfg = Release|Any CPU
+		{5781EBE4-3416-4FB5-BC50-D98CF93FBB4C}.Release|x64.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

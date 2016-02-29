@@ -1,10 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
 using DbInterfaces.Interfaces;
 using SharpTsdbTypes.Communication;
-using Timeenator.Impl;
 using Timeenator.Interfaces;
 
 namespace SharpTsdbClient

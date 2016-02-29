@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Dynamic;
+using FileDb.Impl;
 using FileDb.Scripting;
 using FluentAssertions;
 using Nancy.Json;
@@ -342,6 +343,12 @@ namespace Tests.Dummy
             l1.Should().NotBe(l2);
 
 
+        }
+
+        [Test]
+        public void CreateHausDb()
+        {
+            new DbManagement().CreateDb(@"c:\DBs\SharpTsdb", "Haus");
         }
     }
 }
