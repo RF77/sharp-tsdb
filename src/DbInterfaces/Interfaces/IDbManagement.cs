@@ -14,5 +14,6 @@ namespace DbInterfaces.Interfaces
         void DetachAllDbs();
 
 
+        IDb GetOrCreateDb(string directoryPath, string name);
     }
 }

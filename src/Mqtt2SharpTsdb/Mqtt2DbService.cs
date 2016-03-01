@@ -14,9 +14,12 @@ namespace Mqtt2SharpTsdb
         private static readonly ILog Logger = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
         private MqttClient _client = new MqttClient("10.10.1.77");
         private DbClient _dbClient;
-        public void Init()
+        private string _dbName = "Haus";
+
+        public async void Init()
         {
-            _dbClient = new DbClient(new Client("localhost"), "Haus");
+            _dbClient = new DbClient(new Client("localhost"), _dbName);
+            await _dbClient.CreateOrAtachDbAsync();
             _client.Connect("Mqtt2SharpTsdb");
             _client.MqttMsgPublishReceived += ClientOnMqttMsgPublishReceived;
             _client.Subscribe(new[] {"#"}, new byte[] {0});

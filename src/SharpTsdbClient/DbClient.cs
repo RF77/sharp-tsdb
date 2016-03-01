@@ -30,5 +30,10 @@ namespace SharpTsdbClient
             var result = await PostRequestAsync<DataSerie>($"db/{Db.DbName}/binQuerySerie", queryArray, asJson: false);
             return result.ToNullableQuerySerie<T>();
         }
+
+        public async Task<bool> CreateOrAtachDbAsync()
+        {
+            return (await GetRequestAsync($"dbs/createOrAttachDb/{Db.DbName}") == "ok");
+        }
     }
 }

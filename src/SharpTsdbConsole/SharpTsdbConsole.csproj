@@ -112,9 +112,17 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\SharpTsdbTypes\SharpTsdbTypes.csproj">
+      <Project>{063d0ca7-f8e3-4c8c-a646-651472f68986}</Project>
+      <Name>SharpTsdbTypes</Name>
+    </ProjectReference>
     <ProjectReference Include="..\SharpTsdb\SharpTsdb.csproj">
       <Project>{ECC29A1D-4F22-4349-ACB4-3D714E242AD0}</Project>
       <Name>SharpTsdb</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Timeenator\Timeenator.csproj">
+      <Project>{21720df1-0488-49b8-ba41-9accd8f7469d}</Project>
+      <Name>Timeenator</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

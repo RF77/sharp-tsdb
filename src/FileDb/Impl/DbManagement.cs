@@ -50,6 +50,24 @@ namespace FileDb.Impl
         private string DbNamesFileName => $"{_prefix}Dbs.json";
         public IEnumerable<IDb> LoadedDbs => _loadedDbs.Values;
 
+        public IDb GetOrCreateDb(string directoryPath, string name)
+        {
+            var db = LoadedDbs.FirstOrDefault(i => i.Name == name);
+            if (db == null)
+            {
+                if (Directory.Exists(directoryPath))
+                {
+                    AttachDb(directoryPath);
+                    db = GetDb(name);
+                }
+                else
+                {
+                    db = CreateDb(directoryPath, name);
+                }
+            }
+            return db;
+        }
+
         public IDb CreateDb(string directoryPath, string name)
         {
             return WriterLock(() =>

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
@@ -30,6 +31,17 @@ namespace SharpTsdb
             using (MeLog.LogDebug($"name: {dbName}"))
             {
                 DbService.DbManagement.CreateDb(Settings.Default.DbDirectory, dbName);
+                return "ok";
+            }
+        }
+
+        [Route("dbs/createOrAttachDb/{dbName}")]
+        [HttpGet]
+        public string CreateOrAttachDb(string dbName)
+        {
+            using (MeLog.LogDebug($"name: {dbName}"))
+            {
+                DbService.DbManagement.GetOrCreateDb(Path.Combine(Settings.Default.DbDirectory, dbName), dbName);
                 return "ok";
             }
         }
