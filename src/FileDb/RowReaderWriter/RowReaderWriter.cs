@@ -1,5 +1,6 @@
 using System;
 using System.IO;
+using FileDb.Impl;
 using FileDb.Interfaces;
 using Timeenator.Interfaces;
 
@@ -21,5 +22,7 @@ namespace FileDb.RowReaderWriter
 
         public abstract ISingleDataRow<T> ReadRow<T>(BinaryReader reader);
         public abstract IDataRow ReadRow(BinaryReader reader);
+
+        
     }
 }

@@ -7,6 +7,7 @@ using DbInterfaces.Interfaces;
 using FileDb.Properties;
 using FileDb.RowReaderWriter;
 using Timeenator.Extensions;
+using Timeenator.Extensions.Converting;
 using Timeenator.Impl;
 using Timeenator.Interfaces;
 
@@ -17,7 +18,8 @@ namespace FileDb.Impl
     {
         private const int MinSearchRange = 1000;
 
-        [DataMember] private readonly Db _db;
+        [DataMember]
+        private readonly Db _db;
         private static RowReadWriterFactory _rowReadWriterFactory;
 
         private RowReaderWriter.RowReaderWriter _rowReaderWriter;
@@ -65,6 +67,24 @@ namespace FileDb.Impl
             }
             return GetDataPoints<T>();
         }
+
+        private IDataRow _currentValue;
+
+        public ISingleDataRow<T> CurrentValue<T>() where T : struct
+        {
+            return ReaderLock(() =>
+            {
+                if (_currentValue != null)
+                {
+                    return new SingleDataRow<T>(_currentValue.Key, _currentValue.Value.ToType<T>());
+                }
+                return null;
+            });
+        }
+
+        public DateTime? FirstValueTimeUtc { get; set; }
+        public long Size { get; set; }
+        public long NumberOfItems { get; set; }
 
         public void ClearDataPoints(DateTime? after)
         {
@@ -162,6 +182,7 @@ namespace FileDb.Impl
             });
         }
 
+
         [OnDeserialized]
         private void OnDeserialized(StreamingContext c)
         {
@@ -188,6 +209,26 @@ namespace FileDb.Impl
                 _rowReadWriterFactory = new RowReadWriterFactory();
             }
             _rowReaderWriter = _rowReadWriterFactory.CreateRowReaderWriter(MetadataInternal);
+            InitCurrentValues();
+        }
+
+        public void InitCurrentValues()
+        {
+            var fileInfo = new FileInfo(BinaryFilePath);
+            Size = fileInfo.Length;
+            NumberOfItems = Size / _rowReaderWriter.RowLength;
+            if (NumberOfItems > 0)
+            {
+                using (var fs = File.Open(BinaryFilePath, FileMode.Open, FileAccess.Read, FileShare.Read))
+                {
+                    using (var binaryReader = new BinaryReader(fs))
+                    {
+                        FirstValueTimeUtc = _rowReaderWriter.ReadRow(binaryReader).Key;
+                        fs.Position = Size - _rowReaderWriter.RowLength;
+                        _currentValue = _rowReaderWriter.ReadRow(binaryReader);
+                    }
+                }
+            }
         }
 
         private IQuerySerie<T> ReadRows<T>(FileStream fs, BinaryReader binaryReader, DateTime start,
