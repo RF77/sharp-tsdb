@@ -106,5 +106,22 @@ namespace SharpTsdb
                 return new DataSerie(result);
             }
         }
+
+        [Route("db/{dbName}/binQueryTable")]
+        [HttpPost]
+        public async Task<DataSerie[]> BinaryQueryTable(string dbName)
+        {
+            using (MeLog.LogDebug($"db: {dbName}"))
+            {
+                var myDb = DbService.DbManagement.GetDb(dbName);
+
+                byte[] query = await Request.Content.ReadAsByteArrayAsync();
+
+                var queryExpression = ((Expression<Func<IDb, IObjectQueryTable>>)LinqSerializer.DeserializeBinary(query)).Compile();
+
+                IObjectQueryTable result = queryExpression(myDb);
+                return result.Series.Select(i => new DataSerie(i)).ToArray();
+            }
+        }
     }
 }

@@ -16,5 +16,11 @@ namespace Timeenator.Extensions
         {
             return (long)(date - new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc)).TotalMilliseconds;
         }
+
+        public static long? ToFileTimeUtc(this DateTime? date)
+        {
+            if (date == null) return null;
+            return date.Value.ToFileTimeUtc();
+        }
     }
 }

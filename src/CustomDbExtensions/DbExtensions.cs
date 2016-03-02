@@ -1,9 +1,7 @@
 using System;
 using DbInterfaces.Interfaces;
-using Timeenator.Extensions.Converting;
-using Timeenator.Extensions.Grouping;
 using Timeenator.Impl;
-using Timeenator.Impl.Grouping;
+using Timeenator.Interfaces;
 
 namespace CustomDbExtensions
 {
@@ -143,20 +141,62 @@ namespace CustomDbExtensions
                                 .ExpandTimeRangeByFactor(50)
                                 .Aggregate(a => a.MeanByTime()))
                     .Alias("mov mean 50"));
-            table.AddSerie(movMean12.RemoveNulls().Group(g => g.ByTime.Expression(interval, "3m").ExpandTimeRangeByFactor(3).Aggregate(a => a.Derivative(TimeSpan.FromHours(1))))
-        .Alias("Diff 1h 12"));
-            table.AddSerie(movMean12.RemoveNulls().Group(g => g.ByTime.Expression(interval, "3m").ExpandTimeRangeByFactor(3).Aggregate(a => a.Derivative(TimeSpan.FromDays(1))))
-.Alias("Diff 1d 12"));
-            table.AddSerie(movMean20.RemoveNulls().Group(g => g.ByTime.Expression(interval, "3m").ExpandTimeRangeByFactor(3).Aggregate(a => a.Derivative(TimeSpan.FromHours(1))))
-        .Alias("Diff 1h 20"));
-            table.AddSerie(movMean20.RemoveNulls().Group(g => g.ByTime.Expression(interval, "3m").ExpandTimeRangeByFactor(3).Aggregate(a => a.Derivative(TimeSpan.FromDays(1))))
-.Alias("Diff 1d 20"));
-            table.AddSerie(movMean20.RemoveNulls().Group(g => g.ByTime.Expression(interval, "3m").ExpandTimeRangeByFactor(12).Aggregate(a => a.Derivative(TimeSpan.FromHours(1))))
-.Alias("Diff 1h 20 12"));
-            table.AddSerie(movMean20.RemoveNulls().Group(g => g.ByTime.Expression(interval, "3m").ExpandTimeRangeByFactor(12).Aggregate(a => a.Derivative(TimeSpan.FromDays(1))))
-.Alias("Diff 1d 20 12"));
+            table.AddSerie(movMean12.RemoveNulls()
+                .Group(
+                    g =>
+                        g.ByTime.Expression(interval, "3m")
+                            .ExpandTimeRangeByFactor(3)
+                            .Aggregate(a => a.Derivative(TimeSpan.FromHours(1))))
+                .Alias("Diff 1h 12"));
+            table.AddSerie(movMean12.RemoveNulls()
+                .Group(
+                    g =>
+                        g.ByTime.Expression(interval, "3m")
+                            .ExpandTimeRangeByFactor(3)
+                            .Aggregate(a => a.Derivative(TimeSpan.FromDays(1))))
+                .Alias("Diff 1d 12"));
+            table.AddSerie(movMean20.RemoveNulls()
+                .Group(
+                    g =>
+                        g.ByTime.Expression(interval, "3m")
+                            .ExpandTimeRangeByFactor(3)
+                            .Aggregate(a => a.Derivative(TimeSpan.FromHours(1))))
+                .Alias("Diff 1h 20"));
+            table.AddSerie(movMean20.RemoveNulls()
+                .Group(
+                    g =>
+                        g.ByTime.Expression(interval, "3m")
+                            .ExpandTimeRangeByFactor(3)
+                            .Aggregate(a => a.Derivative(TimeSpan.FromDays(1))))
+                .Alias("Diff 1d 20"));
+            table.AddSerie(movMean20.RemoveNulls()
+                .Group(
+                    g =>
+                        g.ByTime.Expression(interval, "3m")
+                            .ExpandTimeRangeByFactor(12)
+                            .Aggregate(a => a.Derivative(TimeSpan.FromHours(1))))
+                .Alias("Diff 1h 20 12"));
+            table.AddSerie(movMean20.RemoveNulls()
+                .Group(
+                    g =>
+                        g.ByTime.Expression(interval, "3m")
+                            .ExpandTimeRangeByFactor(12)
+                            .Aggregate(a => a.Derivative(TimeSpan.FromDays(1))))
+                .Alias("Diff 1d 20 12"));
 
             return table;
+        }
+
+        public static INullableQueryTable<float> MovingAverage(this IDb db, string measurementName, string time, string interval, int windowFactor)
+        {
+            return db.GetTable<float>(measurementName, time)
+                .Transform(
+                    i =>
+                        i.Group(
+                            g =>
+                                g.ByTime.Expression(interval, "1m")
+                                    .ExpandTimeRangeByFactor(windowFactor)
+                                    .Aggregate(a => a.MeanByTime())));
         }
     }
 }

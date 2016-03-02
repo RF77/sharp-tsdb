@@ -70,5 +70,16 @@ namespace Tests.Client
         }
 
 
+        [Test]
+        public async Task Helper()
+        {
+            //var db = new SharpTsdbClient.Client("10.10.1.77").Db("Haus");
+            var db = new SharpTsdbClient.Client("localhost").Db("fux");
+
+            var result = await db.QueryTableAsync<float>(d => d.GetTable<float>("(?<g>.*).(?<k>Temperatur).*", "time > now() - 1M").Transform(s => s.GroupBy("1d", a => a.Mean())));
+
+        }
+
+
     }
 }

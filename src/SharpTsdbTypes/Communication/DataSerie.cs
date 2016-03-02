@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.Serialization;
+using Timeenator.Extensions;
 using Timeenator.Impl;
 using Timeenator.Interfaces;
 
@@ -18,15 +19,15 @@ namespace SharpTsdbTypes.Communication
         {
             Rows = new DataRows(querySerie.Rows);
             Name = querySerie.FullName;
-            StartTime = querySerie.StartTime;
-            EndTime = querySerie.EndTime;
+            StartTime = querySerie.StartTime.ToFileTimeUtc();
+            EndTime = querySerie.EndTime.ToFileTimeUtc();
             PreviousRow = querySerie.PreviousRow?.ToArray();
             NextRow = querySerie.NextRow?.ToArray();
         }
 
         public IQuerySerie<T> ToQuerySerie<T>() where T : struct
         {
-            return new QuerySerie<T>(Rows.AsTyped<T>().ToList(), StartTime, EndTime)
+            return new QuerySerie<T>(Rows.AsTyped<T>().ToList(), StartTime.FromFileTimeUtcToDateTimeUtc(), EndTime.FromFileTimeUtcToDateTimeUtc())
             {
                 PreviousRow = PreviousRow.ToSingleDataRow<T>(),
                 NextRow = NextRow.ToSingleDataRow<T>()
@@ -35,10 +36,11 @@ namespace SharpTsdbTypes.Communication
 
         public INullableQuerySerie<T> ToNullableQuerySerie<T>() where T : struct
         {
-            return new NullableQuerySerie<T>(Rows.AsNullableTyped<T>().ToList(), StartTime, EndTime)
+            return new NullableQuerySerie<T>(Rows.AsNullableTyped<T>().ToList(), StartTime.FromFileTimeUtcToDateTimeUtc(), EndTime.FromFileTimeUtcToDateTimeUtc())
             {
                 PreviousRow = PreviousRow?.ToSingleDataRow<T>(),
-                NextRow = NextRow?.ToSingleDataRow<T>()
+                NextRow = NextRow?.ToSingleDataRow<T>(),
+                Name = Name
             };
         }
 
@@ -47,10 +49,10 @@ namespace SharpTsdbTypes.Communication
         public string Name { get; set; }
 
         [DataMember]
-        public DateTime? StartTime { get; set; }
+        public long? StartTime { get; set; }
 
         [DataMember]
-        public DateTime? EndTime { get; set; }
+        public long? EndTime { get; set; }
 
         /// <summary>
         /// Last value before the start time or null

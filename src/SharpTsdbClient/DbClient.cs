@@ -1,8 +1,10 @@
 ﻿using System;
+using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
 using DbInterfaces.Interfaces;
 using SharpTsdbTypes.Communication;
+using Timeenator.Impl;
 using Timeenator.Interfaces;
 
 namespace SharpTsdbClient
@@ -29,6 +31,14 @@ namespace SharpTsdbClient
             byte[] queryArray = LinqSerializer.SerializeBinary(query);
             var result = await PostRequestAsync<DataSerie>($"db/{Db.DbName}/binQuerySerie", queryArray, asJson: false);
             return result.ToNullableQuerySerie<T>();
+        }
+
+        public async Task<INullableQueryTable<T>> QueryTableAsync<T>(Expression<Func<IDb, IObjectQueryTable>> query) where T : struct
+        {
+            byte[] queryArray = LinqSerializer.SerializeBinary(query);
+            var result = await PostRequestAsync<DataSerie[]>($"db/{Db.DbName}/binQueryTable", queryArray, asJson: false);
+            var table = new NullableQueryTable<T>(result.Select(i => i.ToNullableQuerySerie<T>()));
+            return table;
         }
 
         public async Task<bool> CreateOrAtachDbAsync()

@@ -24,7 +24,7 @@ namespace Timeenator.Impl
 
         public object[] ToArray()
         {
-            return new object[] {Key, Value};
+            return new object[] {Key.ToFileTimeUtc(), Value};
         }
 
         public SingleDataRow(DateTime time, T value)

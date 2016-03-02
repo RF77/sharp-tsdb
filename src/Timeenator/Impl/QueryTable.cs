@@ -9,7 +9,6 @@ namespace Timeenator.Impl
         public new IDictionary<string, IQuerySerie<T>> Series { get; } = new Dictionary<string, IQuerySerie<T>>();
         protected override IEnumerable<IObjectQuerySerie> GetSeries() => Series.Values;
 
-
         public void AddSerie(IQuerySerie<T> serie)
         {
             Series[serie.Name] = serie;

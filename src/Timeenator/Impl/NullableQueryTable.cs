@@ -12,6 +12,18 @@ namespace Timeenator.Impl
         public new IDictionary<string, INullableQuerySerie<T>> Series { get; } = new Dictionary<string, INullableQuerySerie<T>>();
         protected override IEnumerable<IObjectQuerySerie> GetSeries() => Series.Values;
 
+        public NullableQueryTable()
+        {
+        }
+
+        public NullableQueryTable(IEnumerable<INullableQuerySerie<T>> series)
+        {
+            foreach (var serie in series)
+            {
+                AddSerie(serie);
+            }
+        }
+
         public override IObjectQuerySerieBase TryGetSerie(string name)
         {
             return ((INullableQueryTable<T>)this).TryGetSerie(name);
