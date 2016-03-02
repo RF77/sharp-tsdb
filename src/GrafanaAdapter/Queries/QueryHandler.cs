@@ -71,10 +71,10 @@ namespace GrafanaAdapter.Queries
             serie.columns.Add("time");
             serie.columns.Add("value");
 
-            serie.values.AddRange(res.Rows.Select(i => new List<object> {i.TimeUtc.ToMiliSecondsAfter1970(), i.Value}));
+            serie.values.AddRange(res.Rows.Select(i => new List<object> {i.TimeUtc.ToMiliSecondsAfter1970Utc(), i.Value}));
             if (res.LastRow != null)
             {
-                serie.values.AddRange(res.Rows.Select(i => new List<object> { res.LastRow.TimeUtc.ToMiliSecondsAfter1970(), res.LastRow.Value }));
+                serie.values.AddRange(res.Rows.Select(i => new List<object> { res.LastRow.TimeUtc.ToMiliSecondsAfter1970Utc(), res.LastRow.Value }));
             }
 
             result.series.Add(serie);
