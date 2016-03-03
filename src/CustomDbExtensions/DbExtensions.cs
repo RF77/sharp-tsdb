@@ -195,7 +195,7 @@ namespace CustomDbExtensions
                         i.Group(
                             g =>
                                 g.ByTime.Expression(interval, "1m")
-                                    .ExpandTimeRangeByFactor(windowFactor)
+                                    .ExpandTimeRangeByFactor(windowFactor).TimeStampIsMiddle()
                                     .Aggregate(a => a.MeanByTime())));
         }
     }
