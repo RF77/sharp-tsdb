@@ -350,5 +350,17 @@ namespace Tests.Dummy
         {
             new DbManagement().CreateDb(@"c:\DBs\SharpTsdb", "Haus");
         }
+
+        [Test]
+        public void ExpTest()
+        {
+            var b = Math.Exp(1);
+
+            List<double> c = new List<double>();
+            for (double j = 0; j < 20; j++)
+            {
+                c.Add(b / Math.Exp(1 + (j / 5)));
+            }
+        }
     }
 }

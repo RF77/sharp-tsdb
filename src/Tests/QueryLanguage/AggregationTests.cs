@@ -148,6 +148,27 @@ namespace Tests.QueryLanguage
                 .Should().Be(result.Sum(i => i.Value));
         }
 
+        [Test]
+        public void MeanByTimeIncludePreviousTest()
+        {
+            var sw = Stopwatch.StartNew();
+            var result = _unitUnderTest50.GroupBySeconds(5, a => a.MeanByTime()).Rows;
+            var result2 = _unitUnderTest50.GroupBySeconds(5, a => a.MeanByTimeIncludePreviousAndNext()).RemoveNulls().Rows;
 
+            result.Count.Should().Be(result2.Count);
+
+            sw.Stop();
+        }
+
+        [Test]
+        public void ExpMeanTest()
+        {
+            var sw = Stopwatch.StartNew();
+            //var result = _unitUnderTest50.GroupBySeconds(5, a => a.MeanByTime()).Rows;
+            //var result2 = _unitUnderTest50.GroupBySeconds(5, a => a.MeanByTimeIncludePrevious()).RemoveNulls().Rows;
+            var result3 = _unitUnderTest50.Group(g => g.ByTime.Seconds(5).TimeStampIsMiddle().ExpandTimeRangeByFactor(50).Aggregate(a => a.MeanExpWeighted())).Rows;
+
+            sw.Stop();
+        }
     }
 }

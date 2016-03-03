@@ -5,7 +5,10 @@ namespace Timeenator.Impl.Grouping.Configurators
 {
     public interface IGroupByTimeConfigurator<T> where T : struct
     {
-        IGroupByStartEndTimesConfiguratorOptional<T> Expression(string expression, string minimalExpression = null);
+        IGroupByStartEndTimesConfiguratorOptional<T> Expression(string expression);
+        IGroupByStartEndTimesConfiguratorOptional<T> Expression(string expression, string minimalExpression);
+        IGroupByStartEndTimesConfiguratorOptional<T> Span(TimeSpan timeSpan);
+        IGroupByStartEndTimesConfiguratorOptional<T> Span(TimeSpan timeSpan, TimeSpan? minTimeSpan);
         IGroupByStartEndTimesConfiguratorOptional<T> Seconds(int seconds);
         IGroupByStartEndTimesConfiguratorOptional<T> Minutes(int minutes);
         IGroupByStartEndTimesConfiguratorOptional<T> Hours(int hours);

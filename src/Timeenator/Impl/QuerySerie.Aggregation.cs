@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using MathNet.Numerics.Statistics;
 using Timeenator.Extensions;
@@ -7,8 +9,26 @@ using Timeenator.Interfaces;
 
 namespace Timeenator.Impl
 {
-    public partial class QuerySerie<T> where T:struct 
+    public partial class QuerySerie<T> where T:struct
     {
+        private static double[] ExponentialFactors;
+        private static double ExpSum;
+
+        static QuerySerie()
+        {
+            var b = Math.Exp(1);
+
+            IList<double> eFactors = new List<double>(10);
+            for (double j = 0; j < 10; j++)
+            {
+                eFactors.Add(b / Math.Exp(1 + (j / 5)));
+            }
+            ExponentialFactors = eFactors.Reverse().Concat(eFactors.Skip(1)).ToArray();
+            ExpSum = ExponentialFactors.Sum();
+        }
+
+        
+
         public T? First()
         {
             //if (!Rows.Any()) return null;
@@ -42,13 +62,29 @@ namespace Timeenator.Impl
             return Rows.Select(i => i.Value.ToDouble()).Mean().ToType<T>();
         }
 
+        public T? MeanByTimeIncludePreviousAndNext()
+        {
+            return MeanByTime(true);
+        }
+
+        public T? MeanByTime()
+        {
+            return MeanByTime(false);
+        }
+
         /// <summary>
         /// Mean of all measurement points with taking the time into account
         /// </summary>
         /// <returns></returns>
-        public T? MeanByTime()
+        private T? MeanByTime(bool includePreviousAndNext)
         {
-            if (!Rows.Any()) return null;
+            var notAnyRows = !Rows.Any();
+            if (notAnyRows && (!includePreviousAndNext || (PreviousRow == null && NextRow == null))) return null;
+            if (notAnyRows)
+            {
+                return PreviousRow?.Value ?? NextRow.Value;
+            }
+
             double valueSum = 0;
             var rows = Rows;
             DateTime start = DateTime.MinValue;
@@ -92,6 +128,46 @@ namespace Timeenator.Impl
 
             return result.ToType<T>();
         }
+
+
+
+        public T? MeanExpWeighted()
+        {
+            if (!Rows.Any()) return null;
+            double valueSum = 0;
+            var rows = Rows;
+            DateTime start = DateTime.MinValue;
+            DateTime stop = rows.Last().TimeUtc;
+
+            if (StartTime != null)
+            {
+                start = StartTime.Value;
+            }
+
+            if (NextRow != null && EndTime != null)
+            {
+                stop = EndTime.Value;
+            }
+
+            var diff = stop - start;
+            var timeSpanSubGroup = TimeSpan.FromTicks((diff.Ticks + 20 )/ExponentialFactors.Length);
+            var newSerie = new QuerySerie<T>(Rows, start, stop) {PreviousRow = PreviousRow, NextRow = NextRow};
+            var subGroups = newSerie.Group(g => g.ByTime.Span(timeSpanSubGroup).Aggregate(f => f.MeanByTimeIncludePreviousAndNext())).RemoveNulls();
+            Debug.Assert(subGroups.Rows.Count == ExponentialFactors.Length);
+            var subRows = subGroups.Rows;
+
+            double sum = 0;
+
+            for (int i = 0; i < subRows.Count; i++)
+            {
+                sum += subRows[i].Value.ToDouble() * ExponentialFactors[i];
+            }
+
+            double result = sum / ExpSum;
+
+            return result.ToType<T>();
+        }
+
 
         public T? Difference()
         {

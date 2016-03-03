@@ -44,6 +44,9 @@ namespace Timeenator.Interfaces
         /// <returns></returns>
         T? MeanByTime();
 
+        T? MeanByTimeIncludePreviousAndNext();
+        T? MeanExpWeighted();
+
         T? Difference();
         T? Derivative(TimeSpan timeSpan);
         T? Derivative(string timeSpanExpression);

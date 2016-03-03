@@ -9,6 +9,11 @@ namespace Timeenator.Impl.Grouping.Configurators
 {
     public class GroupByTimeConfigurator<T> : GroupByStartEndTimesConfigurator<T>, IGroupByTimeConfigurator<T> where T : struct
     {
+        public IGroupByStartEndTimesConfiguratorOptional<T> Expression(string expression)
+        {
+            return Expression(expression, null);
+        }
+
         public IGroupByStartEndTimesConfiguratorOptional<T> Expression(string expression, string minimalExpression = null)
         {
             if (expression == null) throw new ArgumentNullException(nameof(expression));
@@ -60,9 +65,26 @@ namespace Timeenator.Impl.Grouping.Configurators
             return this;
         }
 
+        public IGroupByStartEndTimesConfiguratorOptional<T> Span(TimeSpan timeSpan)
+        {
+            return Span(timeSpan, null);
+        }
+
         public GroupByTimeConfigurator(IQuerySerie<T> serie) : base(serie)
         {
 
+        }
+
+        public IGroupByStartEndTimesConfiguratorOptional<T> Span(TimeSpan timeSpan, TimeSpan? minTimeSpan)
+        {
+            if (!Serie.Rows.Any()) return this;
+            ISingleDataRow<T> first = Serie.Rows.First();
+            if (minTimeSpan != null && timeSpan < minTimeSpan.Value)
+            {
+                timeSpan = minTimeSpan.Value;
+            }
+
+            return GroupByTime(Serie.StartTime ?? first.TimeUtc, Serie.EndTime, dt => dt + timeSpan);
         }
 
         public IGroupByStartEndTimesConfiguratorOptional<T> Seconds(int seconds)

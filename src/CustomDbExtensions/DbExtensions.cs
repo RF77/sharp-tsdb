@@ -198,5 +198,16 @@ namespace CustomDbExtensions
                                     .ExpandTimeRangeByFactor(windowFactor).TimeStampIsMiddle()
                                     .Aggregate(a => a.MeanByTime())));
         }
+        public static INullableQueryTable<float> ExpMovingAverage(this IDb db, string measurementName, string time, string interval, int windowFactor)
+        {
+            return db.GetTable<float>(measurementName, time)
+                .Transform(
+                    i =>
+                        i.Group(
+                            g =>
+                                g.ByTime.Expression(interval, "1m")
+                                    .ExpandTimeRangeByFactor(windowFactor).TimeStampIsMiddle()
+                                    .Aggregate(a => a.MeanExpWeighted())));
+        }
     }
 }
