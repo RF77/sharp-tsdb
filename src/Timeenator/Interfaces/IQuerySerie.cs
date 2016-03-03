@@ -14,6 +14,7 @@ namespace Timeenator.Interfaces
         IQuerySerie<T> Where(Func<ISingleDataRow<T>, bool> predicate);
         IQuerySerie<T> WhereValue(Func<T, bool> predicate);
         IQuerySerie<T> Alias(string name);
+        IQuerySerie<T> AppendName(string name);
         INullableQuerySerie<T> Transform(Func<T, T?> transformFunc);
 
         /// <summary>

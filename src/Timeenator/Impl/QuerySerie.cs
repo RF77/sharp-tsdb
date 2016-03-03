@@ -73,6 +73,12 @@ namespace Timeenator.Impl
             return this;
         }
 
+        public IQuerySerie<T> AppendName(string name)
+        {
+            Name += name;
+            return this;
+        }
+
         public INullableQuerySerie<T> Transform(Func<T, T?> transformFunc)
         {
             var newRows = new List<ISingleDataRow<T?>>(Rows.Count);

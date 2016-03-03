@@ -15,5 +15,6 @@ namespace Timeenator.Interfaces
         INullableQuerySerie<T> FillValue(T fillValue);
         IQuerySerie<T> RemoveNulls();
         INullableQuerySerie<T> Fill(ValueForNull fillValue);
+        INullableQuerySerie<T> AppendName(string name);
     }
 }

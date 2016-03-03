@@ -77,6 +77,11 @@ namespace Timeenator.Impl
             return this;
         }
 
+        public INullableQuerySerie<T> AppendName(string name)
+        {
+            Name += name;
+            return this;
+        }
 
         public INullableQuerySerie<T> Transform(Func<T?, T?> transformFunc)
         {

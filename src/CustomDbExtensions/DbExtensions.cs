@@ -209,5 +209,35 @@ namespace CustomDbExtensions
                                     .ExpandTimeRangeByFactor(windowFactor).TimeStampIsMiddle()
                                     .Aggregate(a => a.MeanExpWeighted())));
         }
+
+        public static INullableQueryTable<float> MovingTest(this IDb db, string measurementName, string time, string interval, int windowFactor)
+        {
+            return db.GetTable<float>(measurementName, time)
+                .Transform(
+                    i =>
+                        i.Group(
+                            g =>
+                                g.ByTime.Expression(interval, "1m")
+                                    .ExpandTimeRangeByFactor(windowFactor).TimeStampIsMiddle()
+                                    .Aggregate(a => a.MeanExpWeighted())).AppendName(".Exp")).MergeTable(
+                db.GetTable<float>(measurementName, time)
+                .Transform(
+                    i =>
+                        i.Group(
+                            g =>
+                                g.ByTime.Expression(interval, "1m")
+                                    .ExpandTimeRangeByFactor(windowFactor).TimeStampIsMiddle()
+                                    .Aggregate(a => a.MeanByTime())).AppendName(".Mean"))
+                ).MergeTable(
+                db.GetTable<float>(measurementName, time)
+                .Transform(
+                    i =>
+                        i.Group(
+                            g =>
+                                g.ByTime.Expression(interval, "1m")
+                                    .TimeStampIsMiddle()
+                                    .Aggregate(a => a.MeanByTime())))
+                );
+        }
     }
 }
