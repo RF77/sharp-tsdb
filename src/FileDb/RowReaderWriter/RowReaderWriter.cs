@@ -29,7 +29,7 @@ namespace FileDb.RowReaderWriter
 
         protected static DateTime ReadDate(BinaryReader reader)
         {
-            return DateTime.FromBinary(reader.ReadInt64());
+            return DateTime.SpecifyKind(DateTime.FromBinary(reader.ReadInt64()), DateTimeKind.Utc);
         }
     }
 }
