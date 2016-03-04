@@ -218,7 +218,7 @@ namespace CustomDbExtensions
                         i.Group(
                             g =>
                                 g.ByTime.Expression(interval, "1m")
-                                    .ExpandTimeRangeByFactor(windowFactor).TimeStampIsMiddle()
+                                    .ExpandTimeRange(TimeSpan.FromMinutes(windowFactor)).TimeStampIsMiddle()
                                     .Aggregate(a => a.MeanExpWeighted())).AppendName(".Exp")).MergeTable(
                 db.GetTable<float>(measurementName, time)
                 .Transform(

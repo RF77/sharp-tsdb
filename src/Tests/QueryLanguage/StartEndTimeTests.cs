@@ -17,23 +17,23 @@ namespace Tests.QueryLanguage
         {
             _unitUnderTest = new StartEndTime[]
             {
-                new StartEndTime(new DateTime(1000, 1, 1, 0, 0, 0), new DateTime(1000, 1, 1, 0, 10, 0)),
-                new StartEndTime(new DateTime(1000, 1, 1, 0, 5, 0), new DateTime(1000, 1, 1, 0, 15, 0)),
-                new StartEndTime(new DateTime(1000, 1, 1, 0, 25, 0), new DateTime(1000, 1, 1, 0, 30, 0)),
-                new StartEndTime(new DateTime(1000, 1, 1, 0, 35, 0), new DateTime(1000, 1, 1, 0, 40, 0)),
-                new StartEndTime(new DateTime(1000, 1, 1, 0, 55, 0), new DateTime(1000, 1, 1, 0, 56, 0)),
-                new StartEndTime(new DateTime(1000, 1, 1, 0, 56, 0), new DateTime(1000, 1, 1, 0, 57, 0)),
+                new StartEndTime(new DateTime(1000, 1, 1, 0, 0, 0, DateTimeKind.Utc), new DateTime(1000, 1, 1, 0, 10, 0, DateTimeKind.Utc)),
+                new StartEndTime(new DateTime(1000, 1, 1, 0, 5, 0, DateTimeKind.Utc), new DateTime(1000, 1, 1, 0, 15, 0, DateTimeKind.Utc)),
+                new StartEndTime(new DateTime(1000, 1, 1, 0, 25, 0, DateTimeKind.Utc), new DateTime(1000, 1, 1, 0, 30, 0, DateTimeKind.Utc)),
+                new StartEndTime(new DateTime(1000, 1, 1, 0, 35, 0, DateTimeKind.Utc), new DateTime(1000, 1, 1, 0, 40, 0, DateTimeKind.Utc)),
+                new StartEndTime(new DateTime(1000, 1, 1, 0, 55, 0, DateTimeKind.Utc), new DateTime(1000, 1, 1, 0, 56, 0, DateTimeKind.Utc)),
+                new StartEndTime(new DateTime(1000, 1, 1, 0, 56, 0, DateTimeKind.Utc), new DateTime(1000, 1, 1, 0, 57, 0, DateTimeKind.Utc)),
 
             };
 
             _unitUnderTest2 = new StartEndTime[]
 {
-                new StartEndTime(new DateTime(1000, 1, 1, 0, 0, 0), new DateTime(1000, 1, 1, 0, 10, 0)),
-                new StartEndTime(new DateTime(1000, 1, 1, 0, 5, 0), new DateTime(1000, 1, 1, 0, 15, 0)),
-                new StartEndTime(new DateTime(1000, 1, 1, 0, 25, 0), new DateTime(1000, 1, 1, 0, 50, 0)),
-                new StartEndTime(new DateTime(1000, 1, 1, 0, 27, 0), new DateTime(1000, 1, 1, 0, 35, 0)),
-                new StartEndTime(new DateTime(1000, 1, 1, 0, 33, 0), new DateTime(1000, 1, 1, 0, 45, 0)),
-                new StartEndTime(new DateTime(1000, 1, 1, 0, 56, 0), new DateTime(1000, 1, 1, 0, 57, 0)),
+                new StartEndTime(new DateTime(1000, 1, 1, 0, 0,0, DateTimeKind.Utc), new DateTime(1000, 1, 1, 0, 10,0, DateTimeKind.Utc)),
+                new StartEndTime(new DateTime(1000, 1, 1, 0, 5,0, DateTimeKind.Utc), new DateTime(1000, 1, 1, 0, 15,0, DateTimeKind.Utc)),
+                new StartEndTime(new DateTime(1000, 1, 1, 0, 25,0, DateTimeKind.Utc), new DateTime(1000, 1, 1, 0, 50,0, DateTimeKind.Utc)),
+                new StartEndTime(new DateTime(1000, 1, 1, 0, 27,0, DateTimeKind.Utc), new DateTime(1000, 1, 1, 0, 35,0, DateTimeKind.Utc)),
+                new StartEndTime(new DateTime(1000, 1, 1, 0, 33,0, DateTimeKind.Utc), new DateTime(1000, 1, 1, 0, 45,0, DateTimeKind.Utc)),
+                new StartEndTime(new DateTime(1000, 1, 1, 0, 56,0, DateTimeKind.Utc), new DateTime(1000, 1, 1, 0, 57,0, DateTimeKind.Utc)),
 
 };
         }

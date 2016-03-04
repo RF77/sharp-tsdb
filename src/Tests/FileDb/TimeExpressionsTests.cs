@@ -26,8 +26,8 @@ namespace Tests.FileDb
         {
             var ex = new TimeExpression("time > 1455354920s and time < 1455376521s");
 
-            ex.From.Should().Be(new DateTime(2016, 2, 13, 10, 15, 20));
-            ex.To.Should().Be(new DateTime(2016, 2, 13, 16, 15, 21));
+            ex.From.Should().Be(new DateTime(2016, 2, 13, 10, 15, 20, DateTimeKind.Local).ToUniversalTime());
+            ex.To.Should().Be(new DateTime(2016, 2, 13, 16, 15, 21, DateTimeKind.Local).ToUniversalTime());
         }
 
         [Test]
@@ -35,7 +35,7 @@ namespace Tests.FileDb
         {
             var ex = new TimeExpression("time > 1455354920s");
 
-            ex.From.Should().Be(new DateTime(2016, 2, 13, 10, 15, 20));
+            ex.From.Should().Be(new DateTime(2016, 2, 13, 10, 15, 20, DateTimeKind.Local).ToUniversalTime());
             ex.To.Should().Be(null);
         }
 
@@ -45,7 +45,7 @@ namespace Tests.FileDb
             var ex = new TimeExpression("time < 1455376521s");
 
             ex.From.Should().Be(null);
-            ex.To.Should().Be(new DateTime(2016, 2, 13, 16, 15, 21));
+            ex.To.Should().Be(new DateTime(2016, 2, 13, 16, 15, 21, DateTimeKind.Local).ToUniversalTime());
         }
 
         [Test]
@@ -53,7 +53,7 @@ namespace Tests.FileDb
         {
             var ex = new TimeExpression("time > now() - 6h");
 
-            var shouldTime = DateTime.Now - TimeSpan.FromHours(6);
+            var shouldTime = DateTime.UtcNow - TimeSpan.FromHours(6);
 
             var diff = shouldTime - ex.From.Value;
 
@@ -66,7 +66,7 @@ namespace Tests.FileDb
         {
             var ex = new TimeExpression("time < now() - 6h");
 
-            var shouldTime = DateTime.Now - TimeSpan.FromHours(6);
+            var shouldTime = DateTime.UtcNow - TimeSpan.FromHours(6);
 
             var diff = shouldTime - ex.To.Value;
 

@@ -71,8 +71,8 @@ namespace Timeenator.Impl
 
         public QuerySerieBase(DateTime? startTime, DateTime? endTime)
         {
-            StartTime = startTime;
-            EndTime = endTime;
+            StartTime = startTime?.ToUniversalTime();
+            EndTime = endTime?.ToUniversalTime();
         }
 
         protected QuerySerieBase(IQuerySerieBase<T> serie)

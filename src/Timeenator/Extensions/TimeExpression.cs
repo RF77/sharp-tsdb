@@ -63,7 +63,7 @@ namespace Timeenator.Extensions
             {
                 long number = long.Parse(match.Groups[1].Value);
 
-                return number.FromSecondsAfter1970ToDateTime();
+                return number.FromSecondsAfter1970ToDateTimeUtc();
             }
 
             return null;
@@ -74,7 +74,7 @@ namespace Timeenator.Extensions
             var match = Regex.Match(time, $"time[<>]now\\(\\)\\-(\\d+{StringExtensions.TimeExpression})");
             if (match.Success)
             {
-                return DateTime.Now - match.Groups[1].Value.ToTimeSpan();
+                return DateTime.UtcNow - match.Groups[1].Value.ToTimeSpan();
             }
             return null;
         }

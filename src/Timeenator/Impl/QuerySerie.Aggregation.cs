@@ -11,6 +11,7 @@ namespace Timeenator.Impl
 {
     public partial class QuerySerie<T> where T:struct
     {
+        private const int NumberOfExpFactors = 20;
         private static double[] ExponentialFactors;
         private static double ExpSum;
 
@@ -18,10 +19,10 @@ namespace Timeenator.Impl
         {
             var b = Math.Exp(1);
 
-            IList<double> eFactors = new List<double>(10);
-            for (double j = 0; j < 10; j++)
+            IList<double> eFactors = new List<double>(NumberOfExpFactors);
+            for (double j = 0; j < NumberOfExpFactors; j++)
             {
-                eFactors.Add(b / Math.Exp(1 + (j / 5)));
+                eFactors.Add(b / Math.Exp(1 + (j / 7)));
             }
             ExponentialFactors = eFactors.Reverse().Concat(eFactors.Skip(1)).ToArray();
             ExpSum = ExponentialFactors.Sum();
@@ -134,7 +135,6 @@ namespace Timeenator.Impl
         public T? MeanExpWeighted()
         {
             if (!Rows.Any()) return null;
-            double valueSum = 0;
             var rows = Rows;
             DateTime start = DateTime.MinValue;
             DateTime stop = rows.Last().TimeUtc;
@@ -150,7 +150,7 @@ namespace Timeenator.Impl
             }
 
             var diff = stop - start;
-            var timeSpanSubGroup = TimeSpan.FromTicks((diff.Ticks + 20 )/ExponentialFactors.Length);
+            var timeSpanSubGroup = TimeSpan.FromTicks((diff.Ticks + (NumberOfExpFactors * 2) )/ExponentialFactors.Length);
             var newSerie = new QuerySerie<T>(Rows, start, stop) {PreviousRow = PreviousRow, NextRow = NextRow};
             var subGroups = newSerie.Group(g => g.ByTime.Span(timeSpanSubGroup).Aggregate(f => f.MeanByTimeIncludePreviousAndNext())).RemoveNulls();
             Debug.Assert(subGroups.Rows.Count == ExponentialFactors.Length);

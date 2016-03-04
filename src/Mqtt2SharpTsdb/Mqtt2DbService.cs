@@ -12,13 +12,13 @@ namespace Mqtt2SharpTsdb
     public class Mqtt2DbService
     {
         private static readonly ILog Logger = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
-        private MqttClient _client = new MqttClient("10.10.1.77");
+        private MqttClient _client = new MqttClient("localhost");
         private DbClient _dbClient;
         private string _dbName = "Haus";
 
         public async void Init()
         {
-            _dbClient = new DbClient(new Client("10.10.1.77"), _dbName);
+            _dbClient = new DbClient(new Client("localhost"), _dbName);
             await _dbClient.CreateOrAtachDbAsync();
             _client.Connect("Mqtt2SharpTsdb");
             _client.MqttMsgPublishReceived += ClientOnMqttMsgPublishReceived;

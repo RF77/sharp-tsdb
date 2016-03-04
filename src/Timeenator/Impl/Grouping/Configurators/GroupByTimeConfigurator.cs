@@ -91,7 +91,7 @@ namespace Timeenator.Impl.Grouping.Configurators
         {
             if (!Serie.Rows.Any()) return this;
             ISingleDataRow<T> first = Serie.Rows.First();
-            DateTime d = Serie.StartTime ?? first.TimeUtc;
+            DateTime d = Serie.StartTime?.ToUniversalTime() ?? first.TimeUtc;
 
             int startSeconds = d.Second;
             if (60 % seconds == 0)
@@ -100,7 +100,7 @@ namespace Timeenator.Impl.Grouping.Configurators
                 startSeconds = startSeconds - (startSeconds % seconds);
             }
 
-            DateTime currentDate = new DateTime(d.Year, d.Month, d.Day, d.Hour, d.Minute, startSeconds);
+            DateTime currentDate = new DateTime(d.Year, d.Month, d.Day, d.Hour, d.Minute, startSeconds, DateTimeKind.Utc);
 
             return GroupByTime(currentDate, Serie.EndTime, dt => dt + TimeSpan.FromSeconds(seconds));
         }
@@ -109,7 +109,7 @@ namespace Timeenator.Impl.Grouping.Configurators
         {
             if (!Serie.Rows.Any()) return this;
             ISingleDataRow<T> first = Serie.Rows.First();
-            DateTime d = Serie.StartTime ?? first.TimeUtc;
+            DateTime d = Serie.StartTime?.ToUniversalTime() ?? first.TimeUtc;
 
             int startMinute = d.Minute;
             if (60 % minutes == 0)
@@ -118,7 +118,7 @@ namespace Timeenator.Impl.Grouping.Configurators
                 startMinute = startMinute - (startMinute % minutes);
             }
 
-            DateTime currentDate = new DateTime(d.Year, d.Month, d.Day, d.Hour, startMinute, 0);
+            DateTime currentDate = new DateTime(d.Year, d.Month, d.Day, d.Hour, startMinute, 0, DateTimeKind.Utc);
 
             return GroupByTime(currentDate, Serie.EndTime, dt => dt + TimeSpan.FromMinutes(minutes));
         }
@@ -126,7 +126,7 @@ namespace Timeenator.Impl.Grouping.Configurators
         {
             if (!Serie.Rows.Any()) return this;
             ISingleDataRow<T> first = Serie.Rows.First();
-            DateTime d = Serie.StartTime ?? first.TimeUtc;
+            DateTime d = Serie.StartTime?.ToUniversalTime() ?? first.TimeUtc;
 
             int startHour = d.Hour;
             if (24 % hours == 0)
@@ -135,7 +135,7 @@ namespace Timeenator.Impl.Grouping.Configurators
                 startHour = startHour - (startHour % hours);
             }
 
-            DateTime currentDate = new DateTime(d.Year, d.Month, d.Day, startHour, 0, 0);
+            DateTime currentDate = new DateTime(d.Year, d.Month, d.Day, startHour, 0, 0, DateTimeKind.Utc);
 
             return GroupByTime(currentDate, Serie.EndTime, dt => dt + TimeSpan.FromHours(hours));
         }
@@ -143,9 +143,9 @@ namespace Timeenator.Impl.Grouping.Configurators
         {
             if (!Serie.Rows.Any()) return this;
             ISingleDataRow<T> first = Serie.Rows.First();
-            DateTime d = Serie.StartTime ?? first.TimeUtc;
+            DateTime d = Serie.StartTime?.ToUniversalTime().ToLocalTime() ?? first.TimeUtc.ToLocalTime();
 
-            DateTime currentDate = new DateTime(d.Year, d.Month, d.Day, startHour, 0, 0);
+            DateTime currentDate = new DateTime(d.Year, d.Month, d.Day, startHour, 0, 0, DateTimeKind.Local);
 
             return GroupByTime(currentDate, Serie.EndTime, dt => dt + TimeSpan.FromDays(days));
         }
@@ -159,9 +159,9 @@ namespace Timeenator.Impl.Grouping.Configurators
         {
             if (!Serie.Rows.Any()) return this;
             ISingleDataRow<T> first = Serie.Rows.First();
-            DateTime d = Serie.StartTime ?? first.TimeUtc;
+            DateTime d = Serie.StartTime?.ToUniversalTime().ToLocalTime() ?? first.TimeUtc.ToLocalTime();
 
-            DateTime startDate = new DateTime(d.Year, d.Month, d.Day);
+            var startDate = new DateTime(d.Year, d.Month, d.Day, 0, 0, 0, DateTimeKind.Local);
 
             while (startDate.DayOfWeek != startDay)
             {
@@ -174,7 +174,7 @@ namespace Timeenator.Impl.Grouping.Configurators
         {
             if (!Serie.Rows.Any()) return this;
             ISingleDataRow<T> first = Serie.Rows.First();
-            DateTime d = Serie.StartTime ?? first.TimeUtc;
+            DateTime d = Serie.StartTime?.ToUniversalTime().ToLocalTime() ?? first.TimeUtc.ToLocalTime();
 
             int startMonth = d.Month;
             if (12 % months == 0)
@@ -182,32 +182,39 @@ namespace Timeenator.Impl.Grouping.Configurators
                 startMonth = startMonth - (startMonth % months) + 1;
             }
 
-            DateTime currentDate = new DateTime(d.Year, startMonth, 1, 0, 0, 0);
+            DateTime currentDate = new DateTime(d.Year, startMonth, 1, 0, 0, 0, DateTimeKind.Local);
 
-            return GroupByTime(currentDate, Serie.EndTime, dt => 
+            return GroupByTime(currentDate, Serie.EndTime, dt =>
             {
+                dt = dt.ToLocalTime();
                 int year = dt.Year;
                 int month = dt.Month;
                 int newMonth = month + months;
                 year += (newMonth - 1) / 12;
                 month = ((newMonth - 1) % 12) + 1;
-                return new DateTime(year, month, 1);
+                return new DateTime(year, month, 1, 0, 0, 0, DateTimeKind.Local).ToUniversalTime();
             });
         }
         public IGroupByStartEndTimesConfiguratorOptional<T> Years(int years)
         {
             if (!Serie.Rows.Any()) return this;
             ISingleDataRow<T> first = Serie.Rows.First();
-            DateTime d = Serie.StartTime ?? first.TimeUtc;
+            DateTime d = Serie.StartTime?.ToUniversalTime().ToLocalTime() ?? first.TimeUtc.ToLocalTime();
 
-            DateTime currentDate = new DateTime(d.Year, 1, 1);
+            DateTime currentDate = new DateTime(d.Year, 1, 1,0,0,0,DateTimeKind.Local);
 
-            return GroupByTime(currentDate, Serie.EndTime, dt => new DateTime(dt.Year + years, 1, 1));
+            return GroupByTime(currentDate, Serie.EndTime, dt =>
+            {
+                dt = dt.ToLocalTime();
+                return new DateTime(dt.Year + years, 1, 1, 0, 0, 0, DateTimeKind.Local).ToUniversalTime();
+            });
         }
 
         public IGroupByStartEndTimesConfiguratorOptional<T> GroupByTime(DateTime startTime, DateTime? stopTime, Func<DateTime, DateTime> calcNewDateMethod)
-            
         {
+            startTime = startTime.ToUniversalTime();
+            stopTime = stopTime?.ToUniversalTime();
+
             List<StartEndTime> result = new List<StartEndTime>();
             DateTime endTime = calcNewDateMethod(startTime);
 

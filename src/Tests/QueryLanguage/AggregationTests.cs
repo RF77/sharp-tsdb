@@ -26,8 +26,8 @@ namespace Tests.QueryLanguage
             var unitUnderTest50Even = new List<ISingleDataRow<float>>();
             int items = 1000;
             int items50 = 50;
-            var startDate = new DateTime(2010, 1, 1, 13, 27, 14);
-            var startDateEven = new DateTime(2010, 1, 1, 0, 0, 0);
+            var startDate = new DateTime(2010, 1, 1, 13, 27, 14,DateTimeKind.Utc);
+            var startDateEven = new DateTime(2010, 1, 1, 0, 0, 0, DateTimeKind.Utc);
             var current40S = startDate;
             var current40SEven = startDateEven;
 

@@ -44,18 +44,18 @@ namespace Tests.Client
             await _dbClient.Measurement(measName).ClearMeasurementAsync();
             var empty = await _dbClient.QuerySerieAsync<long>(db => db.GetSerie<long>(measName));
 
-            var dateTime = new DateTime(2010, 1, 1, 0, 0, 0);
+            var dateTime = new DateTime(2010, 1, 1, 0, 0, 0, DateTimeKind.Utc);
             var data = new[]
             {
                 new SingleDataRow<long>(dateTime, 5),
-                new SingleDataRow<long>(new DateTime(2010, 1, 1, 0, 0, 20), 77),
+                new SingleDataRow<long>(new DateTime(2010, 1, 1, 0, 0, 20, DateTimeKind.Utc), 77),
                 new SingleDataRow<long>(DateTime.Now, 1977),
             };
             await _dbClient.Measurement(measName).AppendAsync(data, true);
             var queryResult = await _dbClient.QuerySerieAsync<long>(db => db.GetSerie<long>(measName));
             queryResult.Rows[0].TimeUtc.Should().Be(dateTime);
             queryResult.Rows.Count.Should().Be(3);
-            await _dbClient.Measurement(measName).ClearMeasurementAsync(new DateTime(2010, 1, 1, 0, 0, 1));
+            await _dbClient.Measurement(measName).ClearMeasurementAsync(new DateTime(2010, 1, 1, 0, 0, 1, DateTimeKind.Utc));
             var queryResult2 = await _dbClient.QuerySerieAsync<long>(db => db.GetSerie<long>(measName));
             queryResult2.Rows.Count.Should().Be(1);
             await _dbClient.Measurement(measName).ClearMeasurementAsync();
@@ -73,7 +73,7 @@ namespace Tests.Client
         [Test]
         public async Task Helper()
         {
-            //var db = new SharpTsdbClient.Client("10.10.1.77").Db("Haus");
+            //var db = new SharpTsdbClient.Client("localhost").Db("Haus");
             var db = new SharpTsdbClient.Client("localhost").Db("fux");
 
             var result = await db.QueryTableAsync<float>(d => d.GetTable<float>("(?<g>.*).(?<k>Temperatur).*", "time > now() - 1M").Transform(s => s.GroupBy("1d", a => a.Mean())));

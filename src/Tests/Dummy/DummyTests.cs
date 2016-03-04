@@ -185,6 +185,20 @@ namespace Tests.Dummy
         }
 
         [Test]
+        public void ToUtcPerformance()
+        {
+            DateTime now = new DateTime(2010,1,1,0,0,0).ToUniversalTime().ToLocalTime();
+            DateTime newDate = DateTime.MinValue;
+            var sw = Stopwatch.StartNew();
+            for (int i = 0; i < 1000000; i++)
+            {
+                newDate = now.ToLocalTime();
+            }
+            sw.Stop();
+            //Zeit 729ms
+        }
+
+        [Test]
         public void BinaryDateTimePerformance()
         {
             DateTime now = DateTime.Now;
@@ -211,7 +225,7 @@ namespace Tests.Dummy
             for (int i = 0; i < 1000000; i++)
             {
                 nowLong = now.ToMiliSecondsAfter1970();
-                newDate = nowLong.FromMilisecondsAfter1970ToDateTime();
+                newDate = nowLong.FromMilisecondsAfter1970ToDateTimeUtc();
             }
             sw.Stop();
             //newDate.Should().Be(now);
@@ -341,7 +355,10 @@ namespace Tests.Dummy
             var l1 = d.ToFileTimeUtc();
             var l2 = d2.ToFileTimeUtc();
             l1.Should().NotBe(l2);
-
+            var unspecifiedDate = new DateTime(2010, 1, 1);
+            var sourceUtcDate = new DateTime(2010, 1, 1,0,0,0,DateTimeKind.Utc);
+            var utcDate = unspecifiedDate.ToUniversalTime();
+            var utcDate2 = sourceUtcDate.ToUniversalTime();
 
         }
 

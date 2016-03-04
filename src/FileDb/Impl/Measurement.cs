@@ -159,8 +159,8 @@ namespace FileDb.Impl
         {
             return ReaderLock(() =>
             {
-                var start = from ?? DateTime.MinValue;
-                var stop = to ?? DateTime.MaxValue;
+                var start = from?.ToUniversalTime() ?? DateTime.MinValue;
+                var stop = to?.ToUniversalTime() ?? DateTime.MaxValue;
 
                 using (var fs = File.Open(BinaryFilePath, FileMode.Open, FileAccess.Read, FileShare.Read))
                 {

@@ -44,7 +44,7 @@ namespace Tests.QueryLanguage
             Dummy(3);
 
             const int max = 100000;
-            var start = new DateTime(1000, 1, 1);
+            var start = new DateTime(1000, 1, 1,0,0,0, DateTimeKind.Utc);
             var rowsA = new List<ISingleDataRow<int>>();
             var rowsB = new List<ISingleDataRow<int>>();
 
