@@ -25,7 +25,7 @@ namespace Tests.Client
         [SetUp]
         public void Setup()
         {
-            _dbClient = new SharpTsdbClient.Client("localhost").Db("fux");
+            _dbClient = new SharpTsdbClient.Client("10.10.1.77").Db("fux");
         }
 
         [TearDown]
@@ -90,5 +90,26 @@ namespace Tests.Client
             queryResult2.Rows.Count.Should().Be(1);
             await _dbClient.Measurement(measName).ClearMeasurementAsync();
         }
+
+        [Test]
+        public void TypeToStringTest()
+        {
+            var type = typeof (float);
+            var name = type.Name;
+
+        }
+
+
+        [Test]
+        public async Task Helper()
+        {
+            //var db = new SharpTsdbClient.Client("10.10.1.77").Db("Haus");
+            var db = new SharpTsdbClient.Client("10.10.1.77").Db("fux");
+
+            var result = await db.QueryTableAsync<float>(d => d.GetTable<float>("(?<g>.*).(?<k>Temperatur).*", "time > now() - 1M").Transform(s => s.GroupBy("1d", a => a.Mean())));
+
+        }
+
+
     }
 }
