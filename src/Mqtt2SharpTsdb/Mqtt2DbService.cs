@@ -1,4 +1,15 @@
-﻿using System;
+﻿// /*******************************************************************************
+//  * Copyright (c) 2016 by RF77 (https://github.com/RF77)
+//  * All rights reserved. This program and the accompanying materials
+//  * are made available under the terms of the Eclipse Public License v1.0
+//  * which accompanies this distribution, and is available at
+//  * http://www.eclipse.org/legal/epl-v10.html
+//  *
+//  * Contributors:
+//  *    RF77 - initial API and implementation and/or initial documentation
+//  *******************************************************************************/ 
+
+using System;
 using System.Reflection;
 using System.Text;
 using log4net;
@@ -12,9 +23,9 @@ namespace Mqtt2SharpTsdb
     public class Mqtt2DbService
     {
         private static readonly ILog Logger = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
-        private MqttClient _client = new MqttClient("localhost");
+        private readonly MqttClient _client = new MqttClient("localhost");
+        private readonly string _dbName = "Haus";
         private DbClient _dbClient;
-        private string _dbName = "Haus";
 
         public async void Init()
         {
@@ -47,12 +58,12 @@ namespace Mqtt2SharpTsdb
                 }
 
                 await _dbClient.Measurement(mqttMsgPublishEventArgs.Topic.Replace("/", "."))
-                    .AppendAsync(new[] { new SingleDataRow<float>(DateTime.Now, val) }, false);
-
+                    .AppendAsync(new[] {new SingleDataRow<float>(DateTime.Now, val)}, false);
             }
             catch (Exception ex)
             {
-                Logger.Warn($"Excpetion in topic {mqttMsgPublishEventArgs.Topic}, content: {message}, reason: {ex.Message}");
+                Logger.Warn(
+                    $"Excpetion in topic {mqttMsgPublishEventArgs.Topic}, content: {message}, reason: {ex.Message}");
             }
         }
 

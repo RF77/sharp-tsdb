@@ -1,3 +1,14 @@
+// /*******************************************************************************
+//  * Copyright (c) 2016 by RF77 (https://github.com/RF77)
+//  * All rights reserved. This program and the accompanying materials
+//  * are made available under the terms of the Eclipse Public License v1.0
+//  * which accompanies this distribution, and is available at
+//  * http://www.eclipse.org/legal/epl-v10.html
+//  *
+//  * Contributors:
+//  *    RF77 - initial API and implementation and/or initial documentation
+//  *******************************************************************************/ 
+
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,9 +20,6 @@ namespace Timeenator.Impl
 {
     public class NullableQueryTable<T> : QueryTableBase<T>, INullableQueryTable<T> where T : struct
     {
-        public new IDictionary<string, INullableQuerySerie<T>> Series { get; } = new Dictionary<string, INullableQuerySerie<T>>();
-        protected override IEnumerable<IObjectQuerySerie> GetSeries() => Series.Values;
-
         public NullableQueryTable()
         {
         }
@@ -24,13 +32,15 @@ namespace Timeenator.Impl
             }
         }
 
+        public new IDictionary<string, INullableQuerySerie<T>> Series { get; } =
+            new Dictionary<string, INullableQuerySerie<T>>();
+
         public override IObjectQuerySerieBase TryGetSerie(string name)
         {
-            return ((INullableQueryTable<T>)this).TryGetSerie(name);
+            return ((INullableQueryTable<T>) this).TryGetSerie(name);
         }
 
         IEnumerable<INullableQuerySerie<T>> INullableQueryTable<T>.Series => Series.Values;
-
         IEnumerable<IObjectQuerySerie> IObjectQueryTable.Series => Series.Values;
 
         public INullableQueryTable<T> AddSerie(INullableQuerySerie<T> serie)
@@ -61,10 +71,9 @@ namespace Timeenator.Impl
                 if (serie.Key == name) return serie;
                 if (serie.Name == name) return serie;
             }
-            
+
             return null;
         }
-
 
         /// <summary>
         ///     Creates a new table from a time aligned source table
@@ -151,7 +160,7 @@ namespace Timeenator.Impl
         ///     zipped serie has {3,4,5,8}
         /// </param>
         /// <returns>Source table with added serie</returns>
-        public INullableQueryTable<T> ZipAndAdd(string newSerieKeyOrName,Func<object, T?> zipFunc)
+        public INullableQueryTable<T> ZipAndAdd(string newSerieKeyOrName, Func<object, T?> zipFunc)
         {
             return MergeTable(ZipToNew(newSerieKeyOrName, zipFunc));
         }
@@ -162,5 +171,7 @@ namespace Timeenator.Impl
             transformAction(this, table);
             return table;
         }
+
+        protected override IEnumerable<IObjectQuerySerie> GetSeries() => Series.Values;
     }
 }

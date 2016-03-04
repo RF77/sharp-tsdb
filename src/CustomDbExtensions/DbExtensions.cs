@@ -1,3 +1,14 @@
+// /*******************************************************************************
+//  * Copyright (c) 2016 by RF77 (https://github.com/RF77)
+//  * All rights reserved. This program and the accompanying materials
+//  * are made available under the terms of the Eclipse Public License v1.0
+//  * which accompanies this distribution, and is available at
+//  * http://www.eclipse.org/legal/epl-v10.html
+//  *
+//  * Contributors:
+//  *    RF77 - initial API and implementation and/or initial documentation
+//  *******************************************************************************/ 
+
 using System;
 using DbInterfaces.Interfaces;
 using Timeenator.Impl;
@@ -187,7 +198,8 @@ namespace CustomDbExtensions
             return table;
         }
 
-        public static INullableQueryTable<float> MovingAverage(this IDb db, string measurementName, string time, string interval, int windowFactor)
+        public static INullableQueryTable<float> MovingAverage(this IDb db, string measurementName, string time,
+            string interval, int windowFactor)
         {
             return db.GetTable<float>(measurementName, time)
                 .Transform(
@@ -198,7 +210,9 @@ namespace CustomDbExtensions
                                     .ExpandTimeRangeByFactor(windowFactor).TimeStampIsMiddle()
                                     .Aggregate(a => a.MeanByTime())));
         }
-        public static INullableQueryTable<float> ExpMovingAverage(this IDb db, string measurementName, string time, string interval, int windowFactor)
+
+        public static INullableQueryTable<float> ExpMovingAverage(this IDb db, string measurementName, string time,
+            string interval, int windowFactor)
         {
             return db.GetTable<float>(measurementName, time)
                 .Transform(
@@ -210,7 +224,8 @@ namespace CustomDbExtensions
                                     .Aggregate(a => a.MeanExpWeighted())));
         }
 
-        public static INullableQueryTable<float> MovingTest(this IDb db, string measurementName, string time, string interval, int windowFactor)
+        public static INullableQueryTable<float> MovingTest(this IDb db, string measurementName, string time,
+            string interval, int windowFactor)
         {
             return db.GetTable<float>(measurementName, time)
                 .Transform(
@@ -220,23 +235,24 @@ namespace CustomDbExtensions
                                 g.ByTime.Expression(interval, "1m")
                                     .ExpandTimeRange(TimeSpan.FromMinutes(windowFactor)).TimeStampIsMiddle()
                                     .Aggregate(a => a.MeanExpWeighted())).AppendName(".Exp")).MergeTable(
-                db.GetTable<float>(measurementName, time)
-                .Transform(
-                    i =>
-                        i.Group(
-                            g =>
-                                g.ByTime.Expression(interval, "1m")
-                                    .ExpandTimeRangeByFactor(windowFactor).TimeStampIsMiddle()
-                                    .Aggregate(a => a.MeanByTime())).AppendName(".Mean"))
+                                        db.GetTable<float>(measurementName, time)
+                                            .Transform(
+                                                i =>
+                                                    i.Group(
+                                                        g =>
+                                                            g.ByTime.Expression(interval, "1m")
+                                                                .ExpandTimeRangeByFactor(windowFactor)
+                                                                .TimeStampIsMiddle()
+                                                                .Aggregate(a => a.MeanByTime())).AppendName(".Mean"))
                 ).MergeTable(
-                db.GetTable<float>(measurementName, time)
-                .Transform(
-                    i =>
-                        i.Group(
-                            g =>
-                                g.ByTime.Expression(interval, "1m")
-                                    .TimeStampIsMiddle()
-                                    .Aggregate(a => a.MeanByTime())))
+                    db.GetTable<float>(measurementName, time)
+                        .Transform(
+                            i =>
+                                i.Group(
+                                    g =>
+                                        g.ByTime.Expression(interval, "1m")
+                                            .TimeStampIsMiddle()
+                                            .Aggregate(a => a.MeanByTime())))
                 );
         }
     }

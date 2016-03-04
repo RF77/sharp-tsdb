@@ -1,10 +1,24 @@
-﻿using System;
+﻿// /*******************************************************************************
+//  * Copyright (c) 2016 by RF77 (https://github.com/RF77)
+//  * All rights reserved. This program and the accompanying materials
+//  * are made available under the terms of the Eclipse Public License v1.0
+//  * which accompanies this distribution, and is available at
+//  * http://www.eclipse.org/legal/epl-v10.html
+//  *
+//  * Contributors:
+//  *    RF77 - initial API and implementation and/or initial documentation
+//  *******************************************************************************/ 
+
+using System;
 using Timeenator.Interfaces;
 
 namespace Timeenator.Impl
 {
     public class DataRow : IDataRow, IEquatable<DataRow>
     {
+        public DateTime Key { get; set; }
+        public object Value { get; set; }
+
         public bool Equals(DataRow other)
         {
             if (ReferenceEquals(null, other)) return false;
@@ -16,7 +30,7 @@ namespace Timeenator.Impl
         {
             if (ReferenceEquals(null, obj)) return false;
             if (ReferenceEquals(this, obj)) return true;
-            if (obj.GetType() != this.GetType()) return false;
+            if (obj.GetType() != GetType()) return false;
             return Equals((DataRow) obj);
         }
 
@@ -37,8 +51,5 @@ namespace Timeenator.Impl
         {
             return !Equals(left, right);
         }
-
-        public DateTime Key { get; set; }
-        public object Value { get; set; }
     }
 }

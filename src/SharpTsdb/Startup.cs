@@ -1,6 +1,16 @@
-﻿using System.Net.Http.Headers;
+﻿// /*******************************************************************************
+//  * Copyright (c) 2016 by RF77 (https://github.com/RF77)
+//  * All rights reserved. This program and the accompanying materials
+//  * are made available under the terms of the Eclipse Public License v1.0
+//  * which accompanies this distribution, and is available at
+//  * http://www.eclipse.org/legal/epl-v10.html
+//  *
+//  * Contributors:
+//  *    RF77 - initial API and implementation and/or initial documentation
+//  *******************************************************************************/ 
+
+using System.Net.Http.Headers;
 using System.Web.Http;
-using System.Web.Http.Filters;
 using Owin;
 
 namespace SharpTsdb
@@ -12,7 +22,7 @@ namespace SharpTsdb
     //        actionExecutedContext.Response.Headers.Add("X-Influxdb-Version", "0.9.2");
     //    }
     //}
-    class Startup
+    internal class Startup
     {
         //  Hack from http://stackoverflow.com/a/17227764/19020 to load controllers in 
         //  another assembly.  Another way to do this is to create a custom assembly resolver
@@ -29,18 +39,14 @@ namespace SharpTsdb
             //  http://www.asp.net/web-api/overview/web-api-routing-and-actions/attribute-routing-in-web-api-2
             config.MapHttpAttributeRoutes();
 
-            config.Routes.MapHttpRoute(
-                name: "DefaultApi",
-                routeTemplate: "api/{controller}/{id}",
-                defaults: new { id = RouteParameter.Optional }
+            config.Routes.MapHttpRoute("DefaultApi", "api/{controller}/{id}", new {id = RouteParameter.Optional}
                 );
 
             config.Formatters.JsonFormatter.SupportedMediaTypes.Add(new MediaTypeHeaderValue("text/html"));
             //config.Filters.Add(new AddCustomHeaderFilter());
-            
+
 
             appBuilder.UseWebApi(config);
         }
-
     }
 }

@@ -1,3 +1,14 @@
+// /*******************************************************************************
+//  * Copyright (c) 2016 by RF77 (https://github.com/RF77)
+//  * All rights reserved. This program and the accompanying materials
+//  * are made available under the terms of the Eclipse Public License v1.0
+//  * which accompanies this distribution, and is available at
+//  * http://www.eclipse.org/legal/epl-v10.html
+//  *
+//  * Contributors:
+//  *    RF77 - initial API and implementation and/or initial documentation
+//  *******************************************************************************/ 
+
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -111,7 +122,8 @@ namespace Timeenator.Impl.Grouping.Configurators
 
         public virtual IReadOnlyList<StartEndTime> CreateGroupTimes()
         {
-            GroupTimes = (GroupTimes?.Select(i => CreateGroupTime(i.Start, i.End)) ?? Enumerable.Empty<StartEndTime>()).ToList();
+            GroupTimes =
+                (GroupTimes?.Select(i => CreateGroupTime(i.Start, i.End)) ?? Enumerable.Empty<StartEndTime>()).ToList();
             return GroupTimes;
         }
 
@@ -127,10 +139,10 @@ namespace Timeenator.Impl.Grouping.Configurators
             var result = new List<ISingleDataRow<T?>>();
             int? nextTimeRangeIndex = null;
 
-            for(int groupIndex = 0; groupIndex < GroupTimes.Count; groupIndex++)
+            for (int groupIndex = 0; groupIndex < GroupTimes.Count; groupIndex++)
             {
                 StartEndTime groupTime = GroupTimes[groupIndex];
-                StartEndTime nextGroupTime = (groupIndex + 1 < GroupTimes.Count)? GroupTimes[groupIndex+1]:null;
+                StartEndTime nextGroupTime = (groupIndex + 1 < GroupTimes.Count) ? GroupTimes[groupIndex + 1] : null;
                 var group = new List<ISingleDataRow<T>>();
                 while (index < max && rows[index].TimeUtc < groupTime.Start)
                 {
@@ -198,6 +210,5 @@ namespace Timeenator.Impl.Grouping.Configurators
             }
             return new StartEndTime(startTime, endTime);
         }
-
     }
 }

@@ -1,3 +1,14 @@
+// /*******************************************************************************
+//  * Copyright (c) 2016 by RF77 (https://github.com/RF77)
+//  * All rights reserved. This program and the accompanying materials
+//  * are made available under the terms of the Eclipse Public License v1.0
+//  * which accompanies this distribution, and is available at
+//  * http://www.eclipse.org/legal/epl-v10.html
+//  *
+//  * Contributors:
+//  *    RF77 - initial API and implementation and/or initial documentation
+//  *******************************************************************************/ 
+
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -8,8 +19,6 @@ using Timeenator.Extensions.Converting;
 using Timeenator.Extensions.Grouping;
 using Timeenator.Extensions.Scientific;
 using Timeenator.Impl;
-using Timeenator.Impl.Grouping;
-using Timeenator.Impl.Scientific;
 using Timeenator.Interfaces;
 
 namespace Tests.QueryLanguage
@@ -44,7 +53,7 @@ namespace Tests.QueryLanguage
             Dummy(3);
 
             const int max = 100000;
-            var start = new DateTime(1000, 1, 1,0,0,0, DateTimeKind.Utc);
+            var start = new DateTime(1000, 1, 1, 0, 0, 0, DateTimeKind.Utc);
             var rowsA = new List<ISingleDataRow<int>>();
             var rowsB = new List<ISingleDataRow<int>>();
 
@@ -66,7 +75,8 @@ namespace Tests.QueryLanguage
             //sw.Stop();
 
             var sw2 = Stopwatch.StartNew();
-            var result2 = table.Transform(i => i.GroupByMinutes(1, t => t.First())).ZipToNew("DiffTable", t => t.A - t.B);
+            var result2 = table.Transform(i => i.GroupByMinutes(1, t => t.First()))
+                .ZipToNew("DiffTable", t => t.A - t.B);
             sw2.Stop();
         }
 
@@ -92,16 +102,6 @@ namespace Tests.QueryLanguage
         }
 
         [Test]
-        public void MultipleTableGroups()
-        {
-            var db = new DbManagement().GetDb("fux");
-            var queryTable = db.GetTable<float>("Innen.(?<g>.*).(?<k>Temperatur|Feuchtigkeit)$", "time > now() - 1M");
-            var result = queryTable
-                .Transform(i => i.GroupByHours(1, o => o.Mean()))
-                .ZipToNew("Sum", t => t.Temperatur + t.Feuchtigkeit);
-        }
-
-        [Test]
         public void MultipleAbsoluteHumidityTableGroups()
         {
             var db = new DbManagement().GetDb("fux");
@@ -109,6 +109,16 @@ namespace Tests.QueryLanguage
                 db.GetTable<float>("Innen.(?<g>.*).(?<k>Temperatur|Feuchtigkeit)$", "time > now() - 1M")
                     .Transform(g => g.Group(i => i.ByTime.Hours(1).ExpandTimeRangeByFactor(7).Aggregate(o => o.Mean())))
                     .GroupSeries().Transform(t => t.AbsoluteHumidity("Temperatur", "Feuchtigkeit")).MergeTables();
+        }
+
+        [Test]
+        public void MultipleTableGroups()
+        {
+            var db = new DbManagement().GetDb("fux");
+            var queryTable = db.GetTable<float>("Innen.(?<g>.*).(?<k>Temperatur|Feuchtigkeit)$", "time > now() - 1M");
+            var result = queryTable
+                .Transform(i => i.GroupByHours(1, o => o.Mean()))
+                .ZipToNew("Sum", t => t.Temperatur + t.Feuchtigkeit);
         }
     }
 }

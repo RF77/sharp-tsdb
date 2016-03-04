@@ -1,4 +1,16 @@
-﻿using System;
+﻿// /*******************************************************************************
+//  * Copyright (c) 2016 by RF77 (https://github.com/RF77)
+//  * All rights reserved. This program and the accompanying materials
+//  * are made available under the terms of the Eclipse Public License v1.0
+//  * which accompanies this distribution, and is available at
+//  * http://www.eclipse.org/legal/epl-v10.html
+//  *
+//  * Contributors:
+//  *    RF77 - initial API and implementation and/or initial documentation
+//  *******************************************************************************/ 
+
+using System;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Runtime.Serialization.Formatters;
@@ -51,9 +63,10 @@ namespace Infrastructure
 
         private static string SerializationFilePath(string fileName)
         {
-            var assemblyName = System.Diagnostics.Process.GetCurrentProcess().MainModule.FileName;
+            var assemblyName = Process.GetCurrentProcess().MainModule.FileName;
             assemblyName = new FileInfo(assemblyName).Name.Split('.').First();
-            var filePath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), assemblyName,
+            var filePath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
+                assemblyName,
                 fileName);
             return filePath;
         }

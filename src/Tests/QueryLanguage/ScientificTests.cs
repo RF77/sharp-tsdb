@@ -1,40 +1,32 @@
-using System.Linq;
-using DbInterfaces.Interfaces;
+// /*******************************************************************************
+//  * Copyright (c) 2016 by RF77 (https://github.com/RF77)
+//  * All rights reserved. This program and the accompanying materials
+//  * are made available under the terms of the Eclipse Public License v1.0
+//  * which accompanies this distribution, and is available at
+//  * http://www.eclipse.org/legal/epl-v10.html
+//  *
+//  * Contributors:
+//  *    RF77 - initial API and implementation and/or initial documentation
+//  *******************************************************************************/ 
+
 using FileDb.Impl;
 using NUnit.Framework;
-using Timeenator.Extensions.Converting;
 using Timeenator.Extensions.Grouping;
 using Timeenator.Extensions.Scientific;
-using Timeenator.Impl;
-using Timeenator.Impl.Grouping;
-using Timeenator.Impl.Scientific;
-using Timeenator.Interfaces;
 
 namespace Tests.QueryLanguage
 {
     [TestFixture]
     public class ScientificTests
     {
-
         [SetUp]
         public void Setup()
         {
-           
         }
 
         [TearDown]
         public void TearDown()
         {
-        }
-
-        [Test]
-        public void DewPointTest()
-        {
-            var db = new DbManagement().GetDb("fux");
-            var queryTable = db.GetTable<float>("Aussen.Wetterstation.(?<k>.*?)$", "time > now() - 1y");
-            var result = queryTable
-                .Transform(i => i.GroupByHours( 1, o => o.Mean()))
-                .DewPoint("Temperatur", "Feuchtigkeit", "Taupunkt");
         }
 
         [Test]
@@ -54,6 +46,16 @@ namespace Tests.QueryLanguage
         }
 
         [Test]
+        public void DewPointTest()
+        {
+            var db = new DbManagement().GetDb("fux");
+            var queryTable = db.GetTable<float>("Aussen.Wetterstation.(?<k>.*?)$", "time > now() - 1y");
+            var result = queryTable
+                .Transform(i => i.GroupByHours(1, o => o.Mean()))
+                .DewPoint("Temperatur", "Feuchtigkeit", "Taupunkt");
+        }
+
+        [Test]
         public void MovingAverage()
         {
             var db = new DbManagement().GetDb("fux");
@@ -67,6 +69,5 @@ namespace Tests.QueryLanguage
                             .ExpandTimeRangeByFactor(20)
                             .Aggregate(a => a.MeanByTime()));
         }
-
     }
 }

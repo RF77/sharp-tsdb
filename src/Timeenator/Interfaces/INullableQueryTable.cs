@@ -1,13 +1,24 @@
-﻿using System;
+﻿// /*******************************************************************************
+//  * Copyright (c) 2016 by RF77 (https://github.com/RF77)
+//  * All rights reserved. This program and the accompanying materials
+//  * are made available under the terms of the Eclipse Public License v1.0
+//  * which accompanies this distribution, and is available at
+//  * http://www.eclipse.org/legal/epl-v10.html
+//  *
+//  * Contributors:
+//  *    RF77 - initial API and implementation and/or initial documentation
+//  *******************************************************************************/ 
+
+using System;
 using System.Collections.Generic;
 
 namespace Timeenator.Interfaces
 {
     public interface INullableQueryTable<T> : IQueryTableBase<T> where T : struct
     {
-        new IEnumerable<INullableQuerySerie<T>> Series { get; }         new INullableQuerySerie<T> TryGetSerie(string name);
+        new IEnumerable<INullableQuerySerie<T>> Series { get; }
+        new INullableQuerySerie<T> TryGetSerie(string name);
         INullableQueryTable<T> AddSerie(INullableQuerySerie<T> serie);
-
         INullableQueryTable<T> RemoveSerie(string name);
         INullableQueryTable<T> MergeTable(INullableQueryTable<T> otherTable);
 
@@ -45,7 +56,7 @@ namespace Timeenator.Interfaces
         ///     zipped serie has {3,4,5,8}
         /// </param>
         /// <returns>Source table with added serie</returns>
-        INullableQueryTable<T> ZipAndAdd(string newSerieKeyOrName,Func<dynamic, T?> zipFunc);
+        INullableQueryTable<T> ZipAndAdd(string newSerieKeyOrName, Func<dynamic, T?> zipFunc);
 
         INullableQueryTable<T> ToNewTable(Action<INullableQueryTable<T>, INullableQueryTable<T>> transformAction);
     }

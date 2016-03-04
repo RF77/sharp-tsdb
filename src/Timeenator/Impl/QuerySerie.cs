@@ -1,4 +1,15 @@
-﻿using System;
+﻿// /*******************************************************************************
+//  * Copyright (c) 2016 by RF77 (https://github.com/RF77)
+//  * All rights reserved. This program and the accompanying materials
+//  * are made available under the terms of the Eclipse Public License v1.0
+//  * which accompanies this distribution, and is available at
+//  * http://www.eclipse.org/legal/epl-v10.html
+//  *
+//  * Contributors:
+//  *    RF77 - initial API and implementation and/or initial documentation
+//  *******************************************************************************/ 
+
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
@@ -12,21 +23,8 @@ namespace Timeenator.Impl
     [DebuggerDisplay("{FullName} ({Rows.Count})")]
     public partial class QuerySerie<T> : QuerySerieBase<T>, IQuerySerie<T> where T : struct
     {
-        public IReadOnlyList<ISingleDataRow<T>> Rows { get; }
-
-        public override object this[int index]
-        {
-            get { return Rows[index].Value; }
-            set
-            {
-                Rows[index].Value = (T)Convert.ChangeType(value, typeof(T));
-            }
-        }
-
-        public IEnumerable<T> Values => Rows.Select(i => i.Value); 
-
         public QuerySerie(IReadOnlyList<ISingleDataRow<T>> rows, DateTime? startTime, DateTime? endTime)
-            :base(startTime, endTime)
+            : base(startTime, endTime)
 
         {
             Rows = rows;
@@ -37,8 +35,16 @@ namespace Timeenator.Impl
             Rows = rows;
         }
 
-        IReadOnlyList<IObjectSingleDataRow> IObjectQuerySerie.Rows => Rows;
+        public IReadOnlyList<ISingleDataRow<T>> Rows { get; }
 
+        public override object this[int index]
+        {
+            get { return Rows[index].Value; }
+            set { Rows[index].Value = (T) Convert.ChangeType(value, typeof (T)); }
+        }
+
+        public IEnumerable<T> Values => Rows.Select(i => i.Value);
+        IReadOnlyList<IObjectSingleDataRow> IObjectQuerySerie.Rows => Rows;
 
         public IQuerySerie<T> IncludeLastRow()
         {
@@ -87,7 +93,7 @@ namespace Timeenator.Impl
         }
 
         /// <summary>
-        /// Normalize a saw tooth like series due to overflows or resets
+        ///     Normalize a saw tooth like series due to overflows or resets
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <param name="resetValue">let it null to take the first value after the overflow, otherwise set the value explicitly</param>
@@ -112,7 +118,6 @@ namespace Timeenator.Impl
                         {
                             offset += previousValue;
                         }
-
                     }
                     newRows.Add(new SingleDataRow<T>(row.TimeUtc, (rowValue + offset).ToType<T>()));
                     previousValue = rowValue;
@@ -162,7 +167,8 @@ namespace Timeenator.Impl
             return groupConfigurator(new GroupSelector<T>(this)).ExecuteGrouping();
         }
 
-        public IReadOnlyList<StartEndTime> TimeRanges(Func<IGroupSelector<T>, IGroupByStartEndTimesConfiguratorOptional<T>> groupConfigurator)
+        public IReadOnlyList<StartEndTime> TimeRanges(
+            Func<IGroupSelector<T>, IGroupByStartEndTimesConfiguratorOptional<T>> groupConfigurator)
         {
             var groupTimesCreator = groupConfigurator(new GroupSelector<T>(this)) as IGroupTimesCreator;
 

@@ -1,9 +1,19 @@
-﻿using System.Collections.Generic;
+﻿// /*******************************************************************************
+//  * Copyright (c) 2016 by RF77 (https://github.com/RF77)
+//  * All rights reserved. This program and the accompanying materials
+//  * are made available under the terms of the Eclipse Public License v1.0
+//  * which accompanies this distribution, and is available at
+//  * http://www.eclipse.org/legal/epl-v10.html
+//  *
+//  * Contributors:
+//  *    RF77 - initial API and implementation and/or initial documentation
+//  *******************************************************************************/ 
+
+using System.Collections.Generic;
 using System.Linq;
 using DbInterfaces.Interfaces;
 using FileDb.Scripting;
 using Timeenator.Extensions;
-using Timeenator.Impl;
 using Timeenator.Interfaces;
 
 namespace GrafanaAdapter.Queries
@@ -18,19 +28,17 @@ namespace GrafanaAdapter.Queries
 
             if (query.ToLower() == "show measurements")
             {
-
                 serie.name = "measurements";
                 serie.columns.Add("name");
 
 
                 var myDb = dbm.GetDb(db);
-                serie.values.AddRange(myDb.GetMeasurementNames().Select(i => new List<object>() {i}));
+                serie.values.AddRange(myDb.GetMeasurementNames().Select(i => new List<object> {i}));
 
                 result.series.Add(serie);
 
                 root.results.Add(result);
                 return root;
-
             }
             var dbInstance = dbm.GetDb(db);
             var scriptingEngine = new ScriptingEngine(dbInstance, query);
@@ -58,7 +66,8 @@ namespace GrafanaAdapter.Queries
             root.results.Add(result);
         }
 
-        private static void CreateSerieResult(QuerySerie serie, IObjectQuerySerie res, QueryResult result, QueryRoot root)
+        private static void CreateSerieResult(QuerySerie serie, IObjectQuerySerie res, QueryResult result,
+            QueryRoot root)
         {
             CreateSingleResult(serie, res, result);
 
@@ -74,7 +83,9 @@ namespace GrafanaAdapter.Queries
             serie.values.AddRange(res.Rows.Select(i => new List<object> {i.TimeUtc.ToMiliSecondsAfter1970Utc(), i.Value}));
             if (res.LastRow != null)
             {
-                serie.values.AddRange(res.Rows.Select(i => new List<object> { res.LastRow.TimeUtc.ToMiliSecondsAfter1970Utc(), res.LastRow.Value }));
+                serie.values.AddRange(
+                    res.Rows.Select(
+                        i => new List<object> {res.LastRow.TimeUtc.ToMiliSecondsAfter1970Utc(), res.LastRow.Value}));
             }
 
             result.series.Add(serie);

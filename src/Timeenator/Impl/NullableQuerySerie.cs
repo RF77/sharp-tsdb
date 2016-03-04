@@ -1,16 +1,44 @@
+// /*******************************************************************************
+//  * Copyright (c) 2016 by RF77 (https://github.com/RF77)
+//  * All rights reserved. This program and the accompanying materials
+//  * are made available under the terms of the Eclipse Public License v1.0
+//  * which accompanies this distribution, and is available at
+//  * http://www.eclipse.org/legal/epl-v10.html
+//  *
+//  * Contributors:
+//  *    RF77 - initial API and implementation and/or initial documentation
+//  *******************************************************************************/ 
+
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
-using Timeenator.Extensions.Converting;
 using Timeenator.Impl.Grouping;
 using Timeenator.Interfaces;
 
 namespace Timeenator.Impl
 {
-    [DebuggerDisplay("{FullName} ({Rows.Count})")] 
+    [DebuggerDisplay("{FullName} ({Rows.Count})")]
     public class NullableQuerySerie<T> : QuerySerieBase<T>, INullableQuerySerie<T> where T : struct
     {
+        public NullableQuerySerie(IReadOnlyList<ISingleDataRow<T?>> rows, DateTime? startTime, DateTime? endTime)
+            : base(startTime, endTime)
+
+        {
+            Rows = rows;
+        }
+
+        public NullableQuerySerie(IReadOnlyList<ISingleDataRow<T?>> result, IQuerySerie<T> olddata) : base(olddata)
+        {
+            Rows = result;
+        }
+
+        public NullableQuerySerie(IReadOnlyList<ISingleDataRow<T?>> result, INullableQuerySerie<T> olddata)
+            : base(olddata)
+        {
+            Rows = result;
+        }
+
         public IReadOnlyList<ISingleDataRow<T?>> Rows { get; }
 
         public override object this[int index]
@@ -24,7 +52,7 @@ namespace Timeenator.Impl
                 }
                 else
                 {
-                    Rows[index].Value =  (T)Convert.ChangeType(value, typeof(T));
+                    Rows[index].Value = (T) Convert.ChangeType(value, typeof (T));
                 }
             }
         }
@@ -35,38 +63,26 @@ namespace Timeenator.Impl
             return serie;
         }
 
-        public NullableQuerySerie(IReadOnlyList<ISingleDataRow<T?>> rows, DateTime? startTime, DateTime? endTime)
-            : base(startTime, endTime)
-
-        {
-            Rows = rows;
-        }
-
-        public NullableQuerySerie(IReadOnlyList<ISingleDataRow<T?>> result, IQuerySerie<T> olddata) : base(olddata)
-        {
-            Rows = result;
-        }
-
-        public NullableQuerySerie(IReadOnlyList<ISingleDataRow<T?>> result, INullableQuerySerie<T> olddata) : base(olddata)
-        {
-            Rows = result;
-        }
-
         IReadOnlyList<IObjectSingleDataRow> IObjectQuerySerie.Rows => Rows;
 
-
         #region methods
-        public INullableQuerySerie<T> Zip(INullableQuerySerie<T> secondQuery, string resultQueryName, Func<T?, T?, T?> transformAction)
+
+        public INullableQuerySerie<T> Zip(INullableQuerySerie<T> secondQuery, string resultQueryName,
+            Func<T?, T?, T?> transformAction)
         {
-            if (Rows.Count != secondQuery.Rows.Count) throw new ArgumentOutOfRangeException(nameof(secondQuery), "Zip with different length of row not possible");
+            if (Rows.Count != secondQuery.Rows.Count)
+                throw new ArgumentOutOfRangeException(nameof(secondQuery),
+                    "Zip with different length of row not possible");
             var resultRows = new List<ISingleDataRow<T?>>(secondQuery.Rows.Count);
 
             var result = new NullableQuerySerie<T>(resultRows, this).Alias(resultQueryName);
             for (int i = 0; i < Rows.Count; i++)
             {
-                if (Rows[i].TimeUtc != secondQuery.Rows[i].TimeUtc) throw new ArgumentOutOfRangeException(nameof(secondQuery), "Zip with not aligned times");
+                if (Rows[i].TimeUtc != secondQuery.Rows[i].TimeUtc)
+                    throw new ArgumentOutOfRangeException(nameof(secondQuery), "Zip with not aligned times");
 
-                resultRows.Add(new SingleDataRow<T?>(Rows[i].TimeUtc, transformAction(Rows[i].Value, secondQuery.Rows[i].Value)));
+                resultRows.Add(new SingleDataRow<T?>(Rows[i].TimeUtc,
+                    transformAction(Rows[i].Value, secondQuery.Rows[i].Value)));
             }
             return result;
         }
@@ -119,7 +135,11 @@ namespace Timeenator.Impl
 
         public IQuerySerie<T> RemoveNulls()
         {
-            return new QuerySerie<T>(Rows.Where(i => i.Value != null).Select(i => new SingleDataRow<T>(i.TimeUtc, i.Value.Value)).ToList(), this);
+            return
+                new QuerySerie<T>(
+                    Rows.Where(i => i.Value != null)
+                        .Select(i => new SingleDataRow<T>(i.TimeUtc, i.Value.Value))
+                        .ToList(), this);
         }
 
         public INullableQuerySerie<T> Fill(ValueForNull fillValue)
@@ -127,46 +147,44 @@ namespace Timeenator.Impl
             switch (fillValue)
             {
                 case ValueForNull.Previous:
+                {
+                    T? previous = PreviousRow?.Value;
+                    foreach (var row in Rows)
                     {
-                        T? previous = PreviousRow?.Value;
-                        foreach (var row in Rows)
+                        if (row.Value == null)
                         {
-                            if (row.Value == null)
-                            {
-                                row.Value = previous;
-                            }
-                            else
-                            {
-                                previous = row.Value;
-                            }
+                            row.Value = previous;
+                        }
+                        else
+                        {
+                            previous = row.Value;
                         }
                     }
+                }
                     break;
                 case ValueForNull.Next:
+                {
+                    T? next = NextRow?.Value;
+                    var rows = Rows;
+                    for (int i = rows.Count - 1; i >= 0; i--)
                     {
-
-                        T? next = NextRow?.Value;
-                        var rows = Rows;
-                        for (int i = rows.Count - 1; i >= 0; i--)
+                        var item = rows[i];
+                        if (item.Value == null)
                         {
-                            var item = rows[i];
-                            if (item.Value == null)
-                            {
-                                item.Value = next;
-                            }
-                            else
-                            {
-                                next = item.Value;
-                            }
+                            item.Value = next;
+                        }
+                        else
+                        {
+                            next = item.Value;
                         }
                     }
+                }
                     break;
                 default:
                     throw new ArgumentOutOfRangeException(nameof(fillValue), fillValue, null);
             }
             return this;
         }
-
 
         #endregion
     }

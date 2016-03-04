@@ -1,5 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
+﻿// /*******************************************************************************
+//  * Copyright (c) 2016 by RF77 (https://github.com/RF77)
+//  * All rights reserved. This program and the accompanying materials
+//  * are made available under the terms of the Eclipse Public License v1.0
+//  * which accompanies this distribution, and is available at
+//  * http://www.eclipse.org/legal/epl-v10.html
+//  *
+//  * Contributors:
+//  *    RF77 - initial API and implementation and/or initial documentation
+//  *******************************************************************************/ 
+
+using System;
 using System.IO;
 using System.Linq;
 using System.Linq.Expressions;
@@ -12,7 +22,6 @@ using Serialize.Linq.Serializers;
 using SharpTsdb.Properties;
 using SharpTsdbTypes.Communication;
 using Timeenator.Extensions;
-using Timeenator.Impl;
 using Timeenator.Interfaces;
 
 namespace SharpTsdb
@@ -80,7 +89,9 @@ namespace SharpTsdb
         public string WritePoints(string dbName, string meas, [FromBody] DataRows data, string type = "float",
             bool truncateDbToFirstElement = false)
         {
-            using (MeLog.LogDebug($"db: {dbName}, meas: {meas}, point#: {data.Rows.Count}, trunc: {truncateDbToFirstElement}"))
+            using (
+                MeLog.LogDebug(
+                    $"db: {dbName}, meas: {meas}, point#: {data.Rows.Count}, trunc: {truncateDbToFirstElement}"))
             {
                 var myDb = DbService.DbManagement.GetDb(dbName);
                 var measurement = myDb.GetOrCreateMeasurement(meas, type);
@@ -100,7 +111,8 @@ namespace SharpTsdb
 
                 byte[] query = await Request.Content.ReadAsByteArrayAsync();
 
-                var queryExpression = ((Expression<Func<IDb, IObjectQuerySerie>>)LinqSerializer.DeserializeBinary(query)).Compile();
+                var queryExpression =
+                    ((Expression<Func<IDb, IObjectQuerySerie>>) LinqSerializer.DeserializeBinary(query)).Compile();
 
                 IObjectQuerySerie result = queryExpression(myDb);
                 return new DataSerie(result);
@@ -117,7 +129,8 @@ namespace SharpTsdb
 
                 byte[] query = await Request.Content.ReadAsByteArrayAsync();
 
-                var queryExpression = ((Expression<Func<IDb, IObjectQueryTable>>)LinqSerializer.DeserializeBinary(query)).Compile();
+                var queryExpression =
+                    ((Expression<Func<IDb, IObjectQueryTable>>) LinqSerializer.DeserializeBinary(query)).Compile();
 
                 IObjectQueryTable result = queryExpression(myDb);
                 return result.Series.Select(i => new DataSerie(i)).ToArray();

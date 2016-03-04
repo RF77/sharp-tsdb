@@ -1,3 +1,14 @@
+// /*******************************************************************************
+//  * Copyright (c) 2016 by RF77 (https://github.com/RF77)
+//  * All rights reserved. This program and the accompanying materials
+//  * are made available under the terms of the Eclipse Public License v1.0
+//  * which accompanies this distribution, and is available at
+//  * http://www.eclipse.org/legal/epl-v10.html
+//  *
+//  * Contributors:
+//  *    RF77 - initial API and implementation and/or initial documentation
+//  *******************************************************************************/ 
+
 using System;
 
 namespace Timeenator.Impl.Grouping.Configurators
@@ -16,39 +27,38 @@ namespace Timeenator.Impl.Grouping.Configurators
         IGroupByStartEndTimesConfiguratorOptional<T> StartIsEnd();
 
         /// <summary>
-        /// Expands the current time range by a specified factor
-        /// e.g. is grouped by one hour and expanded by factor 5
-        /// Result: time range inlcudes now the previous 2h, the grouped hour and 2h aftwerwards
+        ///     Expands the current time range by a specified factor
+        ///     e.g. is grouped by one hour and expanded by factor 5
+        ///     Result: time range inlcudes now the previous 2h, the grouped hour and 2h aftwerwards
         /// </summary>
         /// <param name="factor"></param>
         /// <returns></returns>
         IGroupByStartEndTimesConfiguratorOptional<T> ExpandTimeRangeByFactor(double factor);
 
         /// <summary>
-        /// Expands the current time range by a specified time
-        /// e.g. is grouped by one hour and expanded 2h
-        /// Result: time range inlcudes now the previous hour, the grouped hour and 1h aftwerwards
+        ///     Expands the current time range by a specified time
+        ///     e.g. is grouped by one hour and expanded 2h
+        ///     Result: time range inlcudes now the previous hour, the grouped hour and 1h aftwerwards
         /// </summary>
         /// <returns></returns>
         IGroupByStartEndTimesConfiguratorOptional<T> ExpandTimeRange(TimeSpan timeSpan);
 
         /// <summary>
-        /// Expands the current time range by a specified time
-        /// e.g. is grouped by one hour and expanded 2h
-        /// Result: time range inlcudes now the previous hour, the grouped hour and 1h aftwerwards
+        ///     Expands the current time range by a specified time
+        ///     e.g. is grouped by one hour and expanded 2h
+        ///     Result: time range inlcudes now the previous hour, the grouped hour and 1h aftwerwards
         /// </summary>
-
         IGroupByStartEndTimesConfiguratorOptional<T> ExpandTimeRange(string timeSpanExpression);
 
         /// <summary>
-        /// Time between two groups must be higher than the tolareance otherwise the groups will be merged
+        ///     Time between two groups must be higher than the tolareance otherwise the groups will be merged
         /// </summary>
         /// <param name="tolerance"></param>
         /// <returns></returns>
         IGroupByStartEndTimesConfiguratorOptional<T> TimeTolerance(TimeSpan tolerance);
 
         /// <summary>
-        /// Time between two groups must be higher than the tolareance otherwise the groups will be merged
+        ///     Time between two groups must be higher than the tolareance otherwise the groups will be merged
         /// </summary>
         /// <param name="tolerance">time span as string e.g. 1s or 3d</param>
         /// <returns></returns>

@@ -1,3 +1,14 @@
+// /*******************************************************************************
+//  * Copyright (c) 2016 by RF77 (https://github.com/RF77)
+//  * All rights reserved. This program and the accompanying materials
+//  * are made available under the terms of the Eclipse Public License v1.0
+//  * which accompanies this distribution, and is available at
+//  * http://www.eclipse.org/legal/epl-v10.html
+//  *
+//  * Contributors:
+//  *    RF77 - initial API and implementation and/or initial documentation
+//  *******************************************************************************/ 
+
 using System.IO;
 using System.Net;
 using System.Threading.Tasks;
@@ -9,8 +20,7 @@ namespace SharpTsdbClient
     public class ClientBase
     {
         protected static readonly ExpressionSerializer LinqSerializer = new ExpressionSerializer(new BinarySerializer());
-        private JavaScriptSerializer _scriptSerializer = new JavaScriptSerializer();
-
+        private readonly JavaScriptSerializer _scriptSerializer = new JavaScriptSerializer();
         public DbClient Db { get; set; }
 
         protected async Task<T> PostRequestAsync<T>(string url, object objectToserialize, bool asJson = true)
@@ -32,11 +42,11 @@ namespace SharpTsdbClient
             }
             else
             {
-                byte[] bytes = (byte[])objectToserialize;
-                requestStream.Write(bytes,0,bytes.Length);
+                byte[] bytes = (byte[]) objectToserialize;
+                requestStream.Write(bytes, 0, bytes.Length);
             }
 
-            var httpResponse = (HttpWebResponse)await httpWebRequest.GetResponseAsync();
+            var httpResponse = (HttpWebResponse) await httpWebRequest.GetResponseAsync();
             using (var streamReader = new StreamReader(httpResponse.GetResponseStream()))
             {
                 var result = await streamReader.ReadToEndAsync();
@@ -59,7 +69,7 @@ namespace SharpTsdbClient
             //    streamWriter.Write(json);
             //}
 
-            var httpResponse = (HttpWebResponse)await httpWebRequest.GetResponseAsync();
+            var httpResponse = (HttpWebResponse) await httpWebRequest.GetResponseAsync();
             using (var streamReader = new StreamReader(httpResponse.GetResponseStream()))
             {
                 return await streamReader.ReadToEndAsync();

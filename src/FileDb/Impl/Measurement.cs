@@ -1,3 +1,14 @@
+// /*******************************************************************************
+//  * Copyright (c) 2016 by RF77 (https://github.com/RF77)
+//  * All rights reserved. This program and the accompanying materials
+//  * are made available under the terms of the Eclipse Public License v1.0
+//  * which accompanies this distribution, and is available at
+//  * http://www.eclipse.org/legal/epl-v10.html
+//  *
+//  * Contributors:
+//  *    RF77 - initial API and implementation and/or initial documentation
+//  *******************************************************************************/ 
+
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -17,21 +28,21 @@ namespace FileDb.Impl
     public class Measurement : ReadWritLockable, IMeasurement
     {
         private const int MinSearchRange = 1000;
-
-        [DataMember]
-        private readonly Db _db;
         private static RowReadWriterFactory _rowReadWriterFactory;
 
+        [DataMember] private readonly Db _db;
+
+        private IDataRow _currentValue;
         private RowReaderWriter.RowReaderWriter _rowReaderWriter;
 
         /// <summary>
         ///     Only for deserialization
         /// </summary>
-        private Measurement():base(TimeSpan.FromMinutes(3))
+        private Measurement() : base(TimeSpan.FromMinutes(3))
         {
         }
 
-        public Measurement(MeasurementMetadata metadataInternal, Db db):this()
+        public Measurement(MeasurementMetadata metadataInternal, Db db) : this()
         {
             _db = db;
             MetadataInternal = metadataInternal;
@@ -44,7 +55,7 @@ namespace FileDb.Impl
         /// <param name="name"></param>
         /// <param name="type"></param>
         /// <param name="db"></param>
-        public Measurement(string name, Type type, Db db):this()
+        public Measurement(string name, Type type, Db db) : this()
         {
             _db = db;
             MetadataInternal = new MeasurementMetadata(name);
@@ -67,8 +78,6 @@ namespace FileDb.Impl
             }
             return GetDataPoints<T>();
         }
-
-        private IDataRow _currentValue;
 
         public ISingleDataRow<T> CurrentValue<T>() where T : struct
         {
@@ -94,13 +103,12 @@ namespace FileDb.Impl
                 {
                     using (var fs = File.Open(BinaryFilePath, FileMode.Create, FileAccess.Write, FileShare.None))
                     {
-                    }                    
+                    }
                 }
                 else
                 {
                     ClearDataPointsAfter(after.Value);
                 }
-
             });
         }
 
@@ -122,38 +130,6 @@ namespace FileDb.Impl
                 }
             });
         }
-
-        private void ClearDataPointsAfter(DateTime after) 
-        {
-                using (var fs = File.Open(BinaryFilePath, FileMode.Open, FileAccess.ReadWrite, FileShare.ReadWrite))
-                {
-                    var items = fs.Length / _rowReaderWriter.RowLength;
-                    var currentItem = items / 2;
-
-                    using (var binaryReader = new BinaryReader(fs))
-                    {
-                        var itemToStart = GetItemToStart(after, fs, binaryReader, currentItem, currentItem, 0);
-                        if (itemToStart > 0)
-                        {
-                            itemToStart--;
-                        }
-                        fs.Position = itemToStart * _rowReaderWriter.RowLength;
-
-                        while (fs.Position < fs.Length)
-                        {
-                            long position = fs.Position;
-                            var readRow = _rowReaderWriter.ReadRow(binaryReader);
-
-                            if (readRow.Key >= after)
-                            {
-                                fs.SetLength(position);
-                                break;
-                            }
-                        }
-                    }
-                }
-        }
-
 
         public IQuerySerie<T> GetDataPoints<T>(DateTime? @from = null, DateTime? to = null) where T : struct
         {
@@ -182,6 +158,36 @@ namespace FileDb.Impl
             });
         }
 
+        private void ClearDataPointsAfter(DateTime after)
+        {
+            using (var fs = File.Open(BinaryFilePath, FileMode.Open, FileAccess.ReadWrite, FileShare.ReadWrite))
+            {
+                var items = fs.Length/_rowReaderWriter.RowLength;
+                var currentItem = items/2;
+
+                using (var binaryReader = new BinaryReader(fs))
+                {
+                    var itemToStart = GetItemToStart(after, fs, binaryReader, currentItem, currentItem, 0);
+                    if (itemToStart > 0)
+                    {
+                        itemToStart--;
+                    }
+                    fs.Position = itemToStart*_rowReaderWriter.RowLength;
+
+                    while (fs.Position < fs.Length)
+                    {
+                        long position = fs.Position;
+                        var readRow = _rowReaderWriter.ReadRow(binaryReader);
+
+                        if (readRow.Key >= after)
+                        {
+                            fs.SetLength(position);
+                            break;
+                        }
+                    }
+                }
+            }
+        }
 
         [OnDeserialized]
         private void OnDeserialized(StreamingContext c)
@@ -216,7 +222,7 @@ namespace FileDb.Impl
         {
             var fileInfo = new FileInfo(BinaryFilePath);
             Size = fileInfo.Length;
-            NumberOfItems = Size / _rowReaderWriter.RowLength;
+            NumberOfItems = Size/_rowReaderWriter.RowLength;
             if (NumberOfItems > 0)
             {
                 using (var fs = File.Open(BinaryFilePath, FileMode.Open, FileAccess.Read, FileShare.Read))

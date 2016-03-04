@@ -1,4 +1,15 @@
-﻿using System;
+﻿// /*******************************************************************************
+//  * Copyright (c) 2016 by RF77 (https://github.com/RF77)
+//  * All rights reserved. This program and the accompanying materials
+//  * are made available under the terms of the Eclipse Public License v1.0
+//  * which accompanies this distribution, and is available at
+//  * http://www.eclipse.org/legal/epl-v10.html
+//  *
+//  * Contributors:
+//  *    RF77 - initial API and implementation and/or initial documentation
+//  *******************************************************************************/ 
+
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -14,6 +25,13 @@ namespace FileDb.Impl
 {
     public class Db : ReadWritLockable, IDb
     {
+        public Db(DbMetadata metadata) : base(TimeSpan.FromSeconds(30))
+        {
+            MetadataInternal = metadata;
+            Directory.CreateDirectory(MeasurementDirectory);
+        }
+
+        public DbMetadata MetadataInternal { get; set; }
         public string Name => Metadata.Name;
 
         public void SaveMetadata()
@@ -21,24 +39,18 @@ namespace FileDb.Impl
             MetadataInternal.SaveToFile(MetadataInternal.DbMetadataPath);
         }
 
-        public string MeasurementDirectory => Path.Combine(MetadataInternal.DbPath, Settings.Default.MeasurementDirectory);
-
-        public Db(DbMetadata metadata):base(TimeSpan.FromSeconds(30))
-        {
-            MetadataInternal = metadata;
-            Directory.CreateDirectory(MeasurementDirectory);
-        }
-
-        public DbMetadata MetadataInternal { get; set; }
+        public string MeasurementDirectory
+            => Path.Combine(MetadataInternal.DbPath, Settings.Default.MeasurementDirectory);
 
         public IDbMetadata Metadata => MetadataInternal;
 
         public void CreateMeasurement(IMeasurementMetadata metadata)
         {
-            WriterLock(() =>
-            {
-                MetadataInternal.SetMeasurement(metadata.Name, new Measurement((MeasurementMetadata) metadata, this));
-            });
+            WriterLock(
+                () =>
+                {
+                    MetadataInternal.SetMeasurement(metadata.Name, new Measurement((MeasurementMetadata) metadata, this));
+                });
         }
 
         public IMeasurement CreateMeasurement(string name, Type valueType)
@@ -59,7 +71,8 @@ namespace FileDb.Impl
 
         public IQuerySerie<T> GetSerie<T>(string measurementName, string timeExpression) where T : struct
         {
-            return ReaderLock(() => GetMeasurement(measurementName).GetDataPoints<T>(timeExpression).Alias(measurementName));
+            return
+                ReaderLock(() => GetMeasurement(measurementName).GetDataPoints<T>(timeExpression).Alias(measurementName));
         }
 
         public IQuerySerie<T> GetSerie<T>(string measurementName) where T : struct

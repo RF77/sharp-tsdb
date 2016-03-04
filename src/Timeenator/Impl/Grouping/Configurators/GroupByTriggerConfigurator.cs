@@ -1,3 +1,14 @@
+// /*******************************************************************************
+//  * Copyright (c) 2016 by RF77 (https://github.com/RF77)
+//  * All rights reserved. This program and the accompanying materials
+//  * are made available under the terms of the Eclipse Public License v1.0
+//  * which accompanies this distribution, and is available at
+//  * http://www.eclipse.org/legal/epl-v10.html
+//  *
+//  * Contributors:
+//  *    RF77 - initial API and implementation and/or initial documentation
+//  *******************************************************************************/ 
+
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -6,9 +17,9 @@ using Timeenator.Interfaces;
 namespace Timeenator.Impl.Grouping.Configurators
 {
     internal class GroupByTriggerConfigurator<T> : GroupByStartEndTimesConfigurator<T>, IGroupByTriggerConfigurator<T>
-         where T : struct
+        where T : struct
     {
-        public GroupByTriggerConfigurator(IQuerySerie<T> serie):base(serie)
+        public GroupByTriggerConfigurator(IQuerySerie<T> serie) : base(serie)
         {
         }
 

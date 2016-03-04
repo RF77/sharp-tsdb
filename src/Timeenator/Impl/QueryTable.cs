@@ -1,4 +1,15 @@
-﻿using System;
+﻿// /*******************************************************************************
+//  * Copyright (c) 2016 by RF77 (https://github.com/RF77)
+//  * All rights reserved. This program and the accompanying materials
+//  * are made available under the terms of the Eclipse Public License v1.0
+//  * which accompanies this distribution, and is available at
+//  * http://www.eclipse.org/legal/epl-v10.html
+//  *
+//  * Contributors:
+//  *    RF77 - initial API and implementation and/or initial documentation
+//  *******************************************************************************/ 
+
+using System;
 using System.Collections.Generic;
 using Timeenator.Interfaces;
 
@@ -7,7 +18,6 @@ namespace Timeenator.Impl
     public class QueryTable<T> : QueryTableBase<T>, IQueryTable<T> where T : struct
     {
         public new IDictionary<string, IQuerySerie<T>> Series { get; } = new Dictionary<string, IQuerySerie<T>>();
-        protected override IEnumerable<IObjectQuerySerie> GetSeries() => Series.Values;
 
         public void AddSerie(IQuerySerie<T> serie)
         {
@@ -25,12 +35,11 @@ namespace Timeenator.Impl
         }
 
         IEnumerable<IObjectQuerySerie> IObjectQueryTable.Series => Series.Values;
-
         IEnumerable<IQuerySerie<T>> IQueryTable<T>.Series => Series.Values;
 
         public override IObjectQuerySerieBase TryGetSerie(string name)
         {
-            return ((IQueryTable<T>)this).TryGetSerie(name);
+            return ((IQueryTable<T>) this).TryGetSerie(name);
         }
 
         public INullableQueryTable<T> Transform(Func<IQuerySerie<T>, INullableQuerySerie<T>> doFunc)
@@ -43,5 +52,7 @@ namespace Timeenator.Impl
 
             return table;
         }
+
+        protected override IEnumerable<IObjectQuerySerie> GetSeries() => Series.Values;
     }
 }

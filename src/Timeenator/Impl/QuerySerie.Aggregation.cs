@@ -1,4 +1,15 @@
-﻿using System;
+﻿// /*******************************************************************************
+//  * Copyright (c) 2016 by RF77 (https://github.com/RF77)
+//  * All rights reserved. This program and the accompanying materials
+//  * are made available under the terms of the Eclipse Public License v1.0
+//  * which accompanies this distribution, and is available at
+//  * http://www.eclipse.org/legal/epl-v10.html
+//  *
+//  * Contributors:
+//  *    RF77 - initial API and implementation and/or initial documentation
+//  *******************************************************************************/ 
+
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
@@ -9,11 +20,11 @@ using Timeenator.Interfaces;
 
 namespace Timeenator.Impl
 {
-    public partial class QuerySerie<T> where T:struct
+    public partial class QuerySerie<T> where T : struct
     {
         private const int NumberOfExpFactors = 20;
-        private static double[] ExponentialFactors;
-        private static double ExpSum;
+        private static readonly double[] ExponentialFactors;
+        private static readonly double ExpSum;
 
         static QuerySerie()
         {
@@ -22,13 +33,11 @@ namespace Timeenator.Impl
             IList<double> eFactors = new List<double>(NumberOfExpFactors);
             for (double j = 0; j < NumberOfExpFactors; j++)
             {
-                eFactors.Add(b / Math.Exp(1 + (j / 7)));
+                eFactors.Add(b/Math.Exp(1 + (j/7)));
             }
             ExponentialFactors = eFactors.Reverse().Concat(eFactors.Skip(1)).ToArray();
             ExpSum = ExponentialFactors.Sum();
         }
-
-        
 
         public T? First()
         {
@@ -54,7 +63,7 @@ namespace Timeenator.Impl
         }
 
         /// <summary>
-        /// Mean of all measurement points without looking to timestamps
+        ///     Mean of all measurement points without looking to timestamps
         /// </summary>
         /// <returns></returns>
         public T? Mean()
@@ -72,65 +81,6 @@ namespace Timeenator.Impl
         {
             return MeanByTime(false);
         }
-
-        /// <summary>
-        /// Mean of all measurement points with taking the time into account
-        /// </summary>
-        /// <returns></returns>
-        private T? MeanByTime(bool includePreviousAndNext)
-        {
-            var notAnyRows = !Rows.Any();
-            if (notAnyRows && (!includePreviousAndNext || (PreviousRow == null && NextRow == null))) return null;
-            if (notAnyRows)
-            {
-                return PreviousRow?.Value ?? NextRow.Value;
-            }
-
-            double valueSum = 0;
-            var rows = Rows;
-            DateTime start = DateTime.MinValue;
-            DateTime stop = rows.Last().TimeUtc;
-            DateTime? currentTimeStamp = null;
-
-
-            double currentValue = 0;
-            if (PreviousRow != null && StartTime != null)
-            {
-                start = StartTime.Value;
-                currentValue = PreviousRow.Value.ToDouble();
-                currentTimeStamp = start;
-            }
-
-            for (int i = 0; i < rows.Count; i++)
-            {
-                var newRow = rows[i];
-                if (currentTimeStamp != null)
-                {
-                    valueSum += (newRow.TimeUtc - currentTimeStamp.Value).Ticks * currentValue;
-                }
-                else
-                {
-                    start = newRow.TimeUtc;
-                }
-                currentValue = newRow.Value.ToDouble();
-                currentTimeStamp = newRow.TimeUtc;
-            }
-
-            if (NextRow != null && EndTime != null)
-            {
-                stop = EndTime.Value;
-                if (currentTimeStamp != null)
-                {
-                    valueSum += (stop - currentTimeStamp.Value).Ticks * currentValue;
-                }
-            }
-
-            double result = valueSum / (stop - start).Ticks;
-
-            return result.ToType<T>();
-        }
-
-
 
         public T? MeanExpWeighted()
         {
@@ -150,9 +100,11 @@ namespace Timeenator.Impl
             }
 
             var diff = stop - start;
-            var timeSpanSubGroup = TimeSpan.FromTicks((diff.Ticks + (NumberOfExpFactors * 2) )/ExponentialFactors.Length);
+            var timeSpanSubGroup = TimeSpan.FromTicks((diff.Ticks + (NumberOfExpFactors*2))/ExponentialFactors.Length);
             var newSerie = new QuerySerie<T>(Rows, start, stop) {PreviousRow = PreviousRow, NextRow = NextRow};
-            var subGroups = newSerie.Group(g => g.ByTime.Span(timeSpanSubGroup).Aggregate(f => f.MeanByTimeIncludePreviousAndNext())).RemoveNulls();
+            var subGroups =
+                newSerie.Group(g => g.ByTime.Span(timeSpanSubGroup).Aggregate(f => f.MeanByTimeIncludePreviousAndNext()))
+                    .RemoveNulls();
             Debug.Assert(subGroups.Rows.Count == ExponentialFactors.Length);
             var subRows = subGroups.Rows;
 
@@ -160,19 +112,20 @@ namespace Timeenator.Impl
 
             for (int i = 0; i < subRows.Count; i++)
             {
-                sum += subRows[i].Value.ToDouble() * ExponentialFactors[i];
+                sum += subRows[i].Value.ToDouble()*ExponentialFactors[i];
             }
 
-            double result = sum / ExpSum;
+            double result = sum/ExpSum;
 
             return result.ToType<T>();
         }
 
-
         public T? Difference()
         {
             if (!Rows.Any()) return null;
-            return (Rows.Last().Value.ToDouble() - (PreviousRow?.Value.ToDouble() ?? Rows.First().Value.ToDouble())).ToType<T>();
+            return
+                (Rows.Last().Value.ToDouble() - (PreviousRow?.Value.ToDouble() ?? Rows.First().Value.ToDouble()))
+                    .ToType<T>();
         }
 
         public T? Derivative(TimeSpan timeSpan)
@@ -182,7 +135,7 @@ namespace Timeenator.Impl
             var lastValue = Rows.Last();
             var diffTime = lastValue.TimeUtc - firstValue.TimeUtc;
             double diffValue = lastValue.Value.ToDouble() - firstValue.Value.ToDouble();
-            var result = diffValue * timeSpan.Ticks / diffTime.Ticks;
+            var result = diffValue*timeSpan.Ticks/diffTime.Ticks;
             return result.ToType<T>();
         }
 
@@ -204,8 +157,8 @@ namespace Timeenator.Impl
         }
 
         /// <summary>
-        /// Calculates the time span where a specified condition (predicate) is true
-        /// e.g. TimeWhere(v => v == 9.6f)?.TotalMinutes
+        ///     Calculates the time span where a specified condition (predicate) is true
+        ///     e.g. TimeWhere(v => v == 9.6f)?.TotalMinutes
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <param name="predicate">true, if added to time span</param>
@@ -287,6 +240,63 @@ namespace Timeenator.Impl
                 }
             }
             return minItem;
+        }
+
+        /// <summary>
+        ///     Mean of all measurement points with taking the time into account
+        /// </summary>
+        /// <returns></returns>
+        private T? MeanByTime(bool includePreviousAndNext)
+        {
+            var notAnyRows = !Rows.Any();
+            if (notAnyRows && (!includePreviousAndNext || (PreviousRow == null && NextRow == null))) return null;
+            if (notAnyRows)
+            {
+                return PreviousRow?.Value ?? NextRow.Value;
+            }
+
+            double valueSum = 0;
+            var rows = Rows;
+            DateTime start = DateTime.MinValue;
+            DateTime stop = rows.Last().TimeUtc;
+            DateTime? currentTimeStamp = null;
+
+
+            double currentValue = 0;
+            if (PreviousRow != null && StartTime != null)
+            {
+                start = StartTime.Value;
+                currentValue = PreviousRow.Value.ToDouble();
+                currentTimeStamp = start;
+            }
+
+            for (int i = 0; i < rows.Count; i++)
+            {
+                var newRow = rows[i];
+                if (currentTimeStamp != null)
+                {
+                    valueSum += (newRow.TimeUtc - currentTimeStamp.Value).Ticks*currentValue;
+                }
+                else
+                {
+                    start = newRow.TimeUtc;
+                }
+                currentValue = newRow.Value.ToDouble();
+                currentTimeStamp = newRow.TimeUtc;
+            }
+
+            if (NextRow != null && EndTime != null)
+            {
+                stop = EndTime.Value;
+                if (currentTimeStamp != null)
+                {
+                    valueSum += (stop - currentTimeStamp.Value).Ticks*currentValue;
+                }
+            }
+
+            double result = valueSum/(stop - start).Ticks;
+
+            return result.ToType<T>();
         }
     }
 }

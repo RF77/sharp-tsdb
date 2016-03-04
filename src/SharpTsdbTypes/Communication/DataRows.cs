@@ -1,4 +1,15 @@
-﻿using System;
+﻿// /*******************************************************************************
+//  * Copyright (c) 2016 by RF77 (https://github.com/RF77)
+//  * All rights reserved. This program and the accompanying materials
+//  * are made available under the terms of the Eclipse Public License v1.0
+//  * which accompanies this distribution, and is available at
+//  * http://www.eclipse.org/legal/epl-v10.html
+//  *
+//  * Contributors:
+//  *    RF77 - initial API and implementation and/or initial documentation
+//  *******************************************************************************/ 
+
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.Serialization;
@@ -11,18 +22,17 @@ namespace SharpTsdbTypes.Communication
     [DataContract]
     public class DataRows
     {
-        [DataMember]
-        public List<object[]> Rows { get; set; }
-
         public DataRows()
         {
-            
         }
 
         public DataRows(IEnumerable<IDataRow> rows)
         {
             Rows = rows.Select(i => new[] {i.Key.ToFileTimeUtc(), i.Value}).ToList();
         }
+
+        [DataMember]
+        public List<object[]> Rows { get; set; }
 
         public IEnumerable<ISingleDataRow<T>> AsTyped<T>() where T : struct
         {
@@ -31,7 +41,7 @@ namespace SharpTsdbTypes.Communication
 
         private static DateTime ToDateTime(object[] i)
         {
-            return DateTime.FromFileTimeUtc((long)i[0]);
+            return DateTime.FromFileTimeUtc((long) i[0]);
         }
 
         public IEnumerable<ISingleDataRow<T?>> AsNullableTyped<T>() where T : struct
@@ -41,7 +51,7 @@ namespace SharpTsdbTypes.Communication
 
         public IEnumerable<IDataRow> AsIDataRows()
         {
-            return Rows?.Select(i => new DataRow { Key = ToDateTime(i), Value = i[1]});
+            return Rows?.Select(i => new DataRow {Key = ToDateTime(i), Value = i[1]});
         }
     }
 }

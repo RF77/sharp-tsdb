@@ -1,4 +1,15 @@
-﻿using System;
+﻿// /*******************************************************************************
+//  * Copyright (c) 2016 by RF77 (https://github.com/RF77)
+//  * All rights reserved. This program and the accompanying materials
+//  * are made available under the terms of the Eclipse Public License v1.0
+//  * which accompanies this distribution, and is available at
+//  * http://www.eclipse.org/legal/epl-v10.html
+//  *
+//  * Contributors:
+//  *    RF77 - initial API and implementation and/or initial documentation
+//  *******************************************************************************/ 
+
+using System;
 using System.Collections.Generic;
 using System.Dynamic;
 using System.Linq;
@@ -19,40 +30,43 @@ namespace FileDb.Scripting
 
     public class ScriptingEngine
     {
-        private IDb _db;
-        private string _expression;
+        private static ScriptOptions _options;
+
+        private static readonly Dictionary<string, Script<IQueryResult>> _scripts =
+            new Dictionary<string, Script<IQueryResult>>();
+
+        private readonly IDb _db;
         private object _result;
         private Script<IQueryResult> _script;
-        private static ScriptOptions _options;
-        private static Dictionary<string, Script<IQueryResult>> _scripts = new Dictionary<string, Script<IQueryResult>>();
-
-        public IQueryResult Result => _result as IQueryResult;
-        public IObjectQuerySerie ResultAsSerie => _result as IObjectQuerySerie;
-        public IObjectQueryTable ResultAsTable => _result as IObjectQueryTable;
-
-        public ScriptingEngine(IDb db, string expression)
-        {
-            _db = db;
-            _expression = expression;
-        }
 
         static ScriptingEngine()
         {
             CreateOptions();
         }
 
+        public ScriptingEngine(IDb db, string expression)
+        {
+            _db = db;
+            ScriptText = expression;
+        }
+
+        public IQueryResult Result => _result as IQueryResult;
+        public IObjectQuerySerie ResultAsSerie => _result as IObjectQuerySerie;
+        public IObjectQueryTable ResultAsTable => _result as IObjectQueryTable;
+        private string ScriptText { get; }
+
         public static async Task<object> ExecuteTestAsync(string expressionToExecute)
         {
-            var script = CSharpScript.Create<object>(expressionToExecute, globalsType: typeof(Globals), options: _options);
+            var script = CSharpScript.Create<object>(expressionToExecute, globalsType: typeof (Globals),
+                options: _options);
             script.Compile();
             return (await script.RunAsync(new Globals())).ReturnValue;
         }
 
-
         public ScriptingEngine Execute()
         {
             CreateScript();
-            var globals = new Globals()
+            var globals = new Globals
             {
                 db = _db
             };
@@ -80,30 +94,14 @@ namespace FileDb.Scripting
                 typeof (CSharpArgumentInfo).Assembly,
                 typeof (DynamicObject).Assembly,
                 typeof (ExpandoObject).Assembly,
-                typeof (DbExtensions).Assembly,
+                typeof (DbExtensions).Assembly
             }.Distinct());
 
-            _options = _options.WithImports(new[]
-            {
-                "System",
-                "System.Collections.Generic",
-                "System.Diagnostics",
-                "System.Linq",
-                "DbInterfaces.Interfaces",
-                "Timeenator.Interfaces",
-                "FileDb.Interfaces",
-                "FileDb",
-                "Timeenator.Impl",
-                "Timeenator.Impl.Grouping",
-                "Timeenator.Extensions.Grouping",
-                "Timeenator.Extensions.Scientific",
-                "Timeenator.Extensions.Converting",
-                "Microsoft.CSharp",
-                "System.Dynamic",
-                "DbInterfaces.Interfaces",
-                "CustomDbExtensions"
-            });
-            
+            _options = _options.WithImports("System", "System.Collections.Generic", "System.Diagnostics", "System.Linq",
+                "DbInterfaces.Interfaces", "Timeenator.Interfaces", "FileDb.Interfaces", "FileDb", "Timeenator.Impl",
+                "Timeenator.Impl.Grouping", "Timeenator.Extensions.Grouping", "Timeenator.Extensions.Scientific",
+                "Timeenator.Extensions.Converting", "Microsoft.CSharp", "System.Dynamic", "DbInterfaces.Interfaces",
+                "CustomDbExtensions");
         }
 
         private void CreateScript()
@@ -122,7 +120,5 @@ namespace FileDb.Scripting
             _script.Compile();
             _scripts[scriptText] = _script;
         }
-
-        private string ScriptText => _expression;
     }
 }
