@@ -80,8 +80,8 @@ namespace Tests.Dummy
             var sw = Stopwatch.StartNew();
             for (int i = 0; i < 1000000; i++)
             {
-                nowLong = now.ToBinary();
-                newDate = DateTime.FromBinary(nowLong);
+                nowLong = now.Ticks;
+                newDate = DateTime.SpecifyKind(DateTime.FromBinary(nowLong), DateTimeKind.Utc);
             }
             sw.Stop();
             newDate.Should().Be(now);

@@ -15,7 +15,7 @@ namespace Timeenator.Interfaces
 {
     public interface IObjectQueryTable : IQueryResult
     {
-        IEnumerable<IObjectQuerySerie> Series { get; }
+        new IEnumerable<IObjectQuerySerie> Series { get; }
         IObjectQuerySerieBase TryGetSerie(string name);
     }
 }

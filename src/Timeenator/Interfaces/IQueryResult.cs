@@ -9,9 +9,12 @@
 //  *    RF77 - initial API and implementation and/or initial documentation
 //  *******************************************************************************/ 
 
+using System.Collections.Generic;
+
 namespace Timeenator.Interfaces
 {
     public interface IQueryResult
     {
+        IEnumerable<IObjectQuerySerie> Series { get; } 
     }
 }

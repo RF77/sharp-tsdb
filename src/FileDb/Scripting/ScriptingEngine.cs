@@ -51,8 +51,6 @@ namespace FileDb.Scripting
         }
 
         public IQueryResult Result => _result as IQueryResult;
-        public IObjectQuerySerie ResultAsSerie => _result as IObjectQuerySerie;
-        public IObjectQueryTable ResultAsTable => _result as IObjectQueryTable;
         private string ScriptText { get; }
 
         public static async Task<object> ExecuteTestAsync(string expressionToExecute)
@@ -107,18 +105,24 @@ namespace FileDb.Scripting
         private void CreateScript()
         {
             var scriptText = ScriptText;
-
-            Script<IQueryResult> existingScript;
-
-            if (_scripts.TryGetValue(scriptText, out existingScript))
+            lock (typeof(ScriptingEngine))
             {
-                _script = existingScript;
-                return;
+                Script<IQueryResult> existingScript;
+
+                if (_scripts.TryGetValue(scriptText, out existingScript))
+                {
+                    _script = existingScript;
+                    return;
+                }                
             }
 
             _script = CSharpScript.Create<IQueryResult>(scriptText, globalsType: typeof (Globals), options: _options);
             _script.Compile();
-            _scripts[scriptText] = _script;
+
+            lock (typeof (ScriptingEngine))
+            {
+                _scripts[scriptText] = _script;
+            }
         }
     }
 }

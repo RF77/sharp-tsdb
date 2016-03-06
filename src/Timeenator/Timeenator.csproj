@@ -112,6 +112,7 @@
     <Compile Include="Impl\QueryTableBase.cs" />
     <Compile Include="Extensions\Scientific\ScientificQueryTableExtensions.cs" />
     <Compile Include="Impl\Scientific\TemperatureMath.cs" />
+    <Compile Include="Impl\SeriesCollection.cs" />
     <Compile Include="Impl\SingleDataRow.cs" />
     <Compile Include="Extensions\StringExtensions.cs" />
     <Compile Include="Extensions\TimeExpression.cs" />

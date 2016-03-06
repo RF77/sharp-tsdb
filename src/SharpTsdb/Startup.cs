@@ -47,6 +47,7 @@ namespace SharpTsdb
 
 
             appBuilder.UseWebApi(config);
+            appBuilder.MaxQueryStringLength(10000).MaxRequestContentLength(100000000).MaxUrlLength(4000);
         }
     }
 }

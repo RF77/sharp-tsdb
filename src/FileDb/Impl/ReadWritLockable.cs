@@ -24,7 +24,7 @@ namespace FileDb.Impl
             _readWriteTimeOut = readWriteLockTimeOut;
         }
 
-        protected void WriterLock(Action action)
+        public void WriterLock(Action action)
         {
             try
             {
@@ -37,7 +37,7 @@ namespace FileDb.Impl
             }
         }
 
-        protected T ReaderLock<T>(Func<T> action)
+        public T ReaderLock<T>(Func<T> action)
         {
             try
             {
@@ -50,7 +50,7 @@ namespace FileDb.Impl
             }
         }
 
-        protected T WriterLock<T>(Func<T> action)
+        public T WriterLock<T>(Func<T> action)
         {
             try
             {

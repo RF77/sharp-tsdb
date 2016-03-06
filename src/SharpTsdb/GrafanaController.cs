@@ -9,8 +9,10 @@
 //  *    RF77 - initial API and implementation and/or initial documentation
 //  *******************************************************************************/ 
 
+using System;
 using System.Reflection;
 using System.Web.Http;
+using System.Web.Http.Controllers;
 using GrafanaAdapter.Queries;
 using log4net;
 
@@ -27,6 +29,7 @@ namespace SharpTsdb
         [HttpGet]
         public QueryRoot Get(string db, string q)
         {
+            var requestUri = Request.RequestUri;
             using (MeLog.LogDebug($"db: {db}, q: {q}"))
             {
                 return _handler.HandleQuery(db, q, DbService.DbManagement);

@@ -10,15 +10,17 @@
 //  *******************************************************************************/ 
 
 using System.Collections.Generic;
-using System.Diagnostics;
+using Timeenator.Interfaces;
 
-namespace GrafanaAdapter.Queries
+namespace Timeenator.Impl
 {
-    [DebuggerDisplay("{name}: {values.Count}")]
-    public class QuerySerie
+    public class SeriesCollection : IQueryResult
     {
-        public string name { get; set; }
-        public List<string> columns { get; set; } = new List<string>();
-        public List<List<object>> values { get; set; } = new List<List<object>>();
+        public SeriesCollection(IEnumerable<IObjectQuerySerie> series)
+        {
+            Series = series;
+        }
+
+        public IEnumerable<IObjectQuerySerie> Series { get; }
     }
 }

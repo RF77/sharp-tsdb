@@ -44,20 +44,19 @@ namespace GrafanaAdapter.Queries
             var scriptingEngine = new ScriptingEngine(dbInstance, query);
             var res = scriptingEngine.Execute();
 
-            if (res.ResultAsSerie != null)
+            foreach (var s in res.Result.Series.OrderByDescending(i => i.FullName))
             {
-                CreateSerieResult(serie, res.ResultAsSerie, result, root);
+                QuerySerie querySerie = new QuerySerie();
+                CreateSingleResult(querySerie, s, result);
             }
-            if (res.ResultAsTable != null)
-            {
-                CreateTableResult(res.ResultAsTable, result, root);
-            }
+
+            root.results.Add(result);
             return root;
         }
 
         private void CreateTableResult(IObjectQueryTable resultAsTable, QueryResult result, QueryRoot root)
         {
-            foreach (var serie in resultAsTable.Series.OrderBy(i => i.FullName))
+            foreach (var serie in resultAsTable.Series.OrderByDescending(i => i.FullName))
             {
                 QuerySerie querySerie = new QuerySerie();
                 CreateSingleResult(querySerie, serie, result);

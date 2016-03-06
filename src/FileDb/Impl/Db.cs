@@ -111,9 +111,14 @@ namespace FileDb.Impl
             return result;
         }
 
-        public IObjectQueryTable GetTable(string measurementRegex, string timeExpression)
+        //public IObjectQueryTable GetTable(string measurementRegex, string timeExpression)
+        //{
+        //    throw new NotImplementedException();
+        //}
+
+        public IQueryResult Collect(params IQueryResult[] results)
         {
-            throw new NotImplementedException();
+            return new SeriesCollection(results.SelectMany(i => i.Series));
         }
 
         public IReadOnlyList<string> GetMeasurementNames()
