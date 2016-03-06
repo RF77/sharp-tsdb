@@ -23,7 +23,7 @@ namespace Mqtt2SharpTsdb
     public class Mqtt2DbService
     {
         private static readonly ILog Logger = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
-        private readonly MqttClient _client = new MqttClient("localhost");
+        private readonly MqttClient _client = new MqttClient("10.10.1.77");
         private readonly string _dbName = "Haus";
         private DbClient _dbClient;
 

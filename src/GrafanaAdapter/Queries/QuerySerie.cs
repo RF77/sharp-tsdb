@@ -10,9 +10,11 @@
 //  *******************************************************************************/ 
 
 using System.Collections.Generic;
+using System.Diagnostics;
 
 namespace GrafanaAdapter.Queries
 {
+    [DebuggerDisplay("{name}: {values.Count}")]
     public class QuerySerie
     {
         public string name { get; set; }

@@ -17,6 +17,7 @@ using System.Reflection;
 using System.Threading.Tasks;
 using System.Web.Http;
 using DbInterfaces.Interfaces;
+using FileDb.Impl;
 using log4net;
 using Serialize.Linq.Serializers;
 using SharpTsdb.Properties;
@@ -32,6 +33,7 @@ namespace SharpTsdb
         private static readonly ILog Logger = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
         private static readonly ControllerLogger MeLog = new ControllerLogger(Logger);
         private static readonly ExpressionSerializer LinqSerializer = new ExpressionSerializer(new BinarySerializer());
+        private static readonly ReadWritLockable Locker = new ReadWritLockable(TimeSpan.FromMinutes(3));
 
         [Route("dbs/createDb/{dbName}")]
         [HttpGet]
@@ -39,7 +41,10 @@ namespace SharpTsdb
         {
             using (MeLog.LogDebug($"name: {dbName}"))
             {
-                DbService.DbManagement.CreateDb(Settings.Default.DbDirectory, dbName);
+                Locker.WriterLock(() =>
+                {
+                    DbService.DbManagement.CreateDb(Settings.Default.DbDirectory, dbName);
+                });
                 return "ok";
             }
         }
@@ -50,7 +55,10 @@ namespace SharpTsdb
         {
             using (MeLog.LogDebug($"name: {dbName}"))
             {
-                DbService.DbManagement.GetOrCreateDb(Path.Combine(Settings.Default.DbDirectory, dbName), dbName);
+                Locker.WriterLock(() =>
+                {
+                    DbService.DbManagement.GetOrCreateDb(Path.Combine(Settings.Default.DbDirectory, dbName), dbName);
+                });
                 return "ok";
             }
         }
@@ -61,8 +69,11 @@ namespace SharpTsdb
         {
             using (MeLog.LogDebug($"db: {dbName}, meas: {name}"))
             {
-                var myDb = DbService.DbManagement.GetDb(dbName);
-                myDb.CreateMeasurement(name, type.ToType());
+                Locker.WriterLock(() =>
+                {
+                    var myDb = DbService.DbManagement.GetDb(dbName);
+                    myDb.CreateMeasurement(name, type.ToType());
+                });
                 return "ok";
             }
         }
@@ -73,13 +84,17 @@ namespace SharpTsdb
         {
             using (MeLog.LogDebug($"db: {dbName}, meas: {name}, after: {after}"))
             {
-                var myDb = DbService.DbManagement.GetDb(dbName);
-                DateTime? afterTime = null;
-                if (after != null)
+                Locker.WriterLock(() =>
                 {
-                    afterTime = DateTime.FromFileTimeUtc(after.Value);
-                }
-                myDb.GetMeasurement(name).ClearDataPoints(afterTime);
+
+                    var myDb = DbService.DbManagement.GetDb(dbName);
+                    DateTime? afterTime = null;
+                    if (after != null)
+                    {
+                        afterTime = DateTime.FromFileTimeUtc(after.Value);
+                    }
+                    myDb.GetMeasurement(name).ClearDataPoints(afterTime);
+                });
                 return "ok";
             }
         }
@@ -93,8 +108,12 @@ namespace SharpTsdb
                 MeLog.LogDebug(
                     $"db: {dbName}, meas: {meas}, point#: {data.Rows.Count}, trunc: {truncateDbToFirstElement}"))
             {
-                var myDb = DbService.DbManagement.GetDb(dbName);
-                var measurement = myDb.GetOrCreateMeasurement(meas, type);
+                IMeasurement measurement = null;
+                Locker.WriterLock(() =>
+                {
+                    var myDb = DbService.DbManagement.GetDb(dbName);
+                    measurement = myDb.GetOrCreateMeasurement(meas, type);
+                });
 
                 measurement.AppendDataPoints(data.AsIDataRows());
                 return "ok";
@@ -107,15 +126,19 @@ namespace SharpTsdb
         {
             using (MeLog.LogDebug($"db: {dbName}"))
             {
-                var myDb = DbService.DbManagement.GetDb(dbName);
 
                 byte[] query = await Request.Content.ReadAsByteArrayAsync();
 
                 var queryExpression =
                     ((Expression<Func<IDb, IObjectQuerySerie>>) LinqSerializer.DeserializeBinary(query)).Compile();
 
-                IObjectQuerySerie result = queryExpression(myDb);
-                return new DataSerie(result);
+                Locker.ReaderLock(() =>
+                {
+                    var myDb = DbService.DbManagement.GetDb(dbName);
+                    IObjectQuerySerie result = queryExpression(myDb);
+                    return new DataSerie(result);
+                });
+                return null;
             }
         }
 
@@ -125,15 +148,18 @@ namespace SharpTsdb
         {
             using (MeLog.LogDebug($"db: {dbName}"))
             {
-                var myDb = DbService.DbManagement.GetDb(dbName);
-
                 byte[] query = await Request.Content.ReadAsByteArrayAsync();
 
                 var queryExpression =
                     ((Expression<Func<IDb, IObjectQueryTable>>) LinqSerializer.DeserializeBinary(query)).Compile();
 
-                IObjectQueryTable result = queryExpression(myDb);
-                return result.Series.Select(i => new DataSerie(i)).ToArray();
+                Locker.ReaderLock(() =>
+                {
+                    var myDb = DbService.DbManagement.GetDb(dbName);
+                    IObjectQueryTable result = queryExpression(myDb);
+                    return result.Series.Select(i => new DataSerie(i)).ToArray();
+                });
+                return null;
             }
         }
     }
