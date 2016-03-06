@@ -29,7 +29,7 @@ namespace Mqtt2SharpTsdb
 
         public async void Init()
         {
-            _dbClient = new DbClient(new Client("localhost"), _dbName);
+            _dbClient = new DbClient(new Client("10.10.1.77"), _dbName);
             await _dbClient.CreateOrAtachDbAsync();
             _client.Connect("Mqtt2SharpTsdb");
             _client.MqttMsgPublishReceived += ClientOnMqttMsgPublishReceived;
