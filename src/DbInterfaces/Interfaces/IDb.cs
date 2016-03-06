@@ -27,7 +27,8 @@ namespace DbInterfaces.Interfaces
         IQuerySerie<T> GetSerie<T>(string measurementName, string timeExpression) where T : struct;
         IQuerySerie<T> GetSerie<T>(string measurementName) where T : struct;
         IQueryTable<T> GetTable<T>(string measurementRegex, string timeExpression) where T : struct;
-        IObjectQueryTable GetTable(string measurementRegex, string timeExpression);
+        //IObjectQueryTable GetTable(string measurementRegex, string timeExpression);
+        IQueryResult Collect(params IQueryResult[] results);
         IReadOnlyList<string> GetMeasurementNames();
         void DeleteMeasurement(string name);
         void DeleteAllMeasurements();

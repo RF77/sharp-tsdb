@@ -43,6 +43,8 @@ namespace Timeenator.Impl
             set { Rows[index].Value = (T) Convert.ChangeType(value, typeof (T)); }
         }
 
+        public override IEnumerable<IObjectQuerySerie> Series => new[] { this };
+
         public IEnumerable<T> Values => Rows.Select(i => i.Value);
         IReadOnlyList<IObjectSingleDataRow> IObjectQuerySerie.Rows => Rows;
 

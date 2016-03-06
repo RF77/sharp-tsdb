@@ -57,6 +57,8 @@ namespace Timeenator.Impl
             }
         }
 
+        public override IEnumerable<IObjectQuerySerie> Series => new[] {this};
+
         public INullableQuerySerie<T> Clone(string serieName)
         {
             var serie = new NullableQuerySerie<T>(Rows, this) {Name = serieName};

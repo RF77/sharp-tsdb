@@ -10,12 +10,17 @@
 //  *******************************************************************************/ 
 
 using System.Collections.Generic;
+using Timeenator.Interfaces;
 
-namespace Timeenator.Interfaces
+namespace Timeenator.Impl
 {
-    public interface IObjectQueryTable : IQueryResult
+    public class SeriesCollection : IQueryResult
     {
-        new IEnumerable<IObjectQuerySerie> Series { get; }
-        IObjectQuerySerieBase TryGetSerie(string name);
+        public SeriesCollection(IEnumerable<IObjectQuerySerie> series)
+        {
+            Series = series;
+        }
+
+        public IEnumerable<IObjectQuerySerie> Series { get; }
     }
 }

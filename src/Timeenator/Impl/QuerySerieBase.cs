@@ -10,6 +10,7 @@
 //  *******************************************************************************/ 
 
 using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using Timeenator.Interfaces;
 
@@ -115,5 +116,7 @@ namespace Timeenator.Impl
                 Name = name;
             }
         }
+
+        public abstract IEnumerable<IObjectQuerySerie> Series { get; }
     }
 }
