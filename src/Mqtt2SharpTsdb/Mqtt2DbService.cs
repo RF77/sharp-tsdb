@@ -39,32 +39,40 @@ namespace Mqtt2SharpTsdb
 
         private async void ClientOnMqttMsgPublishReceived(object sender, MqttMsgPublishEventArgs mqttMsgPublishEventArgs)
         {
-            var message = Encoding.UTF8.GetString(mqttMsgPublishEventArgs.Message);
-            Logger.Debug($"Got {mqttMsgPublishEventArgs.Topic}, content: {message}");
             try
             {
-                float val;
-                if (message == "OFF")
+                var message = Encoding.UTF8.GetString(mqttMsgPublishEventArgs.Message);
+                Logger.Debug($"Got {mqttMsgPublishEventArgs.Topic}, content: {message}");
+                try
                 {
-                    val = 0;
-                }
-                else if (message == "ON")
-                {
-                    val = 1;
-                }
-                else
-                {
-                    val = float.Parse(message);
-                }
+                    float val;
+                    if (message == "OFF")
+                    {
+                        val = 0;
+                    }
+                    else if (message == "ON")
+                    {
+                        val = 1;
+                    }
+                    else
+                    {
+                        val = float.Parse(message);
+                    }
 
-                await _dbClient.Measurement(mqttMsgPublishEventArgs.Topic.Replace("/", "."))
-                    .AppendAsync(new[] {new SingleDataRow<float>(DateTime.Now, val)}, false);
+                    await _dbClient.Measurement(mqttMsgPublishEventArgs.Topic.Replace("/", "."))
+                        .AppendAsync(new[] { new SingleDataRow<float>(DateTime.Now, val) }, false);
+                }
+                catch (Exception ex)
+                {
+                    Logger.Warn(
+                        $"Excpetion in topic {mqttMsgPublishEventArgs.Topic}, content: {message}, reason: {ex.Message}");
+                }
             }
             catch (Exception ex)
             {
-                Logger.Warn(
-                    $"Excpetion in topic {mqttMsgPublishEventArgs.Topic}, content: {message}, reason: {ex.Message}");
+                Logger.Error($"Catched Exception: {ex.Message}");
             }
+           
         }
 
         public void Stop()

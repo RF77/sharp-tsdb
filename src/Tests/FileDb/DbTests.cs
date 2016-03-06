@@ -238,11 +238,11 @@ namespace Tests.FileDb
 
             //All (without dates)
             var scriptingEngine = new ScriptingEngine(_unitUnderTest, $@"db.GetSerie<float>(""{TestMeasName}"", null)");
-            var data = scriptingEngine.Execute().ResultAsSerie;
-            var allItems = data.Rows;
+            var data = scriptingEngine.Execute().Result;
+            var allItems = data.Series.First().Rows;
             allItems.Count.Should().Be(numberOfRows);
-            data.StartTime.Should().Be(null);
-            data.EndTime.Should().Be(null);
+            data.Series.First().StartTime.Should().Be(null);
+            data.Series.First().EndTime.Should().Be(null);
 
             //var dateTime2000 = new DateTime(2000, 1, 1);
             //data = measurement.GetDataPoints<float>(dateTime2000);
