@@ -11,6 +11,8 @@
 
 using System;
 using DbInterfaces.Interfaces;
+using Timeenator.Extensions.Converting;
+using Timeenator.Extensions.Scientific;
 using Timeenator.Impl;
 using Timeenator.Interfaces;
 
@@ -219,9 +221,50 @@ namespace CustomDbExtensions
                     i =>
                         i.Group(
                             g =>
-                                g.ByTime.Expression(interval, "1m")
-                                    .ExpandTimeRangeByFactor(windowFactor).TimeStampIsMiddle()
+                                g.ByTime.Expression(interval, "1m", 10)
+                                    .ExpandTimeRange(TimeSpan.FromMinutes(windowFactor)).TimeStampIsMiddle()
                                     .Aggregate(a => a.MeanExpWeighted())));
+        }
+
+        public static INullableQueryTable<float> Schneefallgrenze(this IDb db, string time,
+           string interval, int windowFactor)
+        {
+            return db.GetTable<float>("(?<g>Wetterstation).*(?<k>Temp|Hum)", time)
+                .Transform(
+                    i =>
+                        i.Group(
+                            g =>
+                                g.ByTime.Expression(interval, "1m", 10)
+                                    .ExpandTimeRange(TimeSpan.FromMinutes(windowFactor)).TimeStampIsMiddle()
+                                    .Aggregate(a => a.MeanExpWeighted()))).AddSleetLine("Temp","Hum",440,"Schneeregengrenze").AddSnowLine("Temp", "Hum", 440, "Schneefallgrenze")
+                                    .RemoveSerie("Temp").RemoveSerie("Hum");
+        }
+
+        public static INullableQueryTable<float> DewPoint(this IDb db, string measurementName, string time,
+          string interval, string temperatureKey, string humidityKey, int windowFactor)
+        {
+            return db.GetTable<float>(measurementName, time)
+                .Transform(
+                    i =>
+                        i.Group(
+                            g =>
+                                g.ByTime.Expression(interval, "1m", 10)
+                                    .ExpandTimeRange(TimeSpan.FromMinutes(windowFactor)).TimeStampIsMiddle()
+                                    .Aggregate(a => a.MeanExpWeighted())))
+                                    .GroupSeries().Transform(t => t.DewPoint(temperatureKey, humidityKey, null)).MergeTables();
+        }
+        public static INullableQueryTable<float> AbsHumidity(this IDb db, string measurementName, string time,
+          string interval, string temperatureKey, string humidityKey, int windowFactor)
+        {
+            return db.GetTable<float>(measurementName, time)
+                .Transform(
+                    i =>
+                        i.Group(
+                            g =>
+                                g.ByTime.Expression(interval, "1m", 10)
+                                    .ExpandTimeRange(TimeSpan.FromMinutes(windowFactor)).TimeStampIsMiddle()
+                                    .Aggregate(a => a.MeanExpWeighted())))
+                                    .GroupSeries().Transform(t => t.AbsoluteHumidity(temperatureKey, humidityKey, null)).MergeTables();
         }
 
         public static INullableQueryTable<float> MovingTest(this IDb db, string measurementName, string time,

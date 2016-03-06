@@ -57,7 +57,7 @@ namespace GrafanaAdapter.Queries
 
         private void CreateTableResult(IObjectQueryTable resultAsTable, QueryResult result, QueryRoot root)
         {
-            foreach (var serie in resultAsTable.Series)
+            foreach (var serie in resultAsTable.Series.OrderBy(i => i.FullName))
             {
                 QuerySerie querySerie = new QuerySerie();
                 CreateSingleResult(querySerie, serie, result);

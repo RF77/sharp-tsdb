@@ -31,7 +31,13 @@ namespace Timeenator.Impl.Grouping.Configurators
         }
 
         public IGroupByStartEndTimesConfiguratorOptional<T> Expression(string expression,
-            string minimalExpression = null)
+            string minimalExpression)
+        {
+            return Expression(expression, minimalExpression, 1);
+        }
+
+        public IGroupByStartEndTimesConfiguratorOptional<T> Expression(string expression,
+            string minimalExpression, double factor)
         {
             if (expression == null) throw new ArgumentNullException(nameof(expression));
 
@@ -50,7 +56,7 @@ namespace Timeenator.Impl.Grouping.Configurators
             {
                 throw new ArgumentException($"expression {expression} is invalid");
             }
-            int number = int.Parse(match.Groups[1].Value);
+            int number = (int) (int.Parse(match.Groups[1].Value) * factor);
             string type = match.Groups[2].Value;
 
             switch (type)
@@ -80,6 +86,11 @@ namespace Timeenator.Impl.Grouping.Configurators
                     throw new ArgumentException($"expression {expression} has unknown type");
             }
             return this;
+        }
+
+        public IGroupByStartEndTimesConfiguratorOptional<T> Expression(string expression, double factor)
+        {
+            return Expression(expression, null, factor);
         }
 
         public IGroupByStartEndTimesConfiguratorOptional<T> Span(TimeSpan timeSpan)

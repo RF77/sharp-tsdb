@@ -46,9 +46,20 @@ namespace Timeenator.Impl
         {
             get
             {
-                if (GroupName != null && Key != null)
+                if (GroupName != null)
                 {
-                    return $"{GroupName}.{Key}";
+                    if (Key != null)
+                    {
+                        return $"{GroupName}.{Key}";
+                    }
+                    else
+                    {
+                        return GroupName;
+                    }
+                }
+                else if (Key != null)
+                {
+                    return Key;
                 }
                 return $"{_name}";
             }

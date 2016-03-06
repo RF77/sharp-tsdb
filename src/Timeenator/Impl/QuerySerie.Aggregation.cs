@@ -13,6 +13,8 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Reflection;
+using log4net;
 using MathNet.Numerics.Statistics;
 using Timeenator.Extensions;
 using Timeenator.Extensions.Converting;
@@ -22,6 +24,7 @@ namespace Timeenator.Impl
 {
     public partial class QuerySerie<T> where T : struct
     {
+        private static readonly ILog Logger = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
         private const int NumberOfExpFactors = 20;
         private static readonly double[] ExponentialFactors;
         private static readonly double ExpSum;
@@ -105,6 +108,11 @@ namespace Timeenator.Impl
             var subGroups =
                 newSerie.Group(g => g.ByTime.Span(timeSpanSubGroup).Aggregate(f => f.MeanByTimeIncludePreviousAndNext()))
                     .RemoveNulls();
+            if (subGroups.Rows.Count != ExponentialFactors.Length)
+            {
+                Logger.Warn($"Subgroups count is {subGroups.Rows.Count}, instead of {ExponentialFactors.Length}");
+                return subGroups.MeanByTime()?.ToType<T>();
+            }
             Debug.Assert(subGroups.Rows.Count == ExponentialFactors.Length);
             var subRows = subGroups.Rows;
 

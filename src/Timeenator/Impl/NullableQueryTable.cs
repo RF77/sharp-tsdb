@@ -51,7 +51,7 @@ namespace Timeenator.Impl
 
         public INullableQueryTable<T> RemoveSerie(string name)
         {
-            Series.Remove(name);
+            Series.Remove(TryGetSerie(name).FullName);
             return this;
         }
 

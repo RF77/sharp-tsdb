@@ -9,6 +9,7 @@
 //  *    RF77 - initial API and implementation and/or initial documentation
 //  *******************************************************************************/ 
 
+using CustomDbExtensions;
 using FileDb.Impl;
 using NUnit.Framework;
 using Timeenator.Extensions.Grouping;
@@ -44,6 +45,29 @@ namespace Tests.QueryLanguage
                 .RemoveSerie("Feuchtigkeit")
                 ;
         }
+
+        [Test]
+        public void SchneefallTest()
+        {
+            var db = new DbManagement().GetDb("Haus");
+            var result = db.Schneefallgrenze("time > now() - 1d", "1m", 50);
+        }
+
+        [Test]
+        public void DewPoinTest()
+        {
+            var db = new DbManagement().GetDb("Haus");
+            var result = db.DewPoint("Hm.*(?<g>(EG|OG).*)(?<k>Temp|Hum)","time > now() - 1d", "1m", "Temp", "Hum", 50);
+        }
+
+        [Test]
+        public void AbsHumTest()
+        {
+            var db = new DbManagement().GetDb("Haus");
+            var result = db.AbsHumidity("Hm.*(?<g>(EG|OG).*)(?<k>Temp|Hum)", "time > now() - 1d", "1m", "Temp", "Hum", 50);
+        }
+
+
 
         [Test]
         public void DewPointTest()

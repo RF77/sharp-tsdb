@@ -139,6 +139,10 @@
     </None>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\CustomDbExtensions\CustomDbExtensions.csproj">
+      <Project>{3DC705DB-D0DF-49E4-842D-49C28745EE80}</Project>
+      <Name>CustomDbExtensions</Name>
+    </ProjectReference>
     <ProjectReference Include="..\DbInterfaces\DbInterfaces.csproj">
       <Project>{E65A3D01-0656-4522-AAF8-1CF2B11270F3}</Project>
       <Name>DbInterfaces</Name>
