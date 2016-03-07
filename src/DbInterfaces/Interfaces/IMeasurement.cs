@@ -27,5 +27,6 @@ namespace DbInterfaces.Interfaces
         IQuerySerie<T> GetDataPoints<T>(string timeExpression) where T : struct;
         ISingleDataRow<T> CurrentValue<T>() where T : struct;
         void ClearDataPoints(DateTime? after = null);
+        IEnumerable<string> NameAndAliases { get; } 
     }
 }

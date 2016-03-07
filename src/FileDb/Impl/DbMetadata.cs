@@ -38,7 +38,7 @@ namespace FileDb.Impl
 
         public IMeasurement GetMeasurement(string name)
         {
-            return Measurements[name];
+            return MeasurementsWithAliases[name];
         }
 
         public void SetMeasurement(string name, IMeasurement measurement)

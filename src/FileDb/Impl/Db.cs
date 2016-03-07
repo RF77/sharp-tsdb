@@ -69,6 +69,53 @@ namespace FileDb.Impl
             return ReaderLock(() => MetadataInternal.GetMeasurement(name));
         }
 
+        public IReadOnlyList<IMeasurement> GetMeasurements(string nameRegex)
+        {
+            List<IMeasurement> result = new List<IMeasurement>();
+            var regex = new Regex(nameRegex);
+            foreach (var m in MetadataInternal.Measurements.Values)
+            {
+                if (regex.IsMatch(m.Metadata.Name))
+                {
+                    result.Add(m);
+                    continue;
+                }
+                if (m.Metadata.Aliases.Any(alias => regex.IsMatch(alias)))
+                {
+                    result.Add(m);
+                }
+            }
+
+            return result;
+        }
+
+        public void AddAliasToMeasurements(string nameRegex, string aliasName)
+        {
+            WriterLock(() =>
+            {
+                var regex = new Regex(nameRegex);
+                foreach (var m in MetadataInternal.Measurements.Values)
+                {
+                    if (regex.IsMatch(m.Metadata.Name))
+                    {
+                        var alias = regex.Replace(m.Metadata.Name, aliasName);
+                        m.AddAlias(alias);
+                        continue;
+                    }
+                    foreach (var alias in m.Metadata.Aliases)
+                    {
+                        if (regex.IsMatch(alias))
+                        {
+                            var newAlias = regex.Replace(alias, aliasName);
+                            m.AddAlias(newAlias);
+                            break;
+                        }
+                    }
+                }
+                SaveMetadata();
+            });
+        }
+
         public IQuerySerie<T> GetSerie<T>(string measurementName, string timeExpression) where T : struct
         {
             return
@@ -123,7 +170,7 @@ namespace FileDb.Impl
 
         public IReadOnlyList<string> GetMeasurementNames()
         {
-            return ReaderLock(() => MetadataInternal.Measurements.Keys.ToList());
+            return ReaderLock(() => MetadataInternal.MeasurementsWithAliases.Keys.ToList());
         }
 
         public void DeleteMeasurement(string name)

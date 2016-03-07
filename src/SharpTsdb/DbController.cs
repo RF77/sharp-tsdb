@@ -13,7 +13,10 @@ using System;
 using System.IO;
 using System.Linq;
 using System.Linq.Expressions;
+using System.Net;
+using System.Net.Http;
 using System.Reflection;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Web.Http;
 using DbInterfaces.Interfaces;
@@ -78,11 +81,11 @@ namespace SharpTsdb
             }
         }
 
-        [Route("db/{dbName}/clearMeasurment/{name}")]
+        [Route("db/{dbName}/{measurementName}/clear")]
         [HttpGet]
-        public string ClearMeasurement(string dbName, string name, long? after)
+        public string ClearMeasurement(string dbName, string measurementName, long? after)
         {
-            using (MeLog.LogDebug($"db: {dbName}, meas: {name}, after: {after}"))
+            using (MeLog.LogDebug($"db: {dbName}, meas: {measurementName}, after: {after}"))
             {
                 Locker.WriterLock(() =>
                 {
@@ -93,9 +96,64 @@ namespace SharpTsdb
                     {
                         afterTime = DateTime.FromFileTimeUtc(after.Value);
                     }
-                    myDb.GetMeasurement(name).ClearDataPoints(afterTime);
+                    myDb.GetMeasurement(measurementName).ClearDataPoints(afterTime);
                 });
                 return "ok";
+            }
+        }
+
+        [Route("db/{dbName}/{measurementNameRegex}/addAlias/{aliasName}")]
+        [HttpGet]
+        public string AddAliasToMeasurements(string dbName, string measurementNameRegex, string aliasName)
+        {
+            using (MeLog.LogDebug($"db: {dbName}, meas: {measurementNameRegex}, alias: {aliasName}"))
+            {
+                Locker.WriterLock(() =>
+                {
+                    var myDb = DbService.DbManagement.GetDb(dbName);
+                    myDb.AddAliasToMeasurements(measurementNameRegex, aliasName);
+                });
+                return "ok";
+            }
+        }
+
+        [Route("db/{dbName}/allMeasurementsAsText")]
+        [HttpGet]
+        public HttpResponseMessage AllMeasurementsAsText(string dbName)
+        {
+            using (MeLog.LogDebug($"db: {dbName}"))
+            {
+                var resp = new HttpResponseMessage(HttpStatusCode.OK);
+
+                var result = Locker.WriterLock(() =>
+                {
+                    var myDb = DbService.DbManagement.GetDb(dbName);
+                    var measurements = myDb.GetMeasurementNames().OrderBy(i => i);
+                    var nameString = string.Join("\r\n", measurements);
+                    return nameString;
+                });
+                resp.Content = new StringContent(result, System.Text.Encoding.UTF8, "text/plain");
+                return resp;
+            }
+        }
+
+        [Route("db/{dbName}/findMeasurements/{regex}")]
+        [HttpGet]
+        public HttpResponseMessage FindMeasurementsAsText(string dbName, string regex)
+        {
+            using (MeLog.LogDebug($"db: {dbName}"))
+            {
+                var resp = new HttpResponseMessage(HttpStatusCode.OK);
+
+                var result = Locker.WriterLock(() =>
+                {
+                    var myDb = DbService.DbManagement.GetDb(dbName);
+                    var measurements = myDb.GetMeasurementNames().Where(i => Regex.IsMatch(i, regex)).OrderBy(i => i);
+                    var nameString = string.Join("\r\n", measurements);
+                    return nameString;
+                });
+                resp.Content = new StringContent(result, System.Text.Encoding.UTF8, "text/plain");
+                return resp;
             }
         }
 

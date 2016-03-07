@@ -14,6 +14,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using DbInterfaces.Interfaces;
 using FileDb.Impl;
 using FileDb.Scripting;
 using FluentAssertions;
@@ -315,6 +316,42 @@ namespace Tests.FileDb
             var sw = Stopwatch.StartNew();
             var newList = sourceList.OrderBy(i => i).ToList();
             //sourceList.Sort();
+            sw.Stop();
+        }
+
+        [Test, Ignore]
+        public void GetMeasurementsTest()
+        {
+            var dbm = new DbManagement();
+            var db = dbm.GetDb("Haus");
+            var sw = Stopwatch.StartNew();
+            for (int i = 0; i < 100; i++)
+            {
+                var ms = db.GetMeasurements("a");
+            }
+            sw.Stop();
+        }
+
+        [Test, Ignore]
+        public void AllMeasurementNamesTest()
+        {
+            var dbm = new DbManagement();
+            var db = dbm.GetDb("Haus");
+            var sw = Stopwatch.StartNew();
+            var measurements = db.GetMeasurements(".*");
+            var names = measurements.SelectMany(i => i.NameAndAliases).OrderBy(i => i).ToList();
+            var nameString = string.Join("\r\n", names);
+            var measurement = db.GetMeasurement("HmWetterstationSunshineduration");
+            sw.Stop();
+        }
+
+        [Test, Ignore]
+        public void AddAliasesTest()
+        {
+            var dbm = new DbManagement();
+            var db = dbm.GetDb("Haus");
+            var sw = Stopwatch.StartNew();
+            db.AddAliasToMeasurements("OpenHAB.out.(.*).state", "$1");
             sw.Stop();
         }
     }

@@ -33,5 +33,18 @@ namespace DbInterfaces.Interfaces
         void DeleteMeasurement(string name);
         void DeleteAllMeasurements();
         IMeasurement GetOrCreateMeasurement(string name, string type = "float");
+        IReadOnlyList<IMeasurement> GetMeasurements(string nameRegex);
+
+        /// <summary>
+        /// Adds an alias to one or more measurments matching the nameRegex.
+        /// The matched name will be replaced by the aliasName containing optional regex groups
+        /// e.g. name of measurement: ab.cd.ef
+        /// nameRegex: ab.(.*).ef
+        /// aliasName: newName.$1
+        /// result is: ab.cd.ef added an alias newName.cd 
+        /// </summary>
+        /// <param name="nameRegex"></param>
+        /// <param name="aliasName"></param>
+        void AddAliasToMeasurements(string nameRegex, string aliasName);
     }
 }

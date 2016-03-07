@@ -11,6 +11,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Runtime.Serialization;
@@ -24,6 +25,7 @@ using Timeenator.Interfaces;
 
 namespace FileDb.Impl
 {
+    [DebuggerDisplay("{MetadataInternal.Name}")]
     [DataContract]
     public class Measurement : ReadWritLockable, IMeasurement
     {
@@ -111,6 +113,8 @@ namespace FileDb.Impl
                 }
             });
         }
+
+        public IEnumerable<string> NameAndAliases => MetadataInternal.Aliases.Concat(new[] {MetadataInternal.Name});
 
         public IMeasurementMetadata Metadata => MetadataInternal;
 
@@ -294,6 +298,12 @@ namespace FileDb.Impl
             }
 
             return GetItemToStart(start, fs, binaryReader, currentIndex, currentRange, lastValidIndex);
+        }
+
+        public void AddAlias(string @alias)
+        {
+            MetadataInternal.Aliases.Add(alias);
+            _db.MetadataInternal.MeasurementsWithAliases[alias] = this;
         }
     }
 }
