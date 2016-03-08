@@ -67,16 +67,31 @@ namespace SharpTsdb
             }
         }
 
-        [Route("db/{dbName}/createMeasurment/{name}")]
+        [Route("db/{dbName}/{name}/create")]
         [HttpGet]
         public string CreateMeasurement(string dbName, string name, string type = "float")
+        {
+            using (MeLog.LogDebug($"db: {dbName}, meas: {name}, type: {type}"))
+            {
+                Locker.WriterLock(() =>
+                {
+                    var myDb = DbService.DbManagement.GetDb(dbName);
+                    myDb.CreateMeasurement(name, type.ToType());
+                });
+                return "ok";
+            }
+        }
+
+        [Route("db/{dbName}/{name}/delete")]
+        [HttpGet]
+        public string DeleteMeasurement(string dbName, string name)
         {
             using (MeLog.LogDebug($"db: {dbName}, meas: {name}"))
             {
                 Locker.WriterLock(() =>
                 {
                     var myDb = DbService.DbManagement.GetDb(dbName);
-                    myDb.CreateMeasurement(name, type.ToType());
+                    myDb.DeleteMeasurement(name);
                 });
                 return "ok";
             }
