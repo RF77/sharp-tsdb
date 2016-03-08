@@ -9,8 +9,10 @@
 //  *    RF77 - initial API and implementation and/or initial documentation
 //  *******************************************************************************/ 
 
+using System;
 using System.Net.Http.Headers;
 using System.Web.Http;
+using Nancy.Json;
 using Owin;
 
 namespace SharpTsdb
@@ -47,7 +49,8 @@ namespace SharpTsdb
 
 
             appBuilder.UseWebApi(config);
-            appBuilder.MaxQueryStringLength(10000).MaxRequestContentLength(100000000).MaxUrlLength(4000);
+            JsonSettings.MaxJsonLength = Int32.MaxValue;
+            //appBuilder.MaxQueryStringLength(10000).MaxRequestContentLength(100000000).MaxUrlLength(4000);
         }
     }
 }

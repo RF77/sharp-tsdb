@@ -19,14 +19,17 @@ namespace DbInterfaces.Interfaces
     {
         DateTime? FirstValueTimeUtc { get; }
         long Size { get; }
+        string Name { get; }
         long NumberOfItems { get; }
         IMeasurementMetadata Metadata { get; }
+        Type ValueType { get; }
+
         string BinaryFilePath { get; }
         void AppendDataPoints(IEnumerable<IDataRow> row);
         IQuerySerie<T> GetDataPoints<T>(DateTime? from = null, DateTime? to = null) where T : struct;
         IQuerySerie<T> GetDataPoints<T>(string timeExpression) where T : struct;
         ISingleDataRow<T> CurrentValue<T>() where T : struct;
         void ClearDataPoints(DateTime? after = null);
-        IEnumerable<string> NameAndAliases { get; } 
+        IEnumerable<string> NameAndAliases { get; }
     }
 }

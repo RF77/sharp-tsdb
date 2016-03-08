@@ -29,6 +29,8 @@ namespace FileDb.RowReaderWriter
             writer.Write(Convert.ToDecimal(row.Value));
         }
 
+        public override Type ValueType => typeof(decimal);
+
         public override ISingleDataRow<T> ReadRow<T>(BinaryReader reader)
         {
             var row = new SingleDataRow<T>(ReadDate(reader), (T) Convert.ChangeType(reader.ReadDecimal(), typeof (T)));

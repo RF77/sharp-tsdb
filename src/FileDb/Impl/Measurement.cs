@@ -69,6 +69,7 @@ namespace FileDb.Impl
         [DataMember]
         public MeasurementMetadata MetadataInternal { get; set; }
 
+        public Type ValueType => _rowReaderWriter.ValueType;
         public string BinaryFilePath { get; private set; }
 
         public IQuerySerie<T> GetDataPoints<T>(string timeExpression) where T : struct
@@ -95,6 +96,7 @@ namespace FileDb.Impl
 
         public DateTime? FirstValueTimeUtc { get; set; }
         public long Size { get; set; }
+        public string Name => MetadataInternal.Name;
         public long NumberOfItems { get; set; }
 
         public void ClearDataPoints(DateTime? after)

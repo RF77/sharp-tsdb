@@ -175,7 +175,18 @@ namespace FileDb.Impl
 
         public void DeleteMeasurement(string name)
         {
-            WriterLock(() => MetadataInternal.Measurements.Remove(name));
+            WriterLock(() => MetadataInternal.Measurements.Remove(GetMeasurement(name).Name));
+        }
+
+        public void CopyMeasurement(string fromName, string toName)
+        {
+            WriterLock(() =>
+            {
+                var source = GetMeasurement(fromName);
+                var target = GetOrCreateMeasurement(toName, source.ValueType);
+                target.ClearDataPoints();
+               // target.AppendDataPoints(source.GetDataPoints<>());
+            });
         }
 
         public void DeleteAllMeasurements()
@@ -194,5 +205,17 @@ namespace FileDb.Impl
                 return CreateMeasurement(name, type.ToType());
             });
         }
+        public IMeasurement GetOrCreateMeasurement(string name, Type type)
+        {
+            return WriterLock(() =>
+            {
+                if (MetadataInternal.Measurements.ContainsKey(name))
+                {
+                    return GetMeasurement(name);
+                }
+                return CreateMeasurement(name, type);
+            });
+        }
+
     }
 }

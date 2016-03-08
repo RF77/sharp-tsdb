@@ -29,6 +29,8 @@ namespace FileDb.RowReaderWriter
             writer.Write(Convert.ToInt16(row.Value));
         }
 
+        public override Type ValueType => typeof(short);
+
         public override ISingleDataRow<T> ReadRow<T>(BinaryReader reader)
         {
             var row = new SingleDataRow<T>(ReadDate(reader), (T) Convert.ChangeType(reader.ReadInt16(), typeof (T)));

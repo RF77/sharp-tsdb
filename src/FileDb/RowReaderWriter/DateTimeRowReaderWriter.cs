@@ -29,6 +29,8 @@ namespace FileDb.RowReaderWriter
             writer.Write(Convert.ToInt64(((DateTime) row.Value).Ticks));
         }
 
+        public override Type ValueType => typeof(DateTime);
+
         public override ISingleDataRow<T> ReadRow<T>(BinaryReader reader)
         {
             var row = new SingleDataRow<T>(ReadDate(reader),

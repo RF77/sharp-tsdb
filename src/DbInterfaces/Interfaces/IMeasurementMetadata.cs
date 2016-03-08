@@ -9,6 +9,7 @@
 //  *    RF77 - initial API and implementation and/or initial documentation
 //  *******************************************************************************/ 
 
+using System;
 using System.Collections.Generic;
 
 namespace DbInterfaces.Interfaces

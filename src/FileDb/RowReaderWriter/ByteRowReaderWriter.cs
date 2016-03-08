@@ -29,6 +29,8 @@ namespace FileDb.RowReaderWriter
             writer.Write(Convert.ToByte(row.Value));
         }
 
+        public override Type ValueType => typeof(byte);
+
         public override ISingleDataRow<T> ReadRow<T>(BinaryReader reader)
         {
             var row = new SingleDataRow<T>(ReadDate(reader), (T) Convert.ChangeType(reader.ReadByte(), typeof (T)));

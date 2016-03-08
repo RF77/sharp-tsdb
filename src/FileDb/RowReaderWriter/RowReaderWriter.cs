@@ -31,5 +31,7 @@ namespace FileDb.RowReaderWriter
         {
             return DateTime.SpecifyKind(DateTime.FromBinary(reader.ReadInt64()), DateTimeKind.Utc);
         }
+
+        public abstract Type ValueType { get; }
     }
 }

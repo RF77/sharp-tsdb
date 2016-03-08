@@ -31,6 +31,7 @@ namespace DbInterfaces.Interfaces
         IQueryResult Collect(params IQueryResult[] results);
         IReadOnlyList<string> GetMeasurementNames();
         void DeleteMeasurement(string name);
+        void CopyMeasurement(string fromName, string toName);
         void DeleteAllMeasurements();
         IMeasurement GetOrCreateMeasurement(string name, string type = "float");
         IReadOnlyList<IMeasurement> GetMeasurements(string nameRegex);
