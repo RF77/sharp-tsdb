@@ -9,6 +9,7 @@
 //  *    RF77 - initial API and implementation and/or initial documentation
 //  *******************************************************************************/ 
 
+using System;
 using System.IO;
 using System.Net;
 using System.Threading.Tasks;
@@ -20,7 +21,7 @@ namespace SharpTsdbClient
     public class ClientBase
     {
         protected static readonly ExpressionSerializer LinqSerializer = new ExpressionSerializer(new BinarySerializer());
-        private readonly JavaScriptSerializer _scriptSerializer = new JavaScriptSerializer();
+        private readonly JavaScriptSerializer _scriptSerializer = new JavaScriptSerializer(null,false, Int32.MaxValue, Int32.MaxValue, true, false);
         public DbClient Db { get; set; }
 
         protected async Task<T> PostRequestAsync<T>(string url, object objectToserialize, bool asJson = true)

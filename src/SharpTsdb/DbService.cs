@@ -20,7 +20,7 @@ namespace SharpTsdb
     public class DbService
     {
         private IDisposable _server;
-        public string BaseAddress = $"http://10.10.1.77:{Settings.Default.Port}/";
+        public string BaseAddress = $"http://localhost:{Settings.Default.Port}/";
         public static IDbManagement DbManagement { get; } = new DbManagement();
 
         public void Init()
