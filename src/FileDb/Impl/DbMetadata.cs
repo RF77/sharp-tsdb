@@ -13,6 +13,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Runtime.Serialization;
 using DbInterfaces.Interfaces;
 using Newtonsoft.Json;
@@ -36,6 +37,11 @@ namespace FileDb.Impl
 
         public string DbMetadataPath => GetMetadataPath(DbPath);
 
+        Dictionary<string, IMeasurement> IDbMetadata.Measurements
+        {
+            get { return Measurements.ToDictionary(i => i.Key, i => (IMeasurement)i.Value); }
+        }
+            
         public IMeasurement GetMeasurement(string name)
         {
             return MeasurementsWithAliases[name];

@@ -21,6 +21,7 @@ namespace DbInterfaces.Interfaces
         string DbPath { get; set; }
         string DbMetadataPath { get; }
         Dictionary<string, IMeasurement> MeasurementsWithAliases { get; }
+        Dictionary<string, IMeasurement> Measurements { get; }
         IMeasurement GetMeasurement(string name);
         void SetMeasurement(string name, IMeasurement measurement);
     }

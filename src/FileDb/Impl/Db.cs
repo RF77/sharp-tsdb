@@ -198,7 +198,7 @@ namespace FileDb.Impl
         {
             return WriterLock(() =>
             {
-                if (MetadataInternal.Measurements.ContainsKey(name))
+                if (MetadataInternal.MeasurementsWithAliases.ContainsKey(name))
                 {
                     return GetMeasurement(name);
                 }

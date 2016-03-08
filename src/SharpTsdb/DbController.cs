@@ -10,6 +10,7 @@
 //  *******************************************************************************/ 
 
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Linq.Expressions;
@@ -130,6 +131,27 @@ namespace SharpTsdb
                     var myDb = DbService.DbManagement.GetDb(dbName);
                     var measurements = myDb.GetMeasurementNames().OrderBy(i => i);
                     var nameString = string.Join("\r\n", measurements);
+                    return nameString;
+                });
+                resp.Content = new StringContent(result, System.Text.Encoding.UTF8, "text/plain");
+                return resp;
+            }
+        }
+
+        [Route("db/{dbName}/allMeasurementsNamesAsText")]
+        [HttpGet]
+        public HttpResponseMessage AllMeasurementsNamesAsText(string dbName)
+        {
+            using (MeLog.LogDebug($"db: {dbName}"))
+            {
+                var resp = new HttpResponseMessage(HttpStatusCode.OK);
+
+                var result = Locker.WriterLock(() =>
+                {
+                    var myDb = DbService.DbManagement.GetDb(dbName);
+                    var measurements = myDb.Metadata.Measurements.Values;
+                    var values = measurements.Select(i => string.Join("/", i.NameAndAliases)).OrderBy(i => i);
+                    var nameString = string.Join("\r\n", values);
                     return nameString;
                 });
                 resp.Content = new StringContent(result, System.Text.Encoding.UTF8, "text/plain");
