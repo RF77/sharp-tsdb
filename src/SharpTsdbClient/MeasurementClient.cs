@@ -49,30 +49,26 @@ namespace SharpTsdbClient
             return await PostRequestAsync<string>(url, new DataRows(points));
         }
 
-        public async Task<string> CreateMeasurementAsync(Type type)
+        public async Task<string> CreateAsync(Type type)
         {
             return
                 await
                     GetRequestAsync($"db/{Db.DbName}/{MeasurementName}/create?type={type.ToShortCode()}");
         }
 
-        public async Task<string> ClearMeasurementAsync(DateTime? after = null)
+        public async Task<string> ClearAsync(DateTime? after = null)
         {
             return
                 await
                     GetRequestAsync($"db/{Db.DbName}/{MeasurementName}/clear?after={after?.ToFileTimeUtc()}");
         }
 
-        public async Task<string> DeleteMeasurementAsync()
+        public async Task<string> DeleteAsync()
         {
             return
                 await
                     GetRequestAsync($"db/{Db.DbName}/{MeasurementName}/delete");
         }
 
-        public async Task<bool> AddAliasAsync(string measurementRegex, string newAliasReplacePattern)
-        {
-            return (await GetRequestAsync($"db/{Db.DbName}/{measurementRegex}/addAlias/{newAliasReplacePattern}") == "ok");
-        }
     }
 }

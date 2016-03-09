@@ -59,5 +59,10 @@ namespace SharpTsdbClient
             return (await GetRequestAsync($"dbs/createOrAttachDb/{Db.DbName}") == "ok");
         }
 
+        public async Task<bool> AddAliasAsync(string measurementRegex, string newAliasReplacePattern)
+        {
+            return (await GetRequestAsync($"db/{Db.DbName}/{measurementRegex}/addAlias/{newAliasReplacePattern}") == "ok");
+        }
+
     }
 }
