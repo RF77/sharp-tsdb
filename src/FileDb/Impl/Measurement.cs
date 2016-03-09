@@ -222,6 +222,7 @@ namespace FileDb.Impl
             }
             _rowReaderWriter = _rowReadWriterFactory.CreateRowReaderWriter(MetadataInternal);
             InitCurrentValues();
+
         }
 
         public void InitCurrentValues()

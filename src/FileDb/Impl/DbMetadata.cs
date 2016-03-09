@@ -50,13 +50,17 @@ namespace FileDb.Impl
         public void SetMeasurement(string name, IMeasurement measurement)
         {
             Measurements[name] = (Measurement) measurement;
+            foreach (var alias in measurement.NameAndAliases)
+            {
+                MeasurementsWithAliases[alias] = measurement;
+            }
         }
 
         [DataMember]
         public Dictionary<string, Measurement> Measurements { get; private set; }
 
         [JsonIgnore]
-        public Dictionary<string, IMeasurement> MeasurementsWithAliases { get; private set; }
+        public Dictionary<string, IMeasurement> MeasurementsWithAliases { get; private set; } = new Dictionary<string, IMeasurement>();
 
         public static string GetMetadataPath(string dbPath)
         {

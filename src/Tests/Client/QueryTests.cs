@@ -69,7 +69,7 @@ namespace Tests.Client
         public async Task WritePoints1Test()
         {
             var measName = "test";
-            await _dbClient.Measurement(measName).ClearMeasurementAsync();
+            await _dbClient.Measurement(measName).ClearAsync();
             var empty = await _dbClient.QuerySerieAsync<long>(db => db.GetSerie<long>(measName));
 
             var dateTime = new DateTime(2010, 1, 1, 0, 0, 0, DateTimeKind.Utc);
@@ -85,10 +85,10 @@ namespace Tests.Client
             queryResult.Rows.Count.Should().Be(3);
             await
                 _dbClient.Measurement(measName)
-                    .ClearMeasurementAsync(new DateTime(2010, 1, 1, 0, 0, 1, DateTimeKind.Utc));
+                    .ClearAsync(new DateTime(2010, 1, 1, 0, 0, 1, DateTimeKind.Utc));
             var queryResult2 = await _dbClient.QuerySerieAsync<long>(db => db.GetSerie<long>(measName));
             queryResult2.Rows.Count.Should().Be(1);
-            await _dbClient.Measurement(measName).ClearMeasurementAsync();
+            await _dbClient.Measurement(measName).ClearAsync();
         }
 
  

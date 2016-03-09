@@ -297,6 +297,18 @@ namespace Tests.FileDb
             time.Stop();
         }
 
+        [Test]
+        public void AliasAndDeleteTests()
+        {
+            var measurement = _unitUnderTest.GetOrCreateMeasurement("XyInt", typeof (int));
+            measurement.ValueType.Should().Be(typeof (int));
+            _unitUnderTest.AddAliasToMeasurements("XyInt", "ABC");
+            _unitUnderTest.MetadataInternal.Measurements.Count.Should().Be(1);
+            _unitUnderTest.MetadataInternal.MeasurementsWithAliases.Count.Should().Be(2);
+            var aliasMeasurment = _unitUnderTest.GetOrCreateMeasurement("ABC");
+            measurement.Should().Be(aliasMeasurment);
+        }
+
         [Test, Ignore]
         public void RecreateFuxDb()
         {
