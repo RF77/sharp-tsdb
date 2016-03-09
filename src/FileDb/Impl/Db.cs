@@ -175,7 +175,16 @@ namespace FileDb.Impl
 
         public void DeleteMeasurement(string name)
         {
-            WriterLock(() => MetadataInternal.Measurements.Remove(GetMeasurement(name).Name));
+            WriterLock(() =>
+            {
+                var measurement = GetMeasurement(name);
+                foreach (var alias in measurement.NameAndAliases)
+                {
+                    MetadataInternal.MeasurementsWithAliases.Remove(alias);
+                }
+                MetadataInternal.Measurements.Remove(measurement.Name);
+                SaveMetadata();
+            });
         }
 
         public void CopyMeasurement(string fromName, string toName)
