@@ -178,11 +178,59 @@ namespace FileDb.Impl
             WriterLock(() =>
             {
                 var measurement = GetMeasurement(name);
-                foreach (var alias in measurement.NameAndAliases)
+                if (measurement != null)
                 {
-                    MetadataInternal.MeasurementsWithAliases.Remove(alias);
+                    //TODO: Write lock on measurment...
+                    foreach (var alias in measurement.NameAndAliases)
+                    {
+                        MetadataInternal.MeasurementsWithAliases.Remove(alias);
+                    }
+                    MetadataInternal.Measurements.Remove(measurement.Name);
+                    SaveMetadata();
+                    File.Delete(measurement.BinaryFilePath);
                 }
-                MetadataInternal.Measurements.Remove(measurement.Name);
+            });
+        }
+
+        public void DeleteMeasurements(string nameRegex)
+        {
+            WriterLock(() =>
+            {
+                var measurements = GetMeasurements(nameRegex);
+                foreach (var measurement in measurements)
+                {
+                    DeleteMeasurement(measurement.Name);
+                }
+            });
+        }
+
+        /// <summary>
+        /// Delete measurements where the nameRegex matches only the name of a measurement
+        /// </summary>
+        /// <param name="nameRegex"></param>
+        public void DeleteMeasurementsByName(string nameRegex)
+        {
+            WriterLock(() =>
+            {
+                foreach (var measurement in MetadataInternal.Measurements.Keys.ToArray())
+                {
+                    if (Regex.IsMatch(measurement, nameRegex))
+                    {
+                        DeleteMeasurement(measurement);
+                    }
+                }
+            });
+        }
+
+        public void RemoveAliases(string nameRegex)
+        {
+            WriterLock(() =>
+            {
+                foreach (var measurement in MetadataInternal.Measurements.Values)
+                {
+                    measurement.DeleteAliases(nameRegex);
+                    MetadataInternal.RebuildAliasDictionary();
+                }
                 SaveMetadata();
             });
         }

@@ -49,6 +49,21 @@ namespace SharpTsdbClient
             return await PostRequestAsync<string>(url, new DataRows(points));
         }
 
+        public async Task<string> MergeAsync<T>(IEnumerable<ISingleDataRow<T>> points, string minInterval = null, bool onlyChangedValues = false)
+        {
+            //points = points.OrderBy(i => i.)
+            string url = $"db/{Db.DbName}/{MeasurementName}/mergeRows?type={typeof(T).ToShortCode()}";
+            if (minInterval != null)
+            {
+                url += $"&minInterval={minInterval}";
+            }
+            if (onlyChangedValues)
+            {
+                url += $"&onlyChangedValues=true";
+            }
+            return await PostRequestAsync<string>(url, new DataRows(points));
+        }
+
         public async Task<string> CreateAsync(Type type)
         {
             return
@@ -68,6 +83,30 @@ namespace SharpTsdbClient
             return
                 await
                     GetRequestAsync($"db/{Db.DbName}/{MeasurementName}/delete");
+        }
+
+        public async Task<string> DeleteByRegexAsync()
+        {
+            return
+                await
+                    GetRequestAsync($"db/{Db.DbName}/{MeasurementName}/deleteByRegex");
+        }
+
+        public async Task<string> DeleteByNameRegexAsync()
+        {
+            return
+                await
+                    GetRequestAsync($"db/{Db.DbName}/{MeasurementName}/deleteByNameRegex");
+        }
+
+        public async Task<bool> AddAliasesAsync(string newAliasReplacePattern)
+        {
+            return (await GetRequestAsync($"db/{Db.DbName}/{MeasurementName}/addAlias/{newAliasReplacePattern}") == "ok");
+        }
+
+        public async Task<bool> RemoveAliasesAsync()
+        {
+            return (await GetRequestAsync($"db/{Db.DbName}/{MeasurementName}/removeAliases") == "ok");
         }
 
     }

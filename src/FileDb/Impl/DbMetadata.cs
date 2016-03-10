@@ -44,7 +44,9 @@ namespace FileDb.Impl
             
         public IMeasurement GetMeasurement(string name)
         {
-            return MeasurementsWithAliases[name];
+            IMeasurement m;
+            MeasurementsWithAliases.TryGetValue(name, out m);
+            return m;
         }
 
         public void SetMeasurement(string name, IMeasurement measurement)
@@ -70,7 +72,12 @@ namespace FileDb.Impl
         [OnDeserialized]
         internal void OnDeserializingMethod(StreamingContext context)
         {
-            MeasurementsWithAliases =new Dictionary<string, IMeasurement>();
+            RebuildAliasDictionary();
+        }
+
+        public void RebuildAliasDictionary()
+        {
+            MeasurementsWithAliases = new Dictionary<string, IMeasurement>();
             foreach (var meas in Measurements.Values)
             {
                 MeasurementsWithAliases[meas.Metadata.Name] = meas;

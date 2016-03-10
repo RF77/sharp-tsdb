@@ -24,10 +24,16 @@ namespace Timeenator.Extensions.Rows
 
         public static IEnumerable<IDataRow> MinimalTimeSpan(this IEnumerable<IDataRow> rows, string minimalTimeSpan)
         {
-            return rows.MinimalTimeSpan(minimalTimeSpan.ToTimeSpan());
+            return rows.MinimalTimeSpan(minimalTimeSpan?.ToTimeSpan());
         }
 
-        public static IEnumerable<IDataRow> MinimalTimeSpan(this IEnumerable<IDataRow> rows, TimeSpan minimalTimeSpan)
+        public static IEnumerable<IDataRow> MinimalTimeSpan(this IEnumerable<IDataRow> rows, TimeSpan? minimalTimeSpan)
+        {
+            if (minimalTimeSpan == null) return rows;
+            return MinimalTimeSpanImpl(rows, minimalTimeSpan);
+        }
+
+        private static IEnumerable<IDataRow> MinimalTimeSpanImpl(IEnumerable<IDataRow> rows, TimeSpan? minimalTimeSpan)
         {
             IDataRow prev = null;
             foreach (var dataRow in rows)

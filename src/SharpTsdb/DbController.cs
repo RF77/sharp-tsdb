@@ -10,13 +10,13 @@
 //  *******************************************************************************/ 
 
 using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Net;
 using System.Net.Http;
 using System.Reflection;
+using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Web.Http;
@@ -27,6 +27,7 @@ using Serialize.Linq.Serializers;
 using SharpTsdb.Properties;
 using SharpTsdbTypes.Communication;
 using Timeenator.Extensions;
+using Timeenator.Extensions.Rows;
 using Timeenator.Interfaces;
 
 namespace SharpTsdb
@@ -97,6 +98,36 @@ namespace SharpTsdb
             }
         }
 
+        [Route("db/{dbName}/{name}/deleteByRegex")]
+        [HttpGet]
+        public string DeleteMeasurementsByRegex(string dbName, string name)
+        {
+            using (MeLog.LogDebug($"db: {dbName}, meas: {name}"))
+            {
+                Locker.WriterLock(() =>
+                {
+                    var myDb = DbService.DbManagement.GetDb(dbName);
+                    myDb.DeleteMeasurements(name);
+                });
+                return "ok";
+            }
+        }
+
+        [Route("db/{dbName}/{name}/deleteByNameRegex")]
+        [HttpGet]
+        public string DeleteMeasurementsByNameRegex(string dbName, string name)
+        {
+            using (MeLog.LogDebug($"db: {dbName}, meas: {name}"))
+            {
+                Locker.WriterLock(() =>
+                {
+                    var myDb = DbService.DbManagement.GetDb(dbName);
+                    myDb.DeleteMeasurementsByName(name);
+                });
+                return "ok";
+            }
+        }
+
         [Route("db/{dbName}/{measurementName}/clear")]
         [HttpGet]
         public string ClearMeasurement(string dbName, string measurementName, long? after)
@@ -133,6 +164,21 @@ namespace SharpTsdb
             }
         }
 
+        [Route("db/{dbName}/{measurementNameRegex}/removeAliases")]
+        [HttpGet]
+        public string RemoveAliasToMeasurements(string dbName, string measurementNameRegex)
+        {
+            using (MeLog.LogDebug($"db: {dbName}, meas: {measurementNameRegex}"))
+            {
+                Locker.WriterLock(() =>
+                {
+                    var myDb = DbService.DbManagement.GetDb(dbName);
+                    myDb.RemoveAliases(measurementNameRegex);
+                });
+                return "ok";
+            }
+        }
+
         [Route("db/{dbName}/allMeasurementsAsText")]
         [HttpGet]
         public HttpResponseMessage AllMeasurementsAsText(string dbName)
@@ -148,7 +194,7 @@ namespace SharpTsdb
                     var nameString = string.Join("\r\n", measurements);
                     return nameString;
                 });
-                resp.Content = new StringContent(result, System.Text.Encoding.UTF8, "text/plain");
+                resp.Content = new StringContent(result, Encoding.UTF8, "text/plain");
                 return resp;
             }
         }
@@ -165,11 +211,11 @@ namespace SharpTsdb
                 {
                     var myDb = DbService.DbManagement.GetDb(dbName);
                     var measurements = myDb.Metadata.Measurements.Values;
-                    var values = measurements.Select(i => string.Join("/", i.NameAndAliases)).OrderBy(i => i);
+                    var values = measurements.Select(i => string.Join(" / ", i.NameAndAliases)).OrderBy(i => i);
                     var nameString = string.Join("\r\n", values);
                     return nameString;
                 });
-                resp.Content = new StringContent(result, System.Text.Encoding.UTF8, "text/plain");
+                resp.Content = new StringContent(result, Encoding.UTF8, "text/plain");
                 return resp;
             }
         }
@@ -189,7 +235,7 @@ namespace SharpTsdb
                     var nameString = string.Join("\r\n", measurements);
                     return nameString;
                 });
-                resp.Content = new StringContent(result, System.Text.Encoding.UTF8, "text/plain");
+                resp.Content = new StringContent(result, Encoding.UTF8, "text/plain");
                 return resp;
             }
         }
@@ -211,6 +257,26 @@ namespace SharpTsdb
                 });
 
                 measurement.AppendDataPoints(data.AsIDataRows());
+                return "ok";
+            }
+        }
+
+        [Route("db/{dbName}/{meas}/mergeRows")]
+        [HttpPost]
+        public string MergePoints(string dbName, string meas, [FromBody] DataRows data, string type = "float", string minInterval = null, bool onlyChangedValues = false)
+        {
+            using (
+                MeLog.LogDebug(
+                    $"db: {dbName}, meas: {meas}, point#: {data.Rows.Count}, minInterval: {minInterval}, onlyChangedValues: {onlyChangedValues}"))
+            {
+                IMeasurement measurement = null;
+                Locker.WriterLock(() =>
+                {
+                    var myDb = DbService.DbManagement.GetDb(dbName);
+                    measurement = myDb.GetOrCreateMeasurement(meas, type);
+                });
+
+                measurement.MergeDataPoints(data.AsIDataRows(), i => onlyChangedValues ? i.ValueChanges() : i.MinimalTimeSpan(minInterval));
                 return "ok";
             }
         }

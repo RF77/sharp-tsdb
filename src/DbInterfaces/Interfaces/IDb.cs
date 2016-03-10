@@ -47,5 +47,14 @@ namespace DbInterfaces.Interfaces
         /// <param name="nameRegex"></param>
         /// <param name="aliasName"></param>
         void AddAliasToMeasurements(string nameRegex, string aliasName);
+
+        void DeleteMeasurements(string nameRegex);
+        void RemoveAliases(string nameRegex);
+
+        /// <summary>
+        /// Delete measurements where the nameRegex matches only the name of a measurement
+        /// </summary>
+        /// <param name="nameRegex"></param>
+        void DeleteMeasurementsByName(string nameRegex);
     }
 }

@@ -15,6 +15,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Runtime.Serialization;
+using System.Text.RegularExpressions;
 using DbInterfaces.Interfaces;
 using FileDb.Properties;
 using FileDb.RowReaderWriter;
@@ -116,7 +117,7 @@ namespace FileDb.Impl
             });
         }
 
-        public IEnumerable<string> NameAndAliases => MetadataInternal.Aliases.Concat(new[] {MetadataInternal.Name});
+        public IEnumerable<string> NameAndAliases => new[] { MetadataInternal.Name }.Concat(MetadataInternal.Aliases);
 
         public IMeasurementMetadata Metadata => MetadataInternal;
 
@@ -138,6 +139,14 @@ namespace FileDb.Impl
                     ClearDataPointsAfter(startDate);
                     AppendDataPoints(mergedRows);
                 }
+            });
+        }
+
+        public void DeleteAliases(string nameRegex)
+        {
+            WriterLock(() =>
+            {
+                MetadataInternal.Aliases.RemoveWhere(i => Regex.IsMatch(i, nameRegex));
             });
         }
 

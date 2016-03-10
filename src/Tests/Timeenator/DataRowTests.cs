@@ -73,5 +73,25 @@ namespace Tests.Timeenator
             result2.SequenceEqual(result).Should().BeTrue();
 
         }
+
+        [Test]
+        public void TimeSpanIsNullChangesTest()
+        {
+            var rows = new DataRow[]
+            {
+                new DataRow() {Key = new DateTime(2010, 1, 1, 0, 0, 0), Value = 1},
+                new DataRow() {Key = new DateTime(2010, 1, 1, 0, 0, 1), Value = 1},
+                new DataRow() {Key = new DateTime(2010, 1, 1, 0, 0, 2), Value = 2},
+                new DataRow() {Key = new DateTime(2010, 1, 1, 0, 1, 3), Value = 2},
+                new DataRow() {Key = new DateTime(2010, 1, 1, 0, 1, 23), Value = 2},
+                new DataRow() {Key = new DateTime(2010, 1, 1, 0, 2, 5), Value = 3},
+                new DataRow() {Key = new DateTime(2010, 1, 1, 0, 2, 6), Value = 4},
+            };
+
+            var result = rows.MinimalTimeSpan((string)null).ToList();
+
+            result.Count.Should().Be(7);
+
+        }
     }
 }
