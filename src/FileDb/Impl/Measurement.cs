@@ -120,6 +120,28 @@ namespace FileDb.Impl
 
         public IMeasurementMetadata Metadata => MetadataInternal;
 
+        public void MergeDataPoints(IEnumerable<IDataRow> rows, Func<IEnumerable<IDataRow>, IEnumerable<IDataRow>> mergeFunc)
+        {
+            var newRows = rows.OrderBy(i => i.Key).ToList();
+            if (!newRows.Any()) return;
+            WriterLock(() =>
+            {
+                var startDate = newRows.First().Key;
+                var existingRows = GetDataPoints(startDate);
+                if (!existingRows.Rows.Any())
+                {
+                    AppendDataPoints(mergeFunc(newRows));
+                }
+                else
+                {
+                    var mergedRows = mergeFunc(existingRows.Rows.Concat(newRows).OrderBy(i => i.Key));
+                    ClearDataPointsAfter(startDate);
+                    AppendDataPoints(mergedRows);
+                }
+            });
+        }
+
+
         public void AppendDataPoints(IEnumerable<IDataRow> row)
         {
             WriterLock(() =>
@@ -139,6 +161,7 @@ namespace FileDb.Impl
 
         public IQuerySerie<T> GetDataPoints<T>(DateTime? @from = null, DateTime? to = null) where T : struct
         {
+            //TODO: optimize duplicated code with GetDataPoints
             return ReaderLock(() =>
             {
                 var start = from?.ToUniversalTime() ?? DateTime.MinValue;
@@ -159,6 +182,34 @@ namespace FileDb.Impl
                         fs.Position = itemToStart*_rowReaderWriter.RowLength;
 
                         return ReadRows<T>(fs, binaryReader, start, stop, from, to);
+                    }
+                }
+            });
+        }
+
+        public IObjectQuerySerie GetDataPoints(DateTime? @from = null, DateTime? to = null)
+        {
+            //TODO: optimize duplicated code with GetDataPoints<T>
+            return ReaderLock(() =>
+            {
+                var start = from?.ToUniversalTime() ?? DateTime.MinValue;
+                var stop = to?.ToUniversalTime() ?? DateTime.MaxValue;
+
+                using (var fs = File.Open(BinaryFilePath, FileMode.Open, FileAccess.Read, FileShare.Read))
+                {
+                    var items = fs.Length / _rowReaderWriter.RowLength;
+                    var currentItem = items / 2;
+
+                    using (var binaryReader = new BinaryReader(fs))
+                    {
+                        var itemToStart = GetItemToStart(start, fs, binaryReader, currentItem, currentItem, 0);
+                        if (itemToStart > 0)
+                        {
+                            itemToStart--;
+                        }
+                        fs.Position = itemToStart * _rowReaderWriter.RowLength;
+
+                        return ReadRows(fs, binaryReader, start, stop, from, to);
                     }
                 }
             });
@@ -247,6 +298,7 @@ namespace FileDb.Impl
         private IQuerySerie<T> ReadRows<T>(FileStream fs, BinaryReader binaryReader, DateTime start,
             DateTime stop, DateTime? @from = null, DateTime? to = null) where T : struct
         {
+            //TODO: optimize duplicated code with ReadRows
             ISingleDataRow<T> firstRow = null;
             var rows = new List<ISingleDataRow<T>>();
             var data = new QuerySerie<T>(rows, from, to);
@@ -254,6 +306,43 @@ namespace FileDb.Impl
             while (fs.Position < fs.Length)
             {
                 var readRow = _rowReaderWriter.ReadRow<T>(binaryReader);
+
+                if (readRow.TimeUtc >= start)
+                {
+                    if (readRow.TimeUtc <= stop)
+                    {
+                        rows.Add(readRow);
+                    }
+                }
+                else
+                {
+                    firstRow = readRow;
+                }
+
+                if (readRow.TimeUtc >= stop)
+                {
+                    data.NextRow = readRow;
+                    break;
+                }
+            }
+
+            data.Name = Metadata.Name;
+            data.PreviousRow = firstRow;
+
+            return data;
+        }
+
+        private IObjectQuerySerie ReadRows(FileStream fs, BinaryReader binaryReader, DateTime start,
+            DateTime stop, DateTime? @from = null, DateTime? to = null)
+        {
+            //TODO: optimize duplicated code with ReadRows<T>
+            IObjectSingleDataRow firstRow = null;
+            var rows = new List<IObjectSingleDataRow>();
+            var data = new ObjectQuerySerie(rows, from, to);
+
+            while (fs.Position < fs.Length)
+            {
+                var readRow = _rowReaderWriter.ReadRow(binaryReader);
 
                 if (readRow.TimeUtc >= start)
                 {

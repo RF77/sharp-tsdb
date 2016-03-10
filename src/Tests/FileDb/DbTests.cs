@@ -21,6 +21,7 @@ using FluentAssertions;
 using MathNet.Numerics.Statistics;
 using NUnit.Framework;
 using Timeenator.Extensions.Grouping;
+using Timeenator.Extensions.Rows;
 using Timeenator.Impl;
 using Timeenator.Interfaces;
 
@@ -307,6 +308,133 @@ namespace Tests.FileDb
             _unitUnderTest.MetadataInternal.MeasurementsWithAliases.Count.Should().Be(2);
             var aliasMeasurment = _unitUnderTest.GetOrCreateMeasurement("ABC");
             measurement.Should().Be(aliasMeasurment);
+        }
+
+        [Test]
+        public void MergeOnlyValueChangesTest()
+        {
+            var rowsA = new[]
+            {
+                new SingleDataRow<float>(new DateTime(2010, 1, 1, 0, 0, 0, DateTimeKind.Utc),  1),
+                new SingleDataRow<float>(new DateTime(2010, 1, 1, 0, 0, 1, DateTimeKind.Utc),  1),
+                new SingleDataRow<float>(new DateTime(2010, 1, 1, 0, 0, 2, DateTimeKind.Utc),  3),
+                new SingleDataRow<float>(new DateTime(2010, 1, 1, 0, 0, 5, DateTimeKind.Utc),  4),
+                new SingleDataRow<float>(new DateTime(2010, 1, 1, 0, 0, 8, DateTimeKind.Utc),  5),
+                new SingleDataRow<float>(new DateTime(2010, 1, 1, 0, 0, 9, DateTimeKind.Utc),  6),
+            };
+
+            var rowsB = new[]
+            {
+                new SingleDataRow<float>(new DateTime(2010, 1, 1, 0, 0, 9, DateTimeKind.Utc), 6),
+                new SingleDataRow<float>(new DateTime(2010, 1, 1, 0, 0, 2, DateTimeKind.Utc), 3),
+                new SingleDataRow<float>(new DateTime(2010, 1, 1, 0, 0, 3, DateTimeKind.Utc), 3),
+                new SingleDataRow<float>(new DateTime(2010, 1, 1, 0, 0, 4, DateTimeKind.Utc), 4),
+                new SingleDataRow<float>(new DateTime(2010, 1, 1, 0, 0, 5, DateTimeKind.Utc), 4),
+                new SingleDataRow<float>(new DateTime(2010, 1, 1, 0, 0, 8, DateTimeKind.Utc), 5),
+            };
+
+            _unitUnderTest.GetOrCreateMeasurement("A").AppendDataPoints(rowsA);
+            _unitUnderTest.GetOrCreateMeasurement("A").MergeDataPoints(rowsB, o => o.ValueChanges());
+
+            var result = _unitUnderTest.GetSerie<float>("A");
+
+            result.Rows[0].Value.Should().Be(1);
+            result.Rows[1].Value.Should().Be(1);
+            result.Rows[3].Key.Should().Be(new DateTime(2010, 1, 1, 0, 0, 4, DateTimeKind.Utc));
+            result.Rows.Count.Should().Be(6);
+        }
+
+        [Test]
+        public void MergeTimeSpanTest()
+        {
+            var rowsA = new[]
+            {
+                new SingleDataRow<float>(new DateTime(2010, 1, 1, 0, 0, 0, DateTimeKind.Utc),  1),
+                new SingleDataRow<float>(new DateTime(2010, 1, 1, 0, 0, 1, DateTimeKind.Utc),  1),
+                new SingleDataRow<float>(new DateTime(2010, 1, 1, 0, 0, 2, DateTimeKind.Utc),  3),
+                new SingleDataRow<float>(new DateTime(2010, 1, 1, 0, 0, 5, DateTimeKind.Utc),  4),
+                new SingleDataRow<float>(new DateTime(2010, 1, 1, 0, 0, 8, DateTimeKind.Utc),  5),
+                new SingleDataRow<float>(new DateTime(2010, 1, 1, 0, 0, 9, DateTimeKind.Utc),  6),
+            };
+
+            var rowsB = new[]
+            {
+                new SingleDataRow<float>(new DateTime(2010, 1, 1, 0, 0, 9, DateTimeKind.Utc), 6),
+                new SingleDataRow<float>(new DateTime(2010, 1, 1, 0, 0, 2, DateTimeKind.Utc), 3),
+                new SingleDataRow<float>(new DateTime(2010, 1, 1, 0, 0, 3, DateTimeKind.Utc), 3),
+                new SingleDataRow<float>(new DateTime(2010, 1, 1, 0, 0, 4, DateTimeKind.Utc), 4),
+                new SingleDataRow<float>(new DateTime(2010, 1, 1, 0, 0, 5, DateTimeKind.Utc), 4),
+                new SingleDataRow<float>(new DateTime(2010, 1, 1, 0, 0, 8, DateTimeKind.Utc), 5),
+            };
+
+            _unitUnderTest.GetOrCreateMeasurement("A").AppendDataPoints(rowsA);
+            _unitUnderTest.GetOrCreateMeasurement("A").MergeDataPoints(rowsB, o => o.MinimalTimeSpan("2s"));
+
+            var result = _unitUnderTest.GetSerie<float>("A");
+
+            result.Rows.Count.Should().Be(5);
+        }
+
+        [Test]
+        public void MergeTimeSpanAfterTest()
+        {
+            var rowsA = new[]
+            {
+                new SingleDataRow<float>(new DateTime(2010, 1, 1, 0, 0, 0, DateTimeKind.Utc),  1),
+                new SingleDataRow<float>(new DateTime(2010, 1, 1, 0, 0, 1, DateTimeKind.Utc),  1),
+                new SingleDataRow<float>(new DateTime(2010, 1, 1, 0, 0, 2, DateTimeKind.Utc),  3),
+                new SingleDataRow<float>(new DateTime(2010, 1, 1, 0, 0, 5, DateTimeKind.Utc),  4),
+                new SingleDataRow<float>(new DateTime(2010, 1, 1, 0, 0, 8, DateTimeKind.Utc),  5),
+                new SingleDataRow<float>(new DateTime(2010, 1, 1, 0, 0, 9, DateTimeKind.Utc),  6),
+            };
+
+            var rowsB = new[]
+            {
+                new SingleDataRow<float>(new DateTime(2010, 1, 1, 1, 0, 9, DateTimeKind.Utc), 6),
+                new SingleDataRow<float>(new DateTime(2010, 1, 1, 1, 0, 2, DateTimeKind.Utc), 3),
+                new SingleDataRow<float>(new DateTime(2010, 1, 1, 1, 0, 3, DateTimeKind.Utc), 3),
+                new SingleDataRow<float>(new DateTime(2010, 1, 1, 1, 0, 4, DateTimeKind.Utc), 4),
+                new SingleDataRow<float>(new DateTime(2010, 1, 1, 1, 0, 5, DateTimeKind.Utc), 4),
+                new SingleDataRow<float>(new DateTime(2010, 1, 1, 1, 0, 8, DateTimeKind.Utc), 5),
+            };
+
+            _unitUnderTest.GetOrCreateMeasurement("A").AppendDataPoints(rowsA);
+            _unitUnderTest.GetOrCreateMeasurement("A").MergeDataPoints(rowsB, o => o.MinimalTimeSpan("2s"));
+
+            var result = _unitUnderTest.GetSerie<float>("A");
+
+            result.Rows.Count.Should().Be(9);
+        }
+
+        [Test]
+        public void MergeTimeSpanBeforeTest()
+        {
+            var rowsA = new[]
+            {
+                new SingleDataRow<float>(new DateTime(2011, 1, 1, 0, 0, 0, DateTimeKind.Utc),  1),
+                new SingleDataRow<float>(new DateTime(2011, 1, 1, 0, 0, 1, DateTimeKind.Utc),  1),
+                new SingleDataRow<float>(new DateTime(2011, 1, 1, 0, 0, 2, DateTimeKind.Utc),  3),
+                new SingleDataRow<float>(new DateTime(2011, 1, 1, 0, 0, 5, DateTimeKind.Utc),  4),
+                new SingleDataRow<float>(new DateTime(2011, 1, 1, 0, 0, 8, DateTimeKind.Utc),  5),
+                new SingleDataRow<float>(new DateTime(2011, 1, 1, 0, 0, 9, DateTimeKind.Utc),  6),
+            };
+
+            var rowsB = new[]
+            {
+                new SingleDataRow<float>(new DateTime(2010, 1, 1, 1, 0, 9, DateTimeKind.Utc), 6),
+                new SingleDataRow<float>(new DateTime(2010, 1, 1, 1, 0, 2, DateTimeKind.Utc), 3),
+                new SingleDataRow<float>(new DateTime(2010, 1, 1, 1, 0, 3, DateTimeKind.Utc), 3),
+                new SingleDataRow<float>(new DateTime(2010, 1, 1, 1, 0, 4, DateTimeKind.Utc), 4),
+                new SingleDataRow<float>(new DateTime(2010, 1, 1, 1, 0, 5, DateTimeKind.Utc), 4),
+                new SingleDataRow<float>(new DateTime(2010, 1, 1, 1, 0, 8, DateTimeKind.Utc), 5),
+            };
+
+            _unitUnderTest.GetOrCreateMeasurement("A").AppendDataPoints(rowsA);
+            _unitUnderTest.GetOrCreateMeasurement("A").MergeDataPoints(rowsB, o => o.MinimalTimeSpan("2s"));
+
+            var result = _unitUnderTest.GetSerie<float>("A");
+
+            result.Rows.Count.Should().Be(7);
         }
 
         [Test, Ignore]

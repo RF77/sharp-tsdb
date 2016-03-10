@@ -31,5 +31,6 @@ namespace DbInterfaces.Interfaces
         ISingleDataRow<T> CurrentValue<T>() where T : struct;
         void ClearDataPoints(DateTime? after = null);
         IEnumerable<string> NameAndAliases { get; }
+        void MergeDataPoints(IEnumerable<IDataRow> rows, Func<IEnumerable<IDataRow>, IEnumerable<IDataRow>> mergeFunc);
     }
 }

@@ -46,7 +46,7 @@ namespace Tests.QueryLanguage
                 ;
         }
 
-        [Test]
+        [Test,Ignore]
         public void SchneefallTest()
         {
             var db = new DbManagement().GetDb("Haus");

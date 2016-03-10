@@ -36,7 +36,7 @@ namespace SharpTsdbTypes.Communication
 
         public IEnumerable<ISingleDataRow<T>> AsTyped<T>() where T : struct
         {
-            return Rows?.Select(i => new SingleDataRow<T>(ToDateTime(i), i[1].ToType<T>()));
+            return Rows?.Select(i => (ISingleDataRow<T>)new SingleDataRow<T>(ToDateTime(i), i[1].ToType<T>()));
         }
 
         private static DateTime ToDateTime(object[] i)

@@ -74,6 +74,7 @@
   <ItemGroup>
     <Compile Include="Extensions\Converting\ConvertExtensions.cs" />
     <Compile Include="Extensions\Converting\QueryTableExtensions.cs" />
+    <Compile Include="Extensions\Rows\DataRowCollectionExtensions.cs" />
     <Compile Include="Impl\DataRow.cs" />
     <Compile Include="Impl\DataRows\NamedDataRow.cs" />
     <Compile Include="Extensions\DateTimeExtensions.cs" />
@@ -105,6 +106,7 @@
     <Compile Include="Extensions\LongExtensions.cs" />
     <Compile Include="Impl\NullableQuerySerie.cs" />
     <Compile Include="Impl\NullableQueryTable.cs" />
+    <Compile Include="Impl\ObjectQuerySerie.cs" />
     <Compile Include="Impl\QuerySerie.Aggregation.cs" />
     <Compile Include="Impl\QuerySerie.cs" />
     <Compile Include="Impl\QuerySerieBase.cs" />

@@ -10,11 +10,13 @@
 //  *******************************************************************************/ 
 
 using System;
+using System.Diagnostics;
 using Timeenator.Interfaces;
 
 namespace Timeenator.Impl
 {
-    public class DataRow : IDataRow, IEquatable<DataRow>
+    [DebuggerDisplay("{Key}: {Value}")]
+    public class DataRow : IObjectSingleDataRow, IEquatable<DataRow>
     {
         public DateTime Key { get; set; }
         public object Value { get; set; }
@@ -50,6 +52,16 @@ namespace Timeenator.Impl
         public static bool operator !=(DataRow left, DataRow right)
         {
             return !Equals(left, right);
+        }
+
+        public DateTime TimeUtc
+        {
+            get { return Key; }
+            set { Key = value; }
+        }
+        public object[] ToArray()
+        {
+            return new [] { Key.ToFileTimeUtc(), Value };
         }
     }
 }

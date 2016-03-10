@@ -11,7 +11,7 @@
 
 namespace Timeenator.Interfaces
 {
-    public interface IQuerySerieBase<T> : IObjectQuerySerieBase where T : struct
+    public interface IQuerySerieBase<T> : IObjectQuerySerie where T : struct
     {
         /// <summary>
         ///     Last value before the start time or null

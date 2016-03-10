@@ -20,7 +20,7 @@ namespace FileDb.RowReaderWriter
     {
         public int RowLength { get; set; }
         public abstract ISingleDataRow<T> ReadRow<T>(BinaryReader reader);
-        public abstract IDataRow ReadRow(BinaryReader reader);
+        public abstract IObjectSingleDataRow ReadRow(BinaryReader reader);
 
         public virtual void WriteRow(BinaryWriter writer, IDataRow row)
         {

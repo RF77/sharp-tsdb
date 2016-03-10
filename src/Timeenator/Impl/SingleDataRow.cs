@@ -24,21 +24,11 @@ namespace Timeenator.Impl
             Value = value;
         }
 
-        public DateTime TimeUtc
-        {
-            get { return Key; }
-            set { Key = value; }
-        }
-
         public new T Value
         {
             get { return (T) base.Value; }
             set { base.Value = value; }
         }
 
-        public object[] ToArray()
-        {
-            return new object[] {Key.ToFileTimeUtc(), Value};
-        }
     }
 }

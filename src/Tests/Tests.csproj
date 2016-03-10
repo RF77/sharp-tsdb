@@ -110,21 +110,22 @@
     <Compile Include="FileDb\DbTests.cs" />
     <Compile Include="FileDb\TimeExpressionsTests.cs" />
     <Compile Include="Grafana\GrafanaExampleTests.cs" />
-    <Compile Include="QueryLanguage\AggregationTests.cs" />
-    <Compile Include="QueryLanguage\DynamicTableTests.cs" />
-    <Compile Include="QueryLanguage\StartEndTimeTests.cs" />
-    <Compile Include="QueryLanguage\GroupByTriggerTests.cs" />
-    <Compile Include="QueryLanguage\WhereGroupingTests.cs" />
-    <Compile Include="QueryLanguage\QuerySerieTests.cs" />
-    <Compile Include="QueryLanguage\TimeWhereTests.cs" />
-    <Compile Include="QueryLanguage\MeanByTimeTests.cs" />
-    <Compile Include="QueryLanguage\GroupingTests.cs" />
+    <Compile Include="Timeenator\AggregationTests.cs" />
+    <Compile Include="Timeenator\DynamicTableTests.cs" />
+    <Compile Include="Timeenator\DataRowTests.cs" />
+    <Compile Include="Timeenator\StartEndTimeTests.cs" />
+    <Compile Include="Timeenator\GroupByTriggerTests.cs" />
+    <Compile Include="Timeenator\WhereGroupingTests.cs" />
+    <Compile Include="Timeenator\QuerySerieTests.cs" />
+    <Compile Include="Timeenator\TimeWhereTests.cs" />
+    <Compile Include="Timeenator\MeanByTimeTests.cs" />
+    <Compile Include="Timeenator\GroupingTests.cs" />
     <Compile Include="Properties\Settings.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
       <DependentUpon>Settings.settings</DependentUpon>
     </Compile>
-    <Compile Include="QueryLanguage\ScientificTests.cs" />
+    <Compile Include="Timeenator\ScientificTests.cs" />
     <Compile Include="EmptyTests.cs" />
     <Compile Include="Settings.cs" />
     <Compile Include="FileDb\DbManagementTests.cs" />

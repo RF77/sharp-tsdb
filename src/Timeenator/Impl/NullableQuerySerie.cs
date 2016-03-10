@@ -39,7 +39,14 @@ namespace Timeenator.Impl
             Rows = result;
         }
 
-        public IReadOnlyList<ISingleDataRow<T?>> Rows { get; }
+        public new IReadOnlyList<ISingleDataRow<T?>> Rows
+        {
+            get
+            {
+                return base.Rows as List<ISingleDataRow<T?>>;
+            }
+            set { base.Rows = value; }
+        }
 
         public override object this[int index]
         {
@@ -140,7 +147,7 @@ namespace Timeenator.Impl
             return
                 new QuerySerie<T>(
                     Rows.Where(i => i.Value != null)
-                        .Select(i => new SingleDataRow<T>(i.TimeUtc, i.Value.Value))
+                        .Select(i => (ISingleDataRow<T>)new SingleDataRow<T>(i.TimeUtc, i.Value.Value))
                         .ToList(), this);
         }
 

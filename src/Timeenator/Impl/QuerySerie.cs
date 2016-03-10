@@ -20,12 +20,13 @@ using Timeenator.Interfaces;
 
 namespace Timeenator.Impl
 {
+
+
     [DebuggerDisplay("{FullName} ({Rows.Count})")]
     public partial class QuerySerie<T> : QuerySerieBase<T>, IQuerySerie<T> where T : struct
     {
         public QuerySerie(IReadOnlyList<ISingleDataRow<T>> rows, DateTime? startTime, DateTime? endTime)
             : base(startTime, endTime)
-
         {
             Rows = rows;
         }
@@ -35,7 +36,26 @@ namespace Timeenator.Impl
             Rows = rows;
         }
 
-        public IReadOnlyList<ISingleDataRow<T>> Rows { get; }
+        public new IReadOnlyList<ISingleDataRow<T>> Rows
+        {
+            get
+            {
+                var singleDataRows = base.Rows as List<ISingleDataRow<T>>;
+                if (singleDataRows == null)
+                {
+                    
+                }
+                return singleDataRows;
+            }
+            set
+            {
+                if (value is List<SingleDataRow<T>>)
+                {
+                    
+                }
+                base.Rows = value;
+            }
+        }
 
         public override object this[int index]
         {

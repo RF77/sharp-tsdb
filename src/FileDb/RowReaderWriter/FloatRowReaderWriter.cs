@@ -37,7 +37,7 @@ namespace FileDb.RowReaderWriter
             return row;
         }
 
-        public override IDataRow ReadRow(BinaryReader reader)
+        public override IObjectSingleDataRow ReadRow(BinaryReader reader)
         {
             return new DataRow {Key = ReadDate(reader), Value = reader.ReadSingle()};
         }
