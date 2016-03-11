@@ -99,7 +99,7 @@ namespace Tests.QueryLanguage
             var db = new DbManagement().GetDb("fux");
             var queryTable = db.GetTable<float>("Aussen.Wetterstation.(?<k>[TF]).*?$", "time > now() - 1M");
             var result = queryTable
-                .Transform(i => i.GroupByHours(1, o => o.Mean()))
+                .Group(g => g.ByTime.Hours(1).Aggregate(o => o.Mean()))
                 .Calc(t => t.Sum = t.T + t.F);
 
             result.Series.Count().Should().Be(3);

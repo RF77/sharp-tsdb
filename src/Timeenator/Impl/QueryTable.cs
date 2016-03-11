@@ -12,6 +12,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Timeenator.Impl.Grouping.Configurators;
 using Timeenator.Interfaces;
 
 namespace Timeenator.Impl
@@ -65,6 +66,17 @@ namespace Timeenator.Impl
             foreach (var serie in Series.Values)
             {
                 table.AddSerie(doFunc(serie));
+            }
+
+            return table;
+        }
+
+        public INullableQueryTable<T> Group(Func<IGroupSelector<T>, IExecutableGroup<T>> groupConfigurator)
+        {
+            var table = new NullableQueryTable<T>();
+            foreach (var serie in Series.Values)
+            {
+                table.AddSerie(serie.Group(groupConfigurator));
             }
 
             return table;

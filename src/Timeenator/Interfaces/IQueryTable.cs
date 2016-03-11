@@ -11,6 +11,7 @@
 
 using System;
 using System.Collections.Generic;
+using Timeenator.Impl.Grouping.Configurators;
 
 namespace Timeenator.Interfaces
 {
@@ -20,5 +21,6 @@ namespace Timeenator.Interfaces
         new IQuerySerie<T> TryGetSerie(string name);
         void AddSerie(IQuerySerie<T> serie);
         INullableQueryTable<T> Transform(Func<IQuerySerie<T>, INullableQuerySerie<T>> doFunc);
+        INullableQueryTable<T> Group(Func<IGroupSelector<T>, IExecutableGroup<T>> groupConfigurator);
     }
 }
