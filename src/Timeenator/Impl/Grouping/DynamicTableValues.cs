@@ -27,7 +27,7 @@ namespace Timeenator.Impl.Grouping
 
         public override bool TrySetMember(SetMemberBinder binder, object value)
         {
-            var serie = _table.TryGetSerie(binder.Name);
+            var serie = _table.GetOrCreateSerie(binder.Name);
             if (serie != null)
             {
                 serie[Index] = value;

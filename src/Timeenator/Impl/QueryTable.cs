@@ -11,12 +11,29 @@
 
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using Timeenator.Interfaces;
 
 namespace Timeenator.Impl
 {
     public class QueryTable<T> : QueryTableBase<T>, IQueryTable<T> where T : struct
     {
+        public override IObjectQuerySerieBase GetOrCreateSerie(string name)
+        {
+            var serie = TryGetSerie(name);
+            if (serie == null)
+            {
+                var firstSerie = Series.Values.FirstOrDefault();
+                if (firstSerie != null)
+                {
+                    var newSerie = new QuerySerie<T>(new List<ISingleDataRow<T>>(firstSerie.Rows.Select(i => new SingleDataRow<T>(i.Key, default(T)))), firstSerie.StartTime, firstSerie.EndTime);
+                    AddSerie(newSerie);
+                    serie = newSerie;
+                }
+            }
+            return serie;
+        }
+
         public new IDictionary<string, IQuerySerie<T>> Series { get; } = new Dictionary<string, IQuerySerie<T>>();
 
         public void AddSerie(IQuerySerie<T> serie)

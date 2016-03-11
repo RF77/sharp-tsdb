@@ -32,6 +32,22 @@ namespace Timeenator.Impl
             }
         }
 
+        public override IObjectQuerySerieBase GetOrCreateSerie(string name)
+        {
+            var serie = TryGetSerie(name);
+            if (serie == null)
+            {
+                var firstSerie = Series.Values.FirstOrDefault();
+                if (firstSerie != null)
+                {
+                    var newSerie = new NullableQuerySerie<T>(new List<ISingleDataRow<T?>>(firstSerie.Rows.Select(i => new SingleDataRow<T?>(i.Key, null))), firstSerie.StartTime, firstSerie.EndTime).Alias(name);
+                    AddSerie(newSerie);
+                    serie = newSerie;
+                }
+            }
+            return serie;
+        }
+
         public new IDictionary<string, INullableQuerySerie<T>> Series { get; } =
             new Dictionary<string, INullableQuerySerie<T>>();
 
@@ -113,6 +129,19 @@ namespace Timeenator.Impl
                 resultTables.Add(table);
             }
             return resultTables.MergeTables();
+        }
+
+        public INullableQueryTable<T> Calc(Action<dynamic> zipFunc)
+        {
+            var dynamicTable = new DynamicTableValues(this);
+            var firstSerie = Series.Values.First();
+            var count = firstSerie.Rows.Count;
+            for (var i = 0; i < count; i++)
+            {
+                dynamicTable.Index = i;
+                zipFunc(dynamicTable);
+            }
+            return this;
         }
 
         public IReadOnlyList<INullableQueryTable<T>> GroupSeries()

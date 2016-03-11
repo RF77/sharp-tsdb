@@ -59,5 +59,6 @@ namespace Timeenator.Interfaces
         INullableQueryTable<T> ZipAndAdd(string newSerieKeyOrName, Func<dynamic, T?> zipFunc);
 
         INullableQueryTable<T> ToNewTable(Action<INullableQueryTable<T>, INullableQueryTable<T>> transformAction);
+        INullableQueryTable<T> Calc(Action<dynamic> zipFunc);
     }
 }

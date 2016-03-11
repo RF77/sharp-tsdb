@@ -17,5 +17,6 @@ namespace Timeenator.Interfaces
     {
         new IEnumerable<IObjectQuerySerie> Series { get; }
         IObjectQuerySerieBase TryGetSerie(string name);
+        IObjectQuerySerieBase GetOrCreateSerie(string name);
     }
 }

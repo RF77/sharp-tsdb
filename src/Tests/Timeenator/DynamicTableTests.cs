@@ -12,8 +12,10 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Linq;
 using FileDb.Impl;
 using FileDb.Scripting;
+using FluentAssertions;
 using NUnit.Framework;
 using Timeenator.Extensions.Converting;
 using Timeenator.Extensions.Grouping;
@@ -98,7 +100,9 @@ namespace Tests.QueryLanguage
             var queryTable = db.GetTable<float>("Aussen.Wetterstation.(?<k>[TF]).*?$", "time > now() - 1M");
             var result = queryTable
                 .Transform(i => i.GroupByHours(1, o => o.Mean()))
-                .ZipAndAdd("Sum", t => t.T + t.F);
+                .Calc(t => t.Sum = t.T + t.F);
+
+            result.Series.Count().Should().Be(3);
         }
 
         [Test]
