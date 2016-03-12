@@ -144,6 +144,16 @@ namespace Timeenator.Impl
             return this;
         }
 
+        public INullableQueryTable<T> RemoveDbSeries()
+        {
+            var querySeries = Series.Values.Where(i => i.IsDbSerie).ToArray();
+            foreach (var serie in querySeries)
+            {
+                Series.Remove(serie.FullName);
+            }
+            return this;
+        }
+
         public IReadOnlyList<INullableQueryTable<T>> GroupSeries()
         {
             var newTables = new List<INullableQueryTable<T>>();

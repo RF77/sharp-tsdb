@@ -296,6 +296,23 @@ namespace Tests.Dummy
         }
 
         [Test]
+        public void FloatTesting()
+        {
+            var sw = Stopwatch.StartNew();
+            for (int i = 0; i < 10000000; i++)
+            {
+                float sum = 0.1f*4.5f;
+            }
+            sw.Stop();
+            var sw2 = Stopwatch.StartNew();
+            for (int i = 0; i < 10000000; i++)
+            {
+                double sum = 0.1 * 4.5;
+            }
+            sw2.Stop();
+        }
+
+        [Test]
         public void SecondsTimeUtcPerformance()
         {
             DateTime now = DateTime.UtcNow;

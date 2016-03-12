@@ -22,5 +22,6 @@ namespace Timeenator.Interfaces
         void AddSerie(IQuerySerie<T> serie);
         INullableQueryTable<T> Transform(Func<IQuerySerie<T>, INullableQuerySerie<T>> doFunc);
         INullableQueryTable<T> Group(Func<IGroupSelector<T>, IExecutableGroup<T>> groupConfigurator);
+        IQueryTable<T> RemoveDbSeries();
     }
 }

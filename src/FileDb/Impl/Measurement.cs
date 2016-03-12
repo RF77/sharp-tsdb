@@ -310,7 +310,7 @@ namespace FileDb.Impl
             //TODO: optimize duplicated code with ReadRows
             ISingleDataRow<T> firstRow = null;
             var rows = new List<ISingleDataRow<T>>();
-            var data = new QuerySerie<T>(rows, from, to);
+            var data = new QuerySerie<T>(rows, from, to) { IsDbSerie = true };
 
             while (fs.Position < fs.Length)
             {
@@ -347,7 +347,7 @@ namespace FileDb.Impl
             //TODO: optimize duplicated code with ReadRows<T>
             IObjectSingleDataRow firstRow = null;
             var rows = new List<IObjectSingleDataRow>();
-            var data = new ObjectQuerySerie(rows, from, to);
+            var data = new ObjectQuerySerie(rows, from, to) {IsDbSerie = true};
 
             while (fs.Position < fs.Length)
             {

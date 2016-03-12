@@ -60,5 +60,6 @@ namespace Timeenator.Interfaces
 
         INullableQueryTable<T> ToNewTable(Action<INullableQueryTable<T>, INullableQueryTable<T>> transformAction);
         INullableQueryTable<T> Calc(Action<dynamic> zipFunc);
+        INullableQueryTable<T> RemoveDbSeries();
     }
 }

@@ -82,6 +82,16 @@ namespace Timeenator.Impl
             return table;
         }
 
+        public IQueryTable<T> RemoveDbSeries()
+        {
+            var querySeries = Series.Values.Where(i => i.IsDbSerie).ToArray();
+            foreach (var serie in querySeries)
+            {
+                Series.Remove(serie.Name);
+            }
+            return this;
+        }
+
         protected override IEnumerable<IObjectQuerySerie> GetSeries() => Series.Values;
     }
 }

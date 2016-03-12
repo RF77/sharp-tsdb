@@ -16,5 +16,6 @@ namespace Timeenator.Interfaces
     public interface IObjectQuerySerie : IObjectQuerySerieBase
     {
         IReadOnlyList<IObjectSingleDataRow> Rows { get; }
+        bool IsDbSerie { get; set; }
     }
 }

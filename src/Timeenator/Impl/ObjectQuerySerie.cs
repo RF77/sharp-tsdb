@@ -44,7 +44,10 @@ namespace Timeenator.Impl
             LastRow = serie.LastRow;
             GroupName = serie.GroupName;
             Key = serie.Key;
+            IsDbSerie = serie.IsDbSerie;
         }
+
+        public bool IsDbSerie { get; set; }
 
         /// <summary>
         ///     Last value before the start time or null

@@ -103,6 +103,11 @@ namespace Tests.QueryLanguage
                 .Calc(t => t.Sum = t.T + t.F);
 
             result.Series.Count().Should().Be(3);
+
+            result = result.RemoveDbSeries();
+
+            result.Series.Count().Should().Be(1);
+
         }
 
         [Test]
