@@ -12,6 +12,8 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
+using log4net;
 using Timeenator.Extensions.Converting;
 using Timeenator.Impl.Grouping;
 using Timeenator.Interfaces;
@@ -20,6 +22,8 @@ namespace Timeenator.Impl
 {
     public class NullableQueryTable<T> : QueryTableBase<T>, INullableQueryTable<T> where T : struct
     {
+        private static readonly ILog Logger = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
+
         public NullableQueryTable()
         {
         }
@@ -136,10 +140,18 @@ namespace Timeenator.Impl
             var dynamicTable = new DynamicTableValues(this);
             var firstSerie = Series.Values.First();
             var count = firstSerie.Rows.Count;
-            for (var i = 0; i < count; i++)
+            //TODO: why are series not the same length? bug has to be fixed
+            for (var i = 0; i < count - 1/*TODO: remove*/; i++)
             {
-                dynamicTable.Index = i;
-                zipFunc(dynamicTable);
+                try
+                {
+                    dynamicTable.Index = i;
+                    zipFunc(dynamicTable);
+                }
+                catch (Exception ex)
+                {
+                    //Logger.Warn($"Exception in index {i}: {ex.Message}");
+                }
             }
             return this;
         }

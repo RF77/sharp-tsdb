@@ -10,9 +10,16 @@
 //  *******************************************************************************/ 
 
 using System;
+using System.Collections.Generic;
+using System.IO;
 using System.Reflection;
 using System.Text;
 using log4net;
+using Mqtt2SharpTsdb.Config;
+using Mqtt2SharpTsdb.Items;
+using Mqtt2SharpTsdb.Rules;
+using Nancy.Json;
+using Newtonsoft.Json;
 using SharpTsdbClient;
 using Timeenator.Impl;
 using uPLibrary.Networking.M2Mqtt;
@@ -26,15 +33,61 @@ namespace Mqtt2SharpTsdb
         private readonly MqttClient _client = new MqttClient("10.10.1.77");
         private readonly string _dbName = "Haus";
         private DbClient _dbClient;
+        private Dictionary<string, MqttItem> _mqttItems = new Dictionary<string, MqttItem>();
+        private Dictionary<string, MeasurementItem> _measurementItems = new Dictionary<string, MeasurementItem>();
+        private RuleConfiguration _ruleConfiguration;
 
         public async void Init()
         {
+            LoadConfig();
             _dbClient = new DbClient(new Client("10.10.1.77"), _dbName);
             await _dbClient.CreateOrAtachDbAsync();
             _client.Connect("Mqtt2SharpTsdb");
             _client.MqttMsgPublishReceived += ClientOnMqttMsgPublishReceived;
             _client.Subscribe(new[] {"#"}, new byte[] {0});
             Logger.Info("Initialized");
+        }
+
+        private void LoadConfig()
+        {
+            var filePath = ConfigFilePath();
+            if (File.Exists(filePath))
+            {
+                _ruleConfiguration = new JavaScriptSerializer(null, false, Int32.MaxValue, Int32.MaxValue, true, false).Deserialize<RuleConfiguration>(File.ReadAllText(filePath));
+            }
+            else
+            {
+                LoadDefaultConfig();
+                SaveConfig();
+            }
+        }
+
+        private void SaveConfig()
+        {
+            var filePath = ConfigFilePath();
+            File.WriteAllText(filePath, JsonConvert.SerializeObject(_ruleConfiguration, Formatting.Indented));
+        }
+
+        private void LoadDefaultConfig()
+        {
+            _ruleConfiguration = new RuleConfiguration();
+            _ruleConfiguration.IgnoringRules.Add(new IgnoreRule("^OpenHAB.out.cb"));
+            _ruleConfiguration.NamingRules.Add(new NamingRule("/", "."));
+            _ruleConfiguration.TypeRules.Add(new TypeRule(".State$", "byte"));
+            _ruleConfiguration.TypeRules.Add(new TypeRule(".State$", "byte"));
+            _ruleConfiguration.TextConverterRules.Add(new TextConverterRule("ON", 1));
+            _ruleConfiguration.TextConverterRules.Add(new TextConverterRule("OFF", 0));
+            _ruleConfiguration.TextConverterRules.Add(new TextConverterRule("OPEN", 1));
+            _ruleConfiguration.TextConverterRules.Add(new TextConverterRule("CLOSED", 0));
+            _ruleConfiguration.RecordingRules.Add(new RecordingRule("State$", "change"));
+            _ruleConfiguration.RecordingRules.Add(new RecordingRule(".*", "30s"));
+        }
+
+        private static string ConfigFilePath()
+        {
+            var fileInfo = new FileInfo(Assembly.GetExecutingAssembly().Location);
+            var dir = fileInfo.Directory;
+            return Path.Combine(dir.FullName, "config.json");
         }
 
         private async void ClientOnMqttMsgPublishReceived(object sender, MqttMsgPublishEventArgs mqttMsgPublishEventArgs)
