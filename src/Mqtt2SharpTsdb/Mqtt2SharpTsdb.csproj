@@ -77,9 +77,12 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Config\RuleConfiguration.cs" />
+    <Compile Include="Items\IMeasurementItem.cs" />
     <Compile Include="Items\MeasurementItem.cs" />
     <Compile Include="Items\MqttItem.cs" />
     <Compile Include="Rules\IgnoreRule.cs" />
+    <Compile Include="Rules\JsonConverterRule.cs" />
+    <Compile Include="Rules\JsonConverter.cs" />
     <Compile Include="Rules\NamingRule.cs" />
     <Compile Include="Rules\RecordingRule.cs" />
     <Compile Include="Rules\Rule.cs" />

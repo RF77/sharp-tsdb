@@ -34,7 +34,7 @@ namespace Mqtt2SharpTsdb
         private readonly string _dbName = "Haus";
         private DbClient _dbClient;
         private Dictionary<string, MqttItem> _mqttItems = new Dictionary<string, MqttItem>();
-        private Dictionary<string, MeasurementItem> _measurementItems = new Dictionary<string, MeasurementItem>();
+        private Dictionary<string, IMeasurementItem> _measurementItems = new Dictionary<string, IMeasurementItem>();
         private RuleConfiguration _ruleConfiguration;
 
         public async void Init()
@@ -53,7 +53,7 @@ namespace Mqtt2SharpTsdb
             var filePath = ConfigFilePath();
             if (File.Exists(filePath))
             {
-                _ruleConfiguration = new JavaScriptSerializer(null, false, Int32.MaxValue, Int32.MaxValue, true, false).Deserialize<RuleConfiguration>(File.ReadAllText(filePath));
+                _ruleConfiguration = new JavaScriptSerializer(null, false, int.MaxValue, int.MaxValue, true, false).Deserialize<RuleConfiguration>(File.ReadAllText(filePath));
             }
             else
             {
@@ -75,10 +75,11 @@ namespace Mqtt2SharpTsdb
             _ruleConfiguration.NamingRules.Add(new NamingRule("/", "."));
             _ruleConfiguration.TypeRules.Add(new TypeRule(".State$", "byte"));
             _ruleConfiguration.TypeRules.Add(new TypeRule(".State$", "byte"));
-            _ruleConfiguration.TextConverterRules.Add(new TextConverterRule("ON", 1));
-            _ruleConfiguration.TextConverterRules.Add(new TextConverterRule("OFF", 0));
-            _ruleConfiguration.TextConverterRules.Add(new TextConverterRule("OPEN", 1));
-            _ruleConfiguration.TextConverterRules.Add(new TextConverterRule("CLOSED", 0));
+            _ruleConfiguration.TextConverterRules.Add(new TextConverterRule("ON", "1"));
+            _ruleConfiguration.TextConverterRules.Add(new TextConverterRule("OFF", "0"));
+            _ruleConfiguration.TextConverterRules.Add(new TextConverterRule("OPEN", "1"));
+            _ruleConfiguration.TextConverterRules.Add(new TextConverterRule("CLOSED", "0"));
+            _ruleConfiguration.JsonConverterRules.Add(new JsonConverterRule("^hm/status/.*", "val"));
             _ruleConfiguration.RecordingRules.Add(new RecordingRule("State$", "change"));
             _ruleConfiguration.RecordingRules.Add(new RecordingRule(".*", "30s"));
         }
@@ -90,40 +91,24 @@ namespace Mqtt2SharpTsdb
             return Path.Combine(dir.FullName, "config.json");
         }
 
-        private async void ClientOnMqttMsgPublishReceived(object sender, MqttMsgPublishEventArgs mqttMsgPublishEventArgs)
+        private void ClientOnMqttMsgPublishReceived(object sender, MqttMsgPublishEventArgs mqttMsgPublishEventArgs)
         {
             try
             {
                 var message = Encoding.UTF8.GetString(mqttMsgPublishEventArgs.Message);
                 Logger.Debug($"Got {mqttMsgPublishEventArgs.Topic}, content: {message}");
-                try
-                {
-                    float val;
-                    if (message == "OFF")
-                    {
-                        val = 0;
-                    }
-                    else if (message == "ON")
-                    {
-                        val = 1;
-                    }
-                    else
-                    {
-                        val = float.Parse(message);
-                    }
 
-                    await _dbClient.Measurement(mqttMsgPublishEventArgs.Topic.Replace("/", "."))
-                        .AppendAsync(new[] { new SingleDataRow<float>(DateTime.Now, val) }, false);
-                }
-                catch (Exception ex)
+                MqttItem item;
+                if (!_mqttItems.TryGetValue(mqttMsgPublishEventArgs.Topic, out item))
                 {
-                    Logger.Warn(
-                        $"Excpetion in topic {mqttMsgPublishEventArgs.Topic}, content: {message}, reason: {ex.Message}");
+                    item = new MqttItem(mqttMsgPublishEventArgs.Topic, _ruleConfiguration);
                 }
+                item.ReceivedMessage(message);
+               
             }
             catch (Exception ex)
             {
-                Logger.Error($"Catched Exception: {ex.Message}");
+                Logger.Error($"Catched Exception for topic \"{mqttMsgPublishEventArgs.Topic}\": {ex.Message}");
             }
            
         }

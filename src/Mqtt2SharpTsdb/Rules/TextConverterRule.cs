@@ -5,12 +5,15 @@ namespace Mqtt2SharpTsdb.Rules
     [DataContract]
     public class TextConverterRule : Rule
     {
+        [DataMember]
+        public string SourceValue { get; set; }
 
         [DataMember]
-        public long ConvertedValue { get; set; }
+        public string ConvertedValue { get; set; }
 
-        public TextConverterRule(string topicName, long convertedValue) : base(topicName)
+        public TextConverterRule(string sourceValue, string convertedValue) : base(null)
         {
+            SourceValue = sourceValue;
             ConvertedValue = convertedValue;
         }
     }

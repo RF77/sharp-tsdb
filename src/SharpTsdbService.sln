@@ -45,6 +45,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mqtt2SharpTsdbService", "Mq
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mqtt2SharpTsdbConsole", "Mqtt2SharpTsdbConsole\Mqtt2SharpTsdbConsole.csproj", "{5781EBE4-3416-4FB5-BC50-D98CF93FBB4C}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MqttRules", "MqttRules\MqttRules.csproj", "{9D04F051-0F0D-4DE4-8261-3F7E1094538B}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -173,6 +175,14 @@ Global
 		{5781EBE4-3416-4FB5-BC50-D98CF93FBB4C}.Release|Any CPU.Build.0 = Release|Any CPU
 		{5781EBE4-3416-4FB5-BC50-D98CF93FBB4C}.Release|x64.ActiveCfg = Release|Any CPU
 		{5781EBE4-3416-4FB5-BC50-D98CF93FBB4C}.Release|x64.Build.0 = Release|Any CPU
+		{9D04F051-0F0D-4DE4-8261-3F7E1094538B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9D04F051-0F0D-4DE4-8261-3F7E1094538B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9D04F051-0F0D-4DE4-8261-3F7E1094538B}.Debug|x64.ActiveCfg = Debug|x64
+		{9D04F051-0F0D-4DE4-8261-3F7E1094538B}.Debug|x64.Build.0 = Debug|x64
+		{9D04F051-0F0D-4DE4-8261-3F7E1094538B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9D04F051-0F0D-4DE4-8261-3F7E1094538B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9D04F051-0F0D-4DE4-8261-3F7E1094538B}.Release|x64.ActiveCfg = Release|x64
+		{9D04F051-0F0D-4DE4-8261-3F7E1094538B}.Release|x64.Build.0 = Release|x64
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

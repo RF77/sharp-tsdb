@@ -15,7 +15,7 @@ namespace MqttRules.Items
         public IList<IGroup> Groups { get; set; } = new List<IGroup>();
         private TValue _value;
         private TValue _setValue;
-        private MqttClient _client;
+        public MqttClient Client { get; set; }
         private byte _qosLevel;
         private bool _retain;
 
@@ -44,7 +44,7 @@ namespace MqttRules.Items
         public void PublishValue(TValue value, string publishTopic)
         {
             SetValue = value;
-            _client.Publish(publishTopic ?? PublishTopic ?? SubscribingTopics.First(), ConvertValueBack(value), _qosLevel, _retain);
+            Client.Publish(publishTopic ?? PublishTopic ?? SubscribingTopics.First(), ConvertValueBack(value), _qosLevel, _retain);
         }
 
         public TValue SetValue
@@ -56,34 +56,34 @@ namespace MqttRules.Items
         public void Connect(string brokerAddress, byte qosLevel = MqttMsgBase.QOS_LEVEL_AT_MOST_ONCE, bool retain = true)
         {
             _retain = retain;
-            _client = new MqttClient(brokerAddress);
+            Client = new MqttClient(brokerAddress);
 
             // register to message received 
-            _client.MqttMsgPublishReceived += client_MqttMsgPublishReceived;
+            Client.MqttMsgPublishReceived += MqttMsgPublishReceived;
 
             string clientId = Guid.NewGuid().ToString();
-            _client.Connect(clientId);
+            Client.Connect(clientId);
         
             // subscribe to the topic "/home/temperature" with QoS 2 
             _qosLevel = qosLevel;
-            _client.Subscribe(SubscribingTopics, new[] { _qosLevel }); 
+            Client.Subscribe(SubscribingTopics, new[] { _qosLevel }); 
         }
 
         public void Disconnect()
         {
             try
             {
-                _client.MqttMsgPublishReceived -= client_MqttMsgPublishReceived;
-                _client.Unsubscribe(SubscribingTopics);
-                _client.Disconnect();
+                Client.MqttMsgPublishReceived -= MqttMsgPublishReceived;
+                Client.Unsubscribe(SubscribingTopics);
+                Client.Disconnect();
             }
             finally
             {
-                _client = null;
+                Client = null;
             }
         }
 
-        private void client_MqttMsgPublishReceived(object sender, MqttMsgPublishEventArgs e)
+        public void MqttMsgPublishReceived(object sender, MqttMsgPublishEventArgs e)
         {
             var receivedValue = ConvertValue(e);
             if (!Equals(_value, receivedValue))

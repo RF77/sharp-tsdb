@@ -1,4 +1,5 @@
 ﻿using System.Runtime.Serialization;
+using System.Text.RegularExpressions;
 
 namespace Mqtt2SharpTsdb.Rules
 {
@@ -14,6 +15,11 @@ namespace Mqtt2SharpTsdb.Rules
         public Rule(string topicName)
         {
             TopicName = topicName;
+        }
+
+        public bool MatchTopic(string topic)
+        {
+            return Regex.IsMatch(topic, TopicName);
         }
     }
 }

@@ -20,6 +20,9 @@ namespace Mqtt2SharpTsdb.Config
         public List<TextConverterRule> TextConverterRules { get; set; } = new List<TextConverterRule>();
 
         [DataMember]
+        public List<JsonConverterRule> JsonConverterRules { get; set; } = new List<JsonConverterRule>();
+
+        [DataMember]
         public List<RecordingRule> RecordingRules { get; set; } = new List<RecordingRule>();
 
 
