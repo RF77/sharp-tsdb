@@ -15,6 +15,10 @@ namespace Mqtt2SharpTsdb.Rules
             MeasurementName = measurementName;
         }
 
+        public NamingRule()
+        {
+        }
+
         public bool Replace(ref string topic)
         {
             if (Regex.IsMatch(topic, TopicName))

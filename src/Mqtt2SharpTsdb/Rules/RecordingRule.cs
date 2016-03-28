@@ -12,5 +12,9 @@ namespace Mqtt2SharpTsdb.Rules
         {
             RecordingReason = recordingReason;
         }
+
+        public RecordingRule()
+        {
+        }
     }
 }

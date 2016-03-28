@@ -13,5 +13,9 @@ namespace Mqtt2SharpTsdb.Rules
         {
             JsonPropertyName = jsonPropertyName;
         }
+
+        public JsonConverterRule()
+        {
+        }
     }
 }

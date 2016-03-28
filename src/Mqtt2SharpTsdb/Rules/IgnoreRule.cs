@@ -8,5 +8,9 @@ namespace Mqtt2SharpTsdb.Rules
         public IgnoreRule(string topicName) : base(topicName)
         {
         }
+
+        public IgnoreRule()
+        {
+        }
     }
 }

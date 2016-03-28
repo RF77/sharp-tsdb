@@ -17,6 +17,10 @@ namespace Mqtt2SharpTsdb.Rules
             TopicName = topicName;
         }
 
+        public Rule()
+        {
+        }
+
         public bool MatchTopic(string topic)
         {
             return Regex.IsMatch(topic, TopicName);

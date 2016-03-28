@@ -59,7 +59,7 @@ namespace Mqtt2SharpTsdb.Items
             }
         }
 
-        private async void Flush()
+        public async void Flush()
         {
             if (!_isFlushing && QueuedItems.Any())
             {
@@ -67,12 +67,13 @@ namespace Mqtt2SharpTsdb.Items
                 {
                     _isFlushing = true;
                     await DbClient.Measurement(Name).AppendAsync(QueuedItems, false);
-                    Logger.Debug($"{Name}: Wrote {QueuedItems.Count} items: {string.Join(", ", QueuedItems)}");
+                    Logger.Debug($"{Name}: Wrote {QueuedItems.Count} items: {string.Join(", ", QueuedItems.Select(i => $"{i.TimeUtc}: {i.Value}" ))}");
                     QueuedItems.Clear();
                 }
                 catch (Exception ex)
                 {
                     Logger.Warn($"Couldn't write data for item {Name}, now queued {QueuedItems.Count} items, Reason: {ex.Message}");
+                    ItemsToFlush.AddItem(this);
                 }
                 finally
                 {

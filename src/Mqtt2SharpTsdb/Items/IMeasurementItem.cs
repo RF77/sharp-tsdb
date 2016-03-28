@@ -6,5 +6,6 @@ namespace Mqtt2SharpTsdb.Items
     {
         RuleConfiguration RuleConfiguration { get; set; }
         void ReceivedValue(object val);
+        void Flush();
     }
 }

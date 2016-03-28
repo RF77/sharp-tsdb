@@ -14,5 +14,9 @@ namespace Mqtt2SharpTsdb.Rules
         {
             ValueType = valueType;
         }
+
+        public TypeRule()
+        {
+        }
     }
 }

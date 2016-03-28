@@ -16,5 +16,9 @@ namespace Mqtt2SharpTsdb.Rules
             SourceValue = sourceValue;
             ConvertedValue = convertedValue;
         }
+
+        public TextConverterRule()
+        {
+        }
     }
 }

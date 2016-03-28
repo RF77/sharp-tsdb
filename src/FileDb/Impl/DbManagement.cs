@@ -100,6 +100,7 @@ namespace FileDb.Impl
                 {
                     var path = _dbNames[name];
                     db = new Db(path.LoadFromFile<DbMetadata>());
+                    _loadedDbs[name] = db;
                 }
                 return db;
             });

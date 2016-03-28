@@ -14,6 +14,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
 using System.Text;
+using System.Threading.Tasks;
 using log4net;
 using Mqtt2SharpTsdb.Config;
 using Mqtt2SharpTsdb.Items;
@@ -30,9 +31,9 @@ namespace Mqtt2SharpTsdb
     public class Mqtt2DbService
     {
         private static readonly ILog Logger = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
-        private readonly MqttClient _client = new MqttClient("10.10.1.77");
+        private readonly MqttClient _client = new MqttClient("10.10.1.9");
         private readonly string _dbName = "Haus";
-        private DbClient _dbClient;
+        //private DbClient _dbClient;
         private Dictionary<string, MqttItem> _mqttItems = new Dictionary<string, MqttItem>();
         private Dictionary<string, IMeasurementItem> _measurementItems = new Dictionary<string, IMeasurementItem>();
         private RuleConfiguration _ruleConfiguration;
@@ -40,12 +41,38 @@ namespace Mqtt2SharpTsdb
         public async void Init()
         {
             LoadConfig();
-            _dbClient = new DbClient(new Client("10.10.1.77"), _dbName);
-            await _dbClient.CreateOrAtachDbAsync();
-            _client.Connect("Mqtt2SharpTsdb");
+            //_dbClient = new DbClient(new Client("10.10.1.77"), _dbName);
+            //await _dbClient.CreateOrAtachDbAsync();
+            await ReconnectAsync();  
             _client.MqttMsgPublishReceived += ClientOnMqttMsgPublishReceived;
+            _client.ConnectionClosed += _client_ConnectionClosed;
             _client.Subscribe(new[] {"#"}, new byte[] {0});
             Logger.Info("Initialized");
+        }
+
+        private void ConnectMqtt()
+        {
+            _client.Connect("Mqtt2SharpTsdb");
+        }
+
+        private async void _client_ConnectionClosed(object sender, EventArgs e)
+        {
+            Logger.Info("Mqtt Connection closed -> reconnect soon...");
+            await ReconnectAsync();
+        }
+
+        private async Task ReconnectAsync()
+        {
+            try
+            {
+                await Task.Delay(1000);
+                ConnectMqtt();
+            }
+            catch (Exception ex)
+            {
+                Logger.Error($"Couldn't connect to MQTT broker, try again..., reason:{ex.Message} ");
+                await ReconnectAsync();
+            }
         }
 
         private void LoadConfig()
@@ -102,6 +129,7 @@ namespace Mqtt2SharpTsdb
                 if (!_mqttItems.TryGetValue(mqttMsgPublishEventArgs.Topic, out item))
                 {
                     item = new MqttItem(mqttMsgPublishEventArgs.Topic, _ruleConfiguration);
+                    _mqttItems[mqttMsgPublishEventArgs.Topic] = item;
                 }
                 item.ReceivedMessage(message);
                
