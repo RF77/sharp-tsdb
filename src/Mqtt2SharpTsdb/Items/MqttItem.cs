@@ -5,6 +5,7 @@ using log4net;
 using Mqtt2SharpTsdb.Config;
 using Mqtt2SharpTsdb.Rules;
 using Timeenator.Impl;
+using uPLibrary.Networking.M2Mqtt.Messages;
 
 namespace Mqtt2SharpTsdb.Items
 {
@@ -91,7 +92,7 @@ namespace Mqtt2SharpTsdb.Items
             return measName;
         }
 
-        public void ReceivedMessage(string message)
+        public void ReceivedMessage(string message, MqttMsgPublishEventArgs mqttMsgPublishEventArgs)
         {
             object val = message;
             try
@@ -112,7 +113,7 @@ namespace Mqtt2SharpTsdb.Items
                         }
                     }
 
-                    _measurement.ReceivedValue(val);
+                    _measurement.ReceivedValue(val, mqttMsgPublishEventArgs);
 
                 }
 

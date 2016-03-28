@@ -31,12 +31,13 @@ namespace Mqtt2SharpTsdb
     public class Mqtt2DbService
     {
         private static readonly ILog Logger = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
-        private readonly MqttClient _client = new MqttClient("10.10.1.9");
+        private readonly MqttClient _client = new MqttClient(_brokerHostName);
         private readonly string _dbName = "Haus";
         //private DbClient _dbClient;
         private Dictionary<string, MqttItem> _mqttItems = new Dictionary<string, MqttItem>();
         private Dictionary<string, IMeasurementItem> _measurementItems = new Dictionary<string, IMeasurementItem>();
         private RuleConfiguration _ruleConfiguration;
+        private static string _brokerHostName = "10.10.1.9";
 
         public async void Init()
         {
@@ -53,6 +54,7 @@ namespace Mqtt2SharpTsdb
         private void ConnectMqtt()
         {
             _client.Connect("Mqtt2SharpTsdb");
+            Logger.Info($"Connected to MQTT broker {_brokerHostName}");
         }
 
         private async void _client_ConnectionClosed(object sender, EventArgs e)
@@ -131,7 +133,7 @@ namespace Mqtt2SharpTsdb
                     item = new MqttItem(mqttMsgPublishEventArgs.Topic, _ruleConfiguration);
                     _mqttItems[mqttMsgPublishEventArgs.Topic] = item;
                 }
-                item.ReceivedMessage(message);
+                item.ReceivedMessage(message, mqttMsgPublishEventArgs);
                
             }
             catch (Exception ex)

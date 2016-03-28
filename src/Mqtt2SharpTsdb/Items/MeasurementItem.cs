@@ -18,6 +18,8 @@ using Mqtt2SharpTsdb.Config;
 using SharpTsdbClient;
 using Timeenator.Impl;
 using Timeenator.Interfaces;
+using uPLibrary.Networking.M2Mqtt.Messages;
+
 // ReSharper disable StaticMemberInGenericType
 
 namespace Mqtt2SharpTsdb.Items
@@ -44,18 +46,21 @@ namespace Mqtt2SharpTsdb.Items
         public IList<ISingleDataRow<T>> QueuedItems { get; } = new List<ISingleDataRow<T>>();
 
         public RuleConfiguration RuleConfiguration { get; set; }
-        public void ReceivedValue(object val)
+        public void ReceivedValue(object val, MqttMsgPublishEventArgs mqttMsgPublishEventArgs)
         {
-            AddValue((T) Convert.ChangeType(val, typeof(T)));
+            AddValue((T) Convert.ChangeType(val, typeof(T)), mqttMsgPublishEventArgs);
         }
 
-        public void AddValue(T val)
+        public void AddValue(T val, MqttMsgPublishEventArgs mqttMsgPublishEventArgs)
         {
             lock (this)
             {
                 CurrentItem = new SingleDataRow<T>(DateTime.UtcNow, val);
-                QueuedItems.Add(CurrentItem);
-                Flush();
+                if (!mqttMsgPublishEventArgs.Retain)
+                {
+                    QueuedItems.Add(CurrentItem);
+                    Flush();
+                }
             }
         }
 
