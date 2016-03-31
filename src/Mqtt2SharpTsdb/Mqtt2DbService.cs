@@ -109,6 +109,8 @@ namespace Mqtt2SharpTsdb
             _ruleConfiguration.TextConverterRules.Add(new TextConverterRule("OPEN", "1"));
             _ruleConfiguration.TextConverterRules.Add(new TextConverterRule("CLOSED", "0"));
             _ruleConfiguration.JsonConverterRules.Add(new JsonConverterRule("^hm/status/.*", "val"));
+            _ruleConfiguration.RecordingRules.Add(new RecordingRule("testChange", "change"));
+            _ruleConfiguration.RecordingRules.Add(new RecordingRule("testInterval", "10s"));
             _ruleConfiguration.RecordingRules.Add(new RecordingRule("State$", "change"));
             _ruleConfiguration.RecordingRules.Add(new RecordingRule(".*", "30s"));
         }
