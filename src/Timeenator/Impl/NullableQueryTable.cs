@@ -141,7 +141,7 @@ namespace Timeenator.Impl
             var firstSerie = Series.Values.First();
             var count = firstSerie.Rows.Count;
             //TODO: why are series not the same length? bug has to be fixed
-            for (var i = 0; i < count - 1/*TODO: remove*/; i++)
+            for (var i = 0; i < count; i++) //  - 1/*TODO: remove*/
             {
                 try
                 {

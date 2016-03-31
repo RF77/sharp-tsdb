@@ -16,6 +16,7 @@ using System.Reflection;
 using log4net;
 using Mqtt2SharpTsdb.Config;
 using SharpTsdbClient;
+using Timeenator.Extensions;
 using Timeenator.Impl;
 using Timeenator.Interfaces;
 using uPLibrary.Networking.M2Mqtt.Messages;
@@ -29,6 +30,9 @@ namespace Mqtt2SharpTsdb.Items
         private static readonly ILog Logger = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
         private static readonly DbClient DbClient = new DbClient(new Client("10.10.1.9"), "Haus");
         private bool _isFlushing;
+        private TimeSpan? _minInterval;
+        private bool _onlyChanges;
+        private RuleConfiguration _ruleConfiguration;
 
         public MeasurementItem(string name)
         {
@@ -45,9 +49,37 @@ namespace Mqtt2SharpTsdb.Items
         /// </summary>
         public IList<ISingleDataRow<T>> QueuedItems { get; } = new List<ISingleDataRow<T>>();
 
-        public RuleConfiguration RuleConfiguration { get; set; }
+        public RuleConfiguration RuleConfiguration
+        {
+            get { return _ruleConfiguration; }
+            set
+            {
+                _ruleConfiguration = value;
+                if (value != null)
+                {
+                    foreach (var rule in value.RecordingRules)
+                    {
+                        if (rule.MatchTopic(Name))
+                        {
+                            if (rule.RecordingReason.ToLower().StartsWith("change"))
+                            {
+                                _onlyChanges = true;
+                            }
+                            else if (!string.IsNullOrWhiteSpace(rule.RecordingReason))
+                            {
+                                _minInterval = rule.RecordingReason.ToTimeSpan();
+                            }
+                            break;
+                        }
+                    }
+                }
+            }
+        }
+
         public void ReceivedValue(object val, MqttMsgPublishEventArgs mqttMsgPublishEventArgs)
         {
+            val = RuleConfiguration.TextConverterRules.Aggregate(val, (current, rule) => rule.Replace(current));
+
             AddValue((T) Convert.ChangeType(val, typeof(T)), mqttMsgPublishEventArgs);
         }
 
@@ -55,7 +87,20 @@ namespace Mqtt2SharpTsdb.Items
         {
             lock (this)
             {
-                CurrentItem = new SingleDataRow<T>(DateTime.UtcNow, val);
+                if (_onlyChanges && Equals(CurrentItem?.Value, val))
+                {
+                    return;
+                }
+                var now = DateTime.UtcNow;
+                if (_minInterval != null)
+                {
+                    var diff = now - (CurrentItem?.TimeUtc ?? DateTime.MinValue);
+                    if (diff < _minInterval)
+                    {
+                        return;
+                    }
+                }
+                CurrentItem = new SingleDataRow<T>(now, val);
                 if (!mqttMsgPublishEventArgs.Retain)
                 {
                     QueuedItems.Add(CurrentItem);

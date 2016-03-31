@@ -17,7 +17,7 @@ using Timeenator.Interfaces;
 namespace Timeenator.Impl
 {
     [DebuggerDisplay("{FullName}")]
-    public class ObjectQuerySerie : IObjectQuerySerie
+    public class ObjectQuerySerie : IObjectQuerySerie, ITimeWriteableQuerySerie
     {
         private string _name;
         private string _originalName;

@@ -6,10 +6,10 @@ namespace Mqtt2SharpTsdb.Rules
     public class TextConverterRule : Rule
     {
         [DataMember]
-        public string SourceValue { get; set; }
+        public object SourceValue { get; set; }
 
         [DataMember]
-        public string ConvertedValue { get; set; }
+        public object ConvertedValue { get; set; }
 
         public TextConverterRule(string sourceValue, string convertedValue) : base(null)
         {
@@ -19,6 +19,15 @@ namespace Mqtt2SharpTsdb.Rules
 
         public TextConverterRule()
         {
+        }
+
+        public object Replace(object val)
+        {
+            if (val == SourceValue)
+            {
+                return ConvertedValue;
+            }
+            return val;
         }
     }
 }

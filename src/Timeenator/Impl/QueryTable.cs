@@ -74,9 +74,21 @@ namespace Timeenator.Impl
         public INullableQueryTable<T> Group(Func<IGroupSelector<T>, IExecutableGroup<T>> groupConfigurator)
         {
             var table = new NullableQueryTable<T>();
+
+            //groups must be completely aligned, so all the Start and Endtime
+            var minStartTime = Series.Min(i => i.Value.StartTime);
+            var maxEndTime = Series.Max(i => i.Value.EndTime);
+
+            foreach (var serie in Series.Values.OfType<ITimeWriteableQuerySerie>())
+            {
+                serie.StartTime = minStartTime;
+                serie.EndTime = maxEndTime;
+            }
+
             foreach (var serie in Series.Values)
             {
-                table.AddSerie(serie.Group(groupConfigurator));
+
+                    table.AddSerie(serie.Group(groupConfigurator));
             }
 
             return table;

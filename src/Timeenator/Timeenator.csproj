@@ -132,6 +132,7 @@
     <Compile Include="Interfaces\IQueryTable.cs" />
     <Compile Include="Interfaces\IQueryTableBase.cs" />
     <Compile Include="Interfaces\ISingleDataRow.cs" />
+    <Compile Include="Interfaces\ITimeWriteableQuerySerie.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
