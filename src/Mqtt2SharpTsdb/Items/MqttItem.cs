@@ -106,7 +106,7 @@ namespace Mqtt2SharpTsdb.Items
 
                     foreach (var textConverterRule in _ruleConfiguration.TextConverterRules)
                     {
-                        if (textConverterRule.SourceValue == val.ToString())
+                        if (Equals(textConverterRule.SourceValue, val))
                         {
                             val = textConverterRule.ConvertedValue;
                             break;

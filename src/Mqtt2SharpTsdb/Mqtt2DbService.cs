@@ -21,8 +21,6 @@ using Mqtt2SharpTsdb.Items;
 using Mqtt2SharpTsdb.Rules;
 using Nancy.Json;
 using Newtonsoft.Json;
-using SharpTsdbClient;
-using Timeenator.Impl;
 using uPLibrary.Networking.M2Mqtt;
 using uPLibrary.Networking.M2Mqtt.Messages;
 
@@ -32,18 +30,13 @@ namespace Mqtt2SharpTsdb
     {
         private static readonly ILog Logger = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
         private readonly MqttClient _client = new MqttClient(_brokerHostName);
-        private readonly string _dbName = "Haus";
-        //private DbClient _dbClient;
-        private Dictionary<string, MqttItem> _mqttItems = new Dictionary<string, MqttItem>();
-        private Dictionary<string, IMeasurementItem> _measurementItems = new Dictionary<string, IMeasurementItem>();
+        private readonly Dictionary<string, MqttItem> _mqttItems = new Dictionary<string, MqttItem>();
         private RuleConfiguration _ruleConfiguration;
         private static string _brokerHostName = "10.10.1.9";
 
         public async void Init()
         {
             LoadConfig();
-            //_dbClient = new DbClient(new Client("10.10.1.77"), _dbName);
-            //await _dbClient.CreateOrAtachDbAsync();
             await ReconnectAsync();  
             _client.MqttMsgPublishReceived += ClientOnMqttMsgPublishReceived;
             _client.ConnectionClosed += _client_ConnectionClosed;
@@ -119,6 +112,7 @@ namespace Mqtt2SharpTsdb
         {
             var fileInfo = new FileInfo(Assembly.GetExecutingAssembly().Location);
             var dir = fileInfo.Directory;
+            // ReSharper disable once PossibleNullReferenceException
             return Path.Combine(dir.FullName, "config.json");
         }
 
