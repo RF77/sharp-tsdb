@@ -9,14 +9,12 @@
 //  *    RF77 - initial API and implementation and/or initial documentation
 //  *******************************************************************************/ 
 
-using System;
 using System.Reflection;
 using System.Web.Http;
-using System.Web.Http.Controllers;
 using GrafanaAdapter.Queries;
 using log4net;
 
-namespace SharpTsdb
+namespace SharpTsdb.Controller
 {
     [RoutePrefix("")]
     public class GrafanaController : ApiController

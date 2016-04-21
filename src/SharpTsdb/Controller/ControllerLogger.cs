@@ -14,7 +14,7 @@ using System.Runtime.CompilerServices;
 using log4net;
 using log4net.Core;
 
-namespace SharpTsdb
+namespace SharpTsdb.Controller
 {
     public class ControllerLogger
     {

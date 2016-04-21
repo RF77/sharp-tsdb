@@ -120,10 +120,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ControllerLogger.cs" />
-    <Compile Include="DbController.cs" />
+    <Compile Include="Controller\ControllerLogger.cs" />
+    <Compile Include="Controller\DbController.cs" />
     <Compile Include="DbService.cs" />
-    <Compile Include="GrafanaController.cs" />
+    <Compile Include="Controller\GrafanaController.cs" />
     <Compile Include="InfluxQueryParams.cs" />
     <Compile Include="MethodLogger.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -132,7 +132,7 @@
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
       <DependentUpon>Settings.settings</DependentUpon>
     </Compile>
-    <Compile Include="RoutedController.cs" />
+    <Compile Include="Controller\RoutedController.cs" />
     <Compile Include="Startup.cs" />
     <Compile Include="WritePoint.cs" />
   </ItemGroup>
@@ -168,6 +168,7 @@
       <Name>Timeenator</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

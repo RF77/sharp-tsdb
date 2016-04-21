@@ -12,7 +12,7 @@
 using System.Collections.Generic;
 using System.Web.Http;
 
-namespace SharpTsdb
+namespace SharpTsdb.Controller
 {
     [RoutePrefix("api/testing")]
     public class RoutedController : ApiController

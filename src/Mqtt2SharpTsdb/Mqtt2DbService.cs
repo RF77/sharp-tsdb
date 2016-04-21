@@ -32,7 +32,7 @@ namespace Mqtt2SharpTsdb
         private readonly MqttClient _client = new MqttClient(_brokerHostName);
         private readonly Dictionary<string, MqttItem> _mqttItems = new Dictionary<string, MqttItem>();
         private RuleConfiguration _ruleConfiguration;
-        private static string _brokerHostName = "10.10.1.9";
+        private static string _brokerHostName = "localhost";
 
         public async void Init()
         {

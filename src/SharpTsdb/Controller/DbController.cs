@@ -30,7 +30,7 @@ using Timeenator.Extensions;
 using Timeenator.Extensions.Rows;
 using Timeenator.Interfaces;
 
-namespace SharpTsdb
+namespace SharpTsdb.Controller
 {
     [RoutePrefix("")]
     public class DbController : ApiController
@@ -198,6 +198,27 @@ namespace SharpTsdb
                 return resp;
             }
         }
+
+        [Route("db/{dbName}/allMeasurements")]
+        [HttpGet]
+        public HttpResponseMessage AllMeasurements(string dbName)
+        {
+            using (MeLog.LogDebug($"db: {dbName}"))
+            {
+                var resp = new HttpResponseMessage(HttpStatusCode.OK);
+
+                var result = Locker.WriterLock(() =>
+                {
+                    var myDb = DbService.DbManagement.GetDb(dbName);
+                    var measurements = myDb.GetMeasurementNames().OrderBy(i => i);
+                    var nameString = string.Join("\r\n", measurements);
+                    return nameString;
+                });
+                resp.Content = new StringContent(result, Encoding.UTF8, "text/plain");
+                return resp;
+            }
+        }
+
 
         [Route("db/{dbName}/allMeasurementsNamesAsText")]
         [HttpGet]
