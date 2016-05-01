@@ -40,10 +40,10 @@ namespace Tests.QueryLanguage
                 .AddDewPoint("Temperatur", "Feuchtigkeit")
                 .AddAbsoluteHumidity("Temperatur", "Feuchtigkeit")
                 .AddHumidex("Temperatur", "Feuchtigkeit")
+                .AddHeatIndex("Temperatur", "Feuchtigkeit")
                 .AddSleetLine("Temperatur", "Feuchtigkeit", 440)
                 .AddSnowLine("Temperatur", "Feuchtigkeit", 440)
-                .RemoveSerie("Feuchtigkeit")
-                ;
+                .RemoveSerie("Feuchtigkeit");
         }
 
         [Test,Ignore]

@@ -55,6 +55,12 @@ namespace Timeenator.Extensions.Scientific
             return TempMath(sourceTable, temperatureName, humidityName, humidexName, m => m.Humidex);
         }
 
+        public static INullableQueryTable<T> HeatIndex<T>(this INullableQueryTable<T> sourceTable, string temperatureName,
+    string humidityName, string humidexName = "HeatIndex") where T : struct
+        {
+            return TempMath(sourceTable, temperatureName, humidityName, humidexName, m => m.HeatIndex);
+        }
+
         /// <summary>
         ///     Calculates the current temperature where percipitation will fall as snow
         /// </summary>
@@ -143,6 +149,12 @@ namespace Timeenator.Extensions.Scientific
             string temperatureName, string humidityName, string humidexName = "Humidex") where T : struct
         {
             return sourceTable.MergeTable(sourceTable.Humidex(temperatureName, humidityName, humidexName));
+        }
+
+        public static INullableQueryTable<T> AddHeatIndex<T>(this INullableQueryTable<T> sourceTable,
+    string temperatureName, string humidityName, string humidexName = "HeatIndex") where T : struct
+        {
+            return sourceTable.MergeTable(sourceTable.HeatIndex(temperatureName, humidityName, humidexName));
         }
 
         public static INullableQueryTable<T> AddSnowingTemperature<T>(this INullableQueryTable<T> sourceTable,

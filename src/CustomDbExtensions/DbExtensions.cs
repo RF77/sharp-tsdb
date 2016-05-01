@@ -22,6 +22,7 @@ namespace CustomDbExtensions
     {
         public static NullableQueryTable<float> AverageTest(this IDb db)
         {
+
             var time = "time < now() - 14d and time > now() - 21d";
             var table = new NullableQueryTable<float>();
             table.AddSerie(db.GetSerie<float>("Aussen.Wetterstation.Temperatur", time).Alias("roh").ToNullable());
@@ -253,6 +254,24 @@ namespace CustomDbExtensions
                                     .Aggregate(a => a.MeanExpWeighted())))
                                     .GroupSeries().Transform(t => t.DewPoint(temperatureKey, humidityKey, null)).MergeTables();
         }
+
+        public static INullableQueryTable<float> Heat(this IDb db, string measurementName, string time,
+          string interval, string temperatureKey, string humidityKey, int windowFactor)
+        {
+            return db.GetTable<float>(measurementName, time)
+                .Transform(
+                    i =>
+                        i.Group(
+                            g =>
+                                g.ByTime.Expression(interval, "1m", 10)
+                                    .ExpandTimeRange(TimeSpan.FromMinutes(windowFactor)).TimeStampIsMiddle()
+                                    .Aggregate(a => a.MeanExpWeighted())))
+                                    .GroupSeries()
+                                    .Transform(t => t.AddHeatIndex(temperatureKey, humidityKey, null))
+                                    .Transform(t => t.AddHumidex(temperatureKey, humidityKey, null))
+                                    .MergeTables();
+        }
+
         public static INullableQueryTable<float> AbsHumidity(this IDb db, string measurementName, string time,
           string interval, string temperatureKey, string humidityKey, int windowFactor)
         {
