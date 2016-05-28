@@ -258,18 +258,15 @@ namespace CustomDbExtensions
         public static INullableQueryTable<float> Heat(this IDb db, string measurementName, string time,
           string interval, string temperatureKey, string humidityKey, int windowFactor)
         {
-            return db.GetTable<float>(measurementName, time)
-                .Transform(
-                    i =>
-                        i.Group(
-                            g =>
-                                g.ByTime.Expression(interval, "1m", 10)
-                                    .ExpandTimeRange(TimeSpan.FromMinutes(windowFactor)).TimeStampIsMiddle()
+            var table = db.GetTable<float>(measurementName, time)
+                .Transform(i => i.Group(g =>g.ByTime.Expression(interval, "1m", 10).ExpandTimeRange(TimeSpan.FromMinutes(windowFactor)).TimeStampIsMiddle()
                                     .Aggregate(a => a.MeanExpWeighted())))
                                     .GroupSeries()
-                                    .Transform(t => t.AddHeatIndex(temperatureKey, humidityKey, null))
-                                    .Transform(t => t.AddHumidex(temperatureKey, humidityKey, null))
+                                    .Transform(t => t.AddHeatIndex(temperatureKey, humidityKey))
+                                    .Transform(t => t.AddHumidex(temperatureKey, humidityKey))
                                     .MergeTables();
+
+            return table;
         }
 
         public static INullableQueryTable<float> AbsHumidity(this IDb db, string measurementName, string time,
