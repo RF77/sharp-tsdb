@@ -28,7 +28,7 @@ namespace Mqtt2SharpTsdb.Items
     public class MeasurementItem<T> : IMeasurementItem where T : struct
     {
         private static readonly ILog Logger = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
-        private static readonly DbClient DbClient = new DbClient(new Client("10.10.1.77"), "raspberry");
+        private static readonly DbClient DbClient = new DbClient(new Client("10.10.1.77"), "Haus");
         private bool _isFlushing;
         private TimeSpan? _minInterval;
         private bool _onlyChanges;

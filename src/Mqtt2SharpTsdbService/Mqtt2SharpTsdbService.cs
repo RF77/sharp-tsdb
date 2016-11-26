@@ -19,11 +19,13 @@ namespace Mqtt2SharpTsdbService
 {
     public partial class Mqtt2SharpTsdbService : ServiceBase
     {
+        private readonly string[] _args;
         private static readonly ILog Logger = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
         private Mqtt2DbService _service;
 
-        public Mqtt2SharpTsdbService()
+        public Mqtt2SharpTsdbService(string[] args)
         {
+            _args = args;
             InitializeComponent();
         }
 

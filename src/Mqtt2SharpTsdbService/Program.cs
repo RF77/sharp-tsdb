@@ -19,12 +19,12 @@ namespace Mqtt2SharpTsdbService
         /// <summary>
         ///     The main entry point for the application.
         /// </summary>
-        private static void Main()
+        private static void Main(string[] args)
         {
             ServiceBase[] ServicesToRun;
             ServicesToRun = new ServiceBase[]
             {
-                new Mqtt2SharpTsdbService()
+                new Mqtt2SharpTsdbService(args)
             };
             Helper.Run(ServicesToRun);
         }

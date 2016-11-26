@@ -1,2 +1,2 @@
-del X:\Mqtt\*.* /S /Q
-xcopy C:\_git\sharp-tsdb\src\Mqtt2SharpTsdbConsole\bin\x64\Debug\*.* X:\Mqtt\
+del C:\tools\SharpTsdb\Mqtt\*.* /S /Q
+xcopy d:\_git\sharp-tsdb\src\Mqtt2SharpTsdbConsole\bin\Debug\*.* C:\tools\SharpTsdb\Mqtt\

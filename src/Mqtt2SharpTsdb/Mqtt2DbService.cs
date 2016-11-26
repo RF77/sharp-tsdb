@@ -32,7 +32,7 @@ namespace Mqtt2SharpTsdb
         private readonly MqttClient _client = new MqttClient(_brokerHostName);
         private readonly Dictionary<string, MqttItem> _mqttItems = new Dictionary<string, MqttItem>();
         private RuleConfiguration _ruleConfiguration;
-        private static string _brokerHostName = "localhost";
+        private static string _brokerHostName = "10.10.1.20";
 
         public async void Init()
         {
@@ -46,7 +46,7 @@ namespace Mqtt2SharpTsdb
 
         private void ConnectMqtt()
         {
-            _client.Connect("Mqtt2SharpTsdb");
+            _client.Connect("Mqtt2SharpTsdb", null, null, false, (byte)2, true, "Device/Mqtt2SharpTsdb/State", "-1", false, 30);
             Logger.Info($"Connected to MQTT broker {_brokerHostName}");
         }
 
