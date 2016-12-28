@@ -46,7 +46,9 @@ namespace Mqtt2SharpTsdb
 
         private void ConnectMqtt()
         {
-            _client.Connect("Mqtt2SharpTsdb", null, null, false, (byte)2, true, "Device/Mqtt2SharpTsdb/State", "-1", false, 30);
+            Logger.Debug($"Trying to connect to MQTT Server {_brokerHostName}");
+            //_client.Connect("Mqtt2SharpTsdb", null, null, false, (byte)1, true, "Device/Mqtt2SharpTsdb/State", "-1", false, 30);
+            _client.Connect("Mqtt2SharpTsdb");
             Logger.Info($"Connected to MQTT broker {_brokerHostName}");
         }
 
