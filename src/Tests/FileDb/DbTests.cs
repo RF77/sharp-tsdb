@@ -437,7 +437,7 @@ namespace Tests.FileDb
             result.Rows.Count.Should().Be(7);
         }
 
-        [Test, Ignore]
+        [Test, Ignore("x")]
         public void RecreateFuxDb()
         {
             var dbm = new DbManagement();
@@ -449,7 +449,7 @@ namespace Tests.FileDb
             dbm.CreateDb(@"c:\DBs\SharpTsdb", dbName);
         }
 
-        [Test, Ignore]
+        [Test, Ignore("x")]
         public void SortTest()
         {
             var sourceList = Enumerable.Range(0, 1000000).Reverse().ToList();
@@ -459,7 +459,7 @@ namespace Tests.FileDb
             sw.Stop();
         }
 
-        [Test, Ignore]
+        [Test, Ignore("x")]
         public void GetMeasurementsTest()
         {
             var dbm = new DbManagement();
@@ -472,7 +472,7 @@ namespace Tests.FileDb
             sw.Stop();
         }
 
-        [Test, Ignore]
+        [Test, Ignore("x")]
         public void AllMeasurementNamesTest()
         {
             var dbm = new DbManagement();
@@ -485,7 +485,7 @@ namespace Tests.FileDb
             sw.Stop();
         }
 
-        [Test, Ignore]
+        [Test, Ignore("x")]
         public void AddAliasesTest()
         {
             var dbm = new DbManagement();

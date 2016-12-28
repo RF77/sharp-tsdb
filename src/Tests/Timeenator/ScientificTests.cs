@@ -46,7 +46,8 @@ namespace Tests.QueryLanguage
                 .RemoveSerie("Feuchtigkeit");
         }
 
-        [Test,Ignore]
+        [Test]
+        [Ignore("lkjl")]
         public void SchneefallTest()
         {
             var db = new DbManagement().GetDb("Haus");
