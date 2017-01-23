@@ -14,7 +14,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Reflection;
-using log4net;
+using Common.Logging;
 using MathNet.Numerics.Statistics;
 using Timeenator.Extensions;
 using Timeenator.Extensions.Converting;

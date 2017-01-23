@@ -13,7 +13,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using log4net;
+using Common.Logging;
 using Timeenator.Extensions.Converting;
 using Timeenator.Impl.Grouping;
 using Timeenator.Interfaces;
