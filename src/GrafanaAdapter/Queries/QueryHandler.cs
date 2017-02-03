@@ -9,6 +9,7 @@
 //  *    RF77 - initial API and implementation and/or initial documentation
 //  *******************************************************************************/ 
 
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using DbInterfaces.Interfaces;
@@ -26,7 +27,7 @@ namespace GrafanaAdapter.Queries
             var result = new QueryResult();
             var serie = new QuerySerie();
 
-            if (query.ToLower() == "show measurements")
+            if (query.ToLower().StartsWith("show measurements"))
             {
                 serie.name = "measurements";
                 serie.columns.Add("name");
@@ -41,13 +42,19 @@ namespace GrafanaAdapter.Queries
                 return root;
             }
             var dbInstance = dbm.GetDb(db);
-            var scriptingEngine = new ScriptingEngine(dbInstance, query);
-            var res = scriptingEngine.Execute();
 
-            foreach (var s in res.Result.Series.OrderByDescending(i => i.FullName))
+            var queries = query.Split(new[] {";"}, StringSplitOptions.RemoveEmptyEntries);
+
+            foreach (var subQuery in queries)
             {
-                QuerySerie querySerie = new QuerySerie();
-                CreateSingleResult(querySerie, s, result);
+                var scriptingEngine = new ScriptingEngine(dbInstance, subQuery);
+                var res = scriptingEngine.Execute();
+
+                foreach (var s in res.Result.Series.OrderByDescending(i => i.FullName))
+                {
+                    QuerySerie querySerie = new QuerySerie();
+                    CreateSingleResult(querySerie, s, result);
+                }
             }
 
             root.results.Add(result);

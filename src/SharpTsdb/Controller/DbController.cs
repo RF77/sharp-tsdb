@@ -48,11 +48,17 @@ namespace SharpTsdb.Controller
             {
                 Locker.WriterLock(() =>
                 {
-                    DbService.DbManagement.CreateDb(Settings.Default.DbDirectory, dbName);
+                    DbService.DbManagement.CreateDb(DefaultDbDirectory, dbName);
                 });
                 return "ok";
             }
         }
+
+#if DEBUG
+        private static string DefaultDbDirectory => Settings.Default.DbDirectory+"_Debug";
+#else
+        private static string DefaultDbDirectory => Settings.Default.DbDirectory;
+#endif
 
         [Route("dbs/createOrAttachDb/{dbName}")]
         [HttpGet]
@@ -62,7 +68,7 @@ namespace SharpTsdb.Controller
             {
                 Locker.WriterLock(() =>
                 {
-                    DbService.DbManagement.GetOrCreateDb(Path.Combine(Settings.Default.DbDirectory, dbName), dbName);
+                    DbService.DbManagement.GetOrCreateDb(Path.Combine(DefaultDbDirectory, dbName), dbName);
                 });
                 return "ok";
             }
@@ -193,6 +199,24 @@ namespace SharpTsdb.Controller
                     var measurements = myDb.GetMeasurementNames().OrderBy(i => i);
                     var nameString = string.Join("\r\n", measurements);
                     return nameString;
+                });
+                resp.Content = new StringContent(result, Encoding.UTF8, "text/plain");
+                return resp;
+            }
+        }
+
+        [Route("dbs/allAsText")]
+        [HttpGet]
+        public HttpResponseMessage AllDbsAsText()
+        {
+            using (MeLog.LogDebug($"AllDbsAsText"))
+            {
+                var resp = new HttpResponseMessage(HttpStatusCode.OK);
+
+                var result = Locker.WriterLock(() =>
+                {
+                    var dbs = DbService.DbManagement.GetDbNames();
+                    return string.Join("\r\n", dbs);
                 });
                 resp.Content = new StringContent(result, Encoding.UTF8, "text/plain");
                 return resp;

@@ -47,7 +47,11 @@ namespace FileDb.Impl
             Deserialize();
         }
 
+#if DEBUG
+        private string DbNamesFileName => $"{_prefix}Dbs_Debug.json";
+#else
         private string DbNamesFileName => $"{_prefix}Dbs.json";
+#endif
         public IEnumerable<IDb> LoadedDbs => _loadedDbs.Values;
 
         public IDb GetOrCreateDb(string directoryPath, string name)

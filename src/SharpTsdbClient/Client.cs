@@ -27,7 +27,14 @@ namespace SharpTsdbClient
         /// </summary>
         /// <param name="serverAddress">address of Server, e.g. localhost</param>
         /// <param name="port">Port of server (defaults to 9003)</param>
-        public Client(string serverAddress, ushort port = 9003)
+        public Client(string serverAddress,
+#if DEBUG
+            ushort port = 9004
+#else
+            ushort port = 9003
+#endif
+
+            )
         {
             ServerAddress = serverAddress;
             Port = port;
